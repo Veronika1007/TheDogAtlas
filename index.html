@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>TheDogAtlas – Dog‑Friendly Map & Trails</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      :root {
+        --primary: #ff7a4a;
+        --primary-dark: #e15f32;
+        --bg: #f7f7f9;
+        --text: #22242a;
+        --muted: #6b6f7a;
+        --card-bg: #ffffff;
+        --border: #e0e2e8;
+        --accent: #1c3250;
+        --radius: 10px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      a {
+        color: var(--primary-dark);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+
+      header {
+        background: #ffffff;
+        border-bottom: 1px solid var(--border);
+        padding: 12px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .logo-circle {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-weight: 700;
+        font-size: 16px;
+      }
+
+      nav a {
+        margin-left: 16px;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--muted);
+      }
+
+      nav a.active {
+        color: var(--accent);
+      }
+
+      main {
+        max-width: 1140px;
+        margin: 0 auto;
+        padding: 24px 16px 40px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+        gap: 24px;
+        align-items: center;
+        margin-bottom: 32px;
+      }
+
+      .hero h1 {
+        margin: 0 0 8px;
+        font-size: 32px;
+      }
+
+      .hero p {
+        margin: 0 0 16px;
+        color: var(--muted);
+        max-width: 520px;
+        line-height: 1.5;
+      }
+
+      .hero-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 99px;
+        background: rgba(255, 122, 74, 0.12);
+        color: var(--primary-dark);
+        font-size: 12px;
+        margin-bottom: 8px;
+      }
+
+      .hero-form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+
+      .hero-form input,
+      .hero-form select {
+        padding: 10px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        min-width: 0;
+        font-size: 14px;
+        flex: 1 1 160px;
+      }
+
+      .hero-form button {
+        padding: 10px 20px;
+        border-radius: 999px;
+        border: none;
+        background: var(--primary);
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+
+      .hero-form button:hover {
+        background: var(--primary-dark);
+      }
+
+      .hero-meta {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .hero-card {
+        background: var(--card-bg);
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        padding: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+      }
+
+      .hero-card h2 {
+        font-size: 16px;
+        margin: 0 0 8px;
+      }
+
+      .hero-pill-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin: 8px 0 12px;
+      }
+
+      .pill {
+        font-size: 11px;
+        padding: 4px 8px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        color: var(--muted);
+        background: #fafbff;
+      }
+
+      .hero-card small {
+        display: block;
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+        gap: 24px;
+        align-items: flex-start;
+      }
+
+      .panel {
+        background: var(--card-bg);
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        padding: 16px;
+      }
+
+      .panel h2 {
+        margin: 0 0 8px;
+        font-size: 18px;
+      }
+
+      .panel p {
+        margin: 0 0 12px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+
+      .map-placeholder {
+        background: linear-gradient(135deg, #f2f2f7, #e9edf7);
+        border-radius: 12px;
+        border: 1px dashed #c4cad9;
+        height: 320px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--muted);
+        font-size: 14px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .map-pin {
+        position: absolute;
+        width: 22px;
+        height: 22px;
+        background: var(--primary);
+        border-radius: 50% 50% 50% 0;
+        transform: rotate(-45deg);
+        top: 45%;
+        left: 48%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .map-pin::after {
+        content: "";
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background: #fff;
+        border-radius: 50%;
+        top: 6px;
+        left: 6px;
+      }
+
+      .map-legend {
+        position: absolute;
+        left: 12px;
+        bottom: 12px;
+        display: flex;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+      }
+
+      .legend-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 4px;
+      }
+
+      .results {
+        margin-top: 12px;
+      }
+
+      .result-card {
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        padding: 10px 12px;
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        align-items: center;
+        background: #fcfcff;
+      }
+
+      .result-card h3 {
+        margin: 0 0 4px;
+        font-size: 14px;
+      }
+
+      .result-card small {
+        display: block;
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .result-meta {
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .result-actions a {
+        font-size: 11px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--primary);
+        color: var(--primary-dark);
+        font-weight: 500;
+        margin-left: 4px;
+      }
+
+      .result-actions a.primary {
+        background: var(--primary);
+        color: #fff;
+        border-color: var(--primary);
+      }
+
+      .trail-card {
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        padding: 10px 12px;
+        margin-top: 8px;
+        background: #fcfffb;
+      }
+
+      .trail-card h3 {
+        margin: 0 0 4px;
+        font-size: 14px;
+      }
+
+      .trail-meta {
+        font-size: 11px;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+
+      .community-section {
+        margin-top: 16px;
+        border-top: 1px dashed var(--border);
+        padding-top: 12px;
+      }
+
+      .community-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 8px;
+        margin-top: 6px;
+      }
+
+      .community-card {
+        padding: 8px;
+        border-radius: 8px;
+        background: #f8fafc;
+        font-size: 12px;
+      }
+
+      .community-card strong {
+        display: block;
+        margin-bottom: 2px;
+      }
+
+      footer {
+        max-width: 1140px;
+        margin: 16px auto 32px;
+        padding: 0 16px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      @media (max-width: 900px) {
+        .hero,
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        header {
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+        nav {
+          width: 100%;
+          display: flex;
+          justify-content: flex-start;
+          margin-top: 4px;
+          overflow-x: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        <div class="logo-circle">TA</div>
+        <div>
+          <div style="font-weight: 700; font-size: 16px">TheDogAtlas</div>
+          <div style="font-size: 11px; color: var(--muted)">
+            Dog‑friendly places & trails
+          </div>
+        </div>
+      </div>
+      <nav>
+        <a href="#" class="active">Map</a>
+        <a href="#trails">Trails</a>
+        <a href="#community">Community</a>
+        <a href="#account">Sign in</a>
+      </nav>
+    </header>
+
+    <main>
+      <!-- HERO -->
+      <section class="hero">
+        <div>
+          <div class="hero-tag">
+            <span>🗺️</span> <span>Hertfordshire beta · Dog‑friendly only</span>
+          </div>
+          <h1>Find dog‑friendly pubs, stays & walking trails in seconds.</h1>
+          <p>
+            TheDogAtlas helps you plan dog‑friendly days out and trips: discover
+            verified venues, mapped walks, and build simple itineraries for
+            breakfast, lunch, dinner and play.
+          </p>
+
+          <form
+            class="hero-form"
+            onsubmit="event.preventDefault(); demoSearch();"
+          >
+            <input
+              id="whereInput"
+              type="text"
+              placeholder="Where are you going? (e.g. St Albans)"
+              value="Hertfordshire"
+            />
+            <select id="typeInput">
+              <option value="all">All types</option>
+              <option value="pub">Pubs & bars</option>
+              <option value="cafe">Cafes</option>
+              <option value="restaurant">Restaurants</option>
+              <option value="hotel">Hotels</option>
+              <option value="park">Parks</option>
+              <option value="trail">Walking trails</option>
+              <option value="shop">Shops</option>
+              <option value="vet">Vets & groomers</option>
+            </select>
+            <select id="timeInput">
+              <option value="">Any time</option>
+              <option value="breakfast">Breakfast</option>
+              <option value="lunch">Lunch</option>
+              <option value="dinner">Dinner</option>
+            </select>
+            <button type="submit">Search map</button>
+          </form>
+
+          <div class="hero-meta">
+            Example: “Hertfordshire · Pubs · Dinner” to see dog‑friendly options
+            and nearby trails.
+          </div>
+        </div>
+
+        <aside class="hero-card">
+          <h2>Tonight in Hertfordshire</h2>
+          <p style="font-size: 13px; color: var(--muted); margin: 0 0 8px">
+            Example one‑day itinerary for you and your dog.
+          </p>
+          <div class="hero-pill-row">
+            <span class="pill">Breakfast · Dog‑friendly café</span>
+            <span class="pill">Midday walk · 4km loop</span>
+            <span class="pill">Lunch · Garden pub</span>
+            <span class="pill">Afternoon park & coffee</span>
+          </div>
+          <small
+            >In the full product this card would be auto‑generated from your
+            filters and dates.</small
+          >
+        </aside>
+      </section>
+
+      <!-- MAP + SIDEBAR -->
+      <section class="layout">
+        <div class="panel">
+          <h2>Map preview</h2>
+          <p>
+            This is a static placeholder. In production, this area would be an
+            interactive map (Leaflet/Mapbox/Google Maps) with dog‑friendly
+            layers and trails.
+          </p>
+
+          <div class="map-placeholder" id="mapBox">
+            <div class="map-pin"></div>
+            <div class="map-legend">
+              <span
+                ><span class="legend-dot" style="background: #ff7a4a"></span
+                >Pubs</span
+              >
+              <span
+                ><span class="legend-dot" style="background: #2f855a"></span
+                >Trails</span
+              >
+              <span
+                ><span class="legend-dot" style="background: #3182ce"></span
+                >Hotels</span
+              >
+            </div>
+            <span id="mapText"
+              >Hertfordshire · dog‑friendly venues & walks (demo)</span
+            >
+          </div>
+
+          <div class="results" id="resultsBox">
+            <!-- JS will inject result cards here -->
+          </div>
+        </div>
+
+        <aside class="panel" id="trails">
+          <h2>Featured walking trail</h2>
+          <p>
+            Highlight safe, dog‑friendly routes with distance, difficulty,
+            terrain and nearby venues.
+          </p>
+
+          <div class="trail-card">
+            <h3>Verulamium Park Riverside Loop</h3>
+            <div class="trail-meta">
+              St Albans · 4.2 km · Easy · Mostly flat · On‑lead near roads,
+              off‑lead in fields.
+            </div>
+            <div style="font-size: 12px; margin-bottom: 6px">
+              A gentle riverside circuit with wide paths, green space for
+              off‑lead play, and a dog‑friendly café at the park edge.
+            </div>
+            <div
+              style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 11px"
+            >
+              <span class="pill">Water access</span>
+              <span class="pill">Parking nearby</span>
+              <span class="pill">Café at start</span>
+            </div>
+          </div>
+
+          <div class="community-section" id="community">
+            <h3 style="font-size: 14px; margin: 12px 0 4px">
+              Community snapshot
+            </h3>
+            <p style="font-size: 12px; margin: 0 0 4px">
+              In the full app, owners share photos, tips and meet‑ups for each
+              area.
+            </p>
+            <div class="community-list">
+              <div class="community-card">
+                <strong>@TruffleTheSpaniel</strong>
+                “Great off‑lead space, plenty of bins and friendly regulars.”
+              </div>
+              <div class="community-card">
+                <strong>@HertsHounds</strong>
+                “We do Sunday group walks here – 10+ dogs each week.”
+              </div>
+              <div class="community-card">
+                <strong>#TheDogAtlas</strong>
+                Tag your photos on Instagram to appear here.
+              </div>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <footer id="account">
+      &copy; <span id="year"></span> TheDogAtlas · Demo only · Data and bookings
+      shown here are placeholders.
+    </footer>
+
+    <script>
+      const demoVenues = [
+        {
+          name: "The Wagging Tail Pub",
+          type: "pub",
+          location: "St Albans",
+          note: "Dog‑friendly garden, water bowls, treats at the bar.",
+          booking: "#",
+          opentable: "#",
+        },
+        {
+          name: "Paws & Beans Café",
+          type: "cafe",
+          location: "St Albans",
+          note: "Indoor dogs welcome, towels by the door on rainy days.",
+          booking: "#",
+          opentable: "",
+        },
+        {
+          name: "Herts Meadow Trailhead",
+          type: "trail",
+          location: "Hertfordshire",
+          note: "3 km circular trail with off‑lead fields and a stream.",
+          booking: "",
+          opentable: "",
+        },
+        {
+          name: "Dog‑Friendly Inn",
+          type: "hotel",
+          location: "Hertfordshire",
+          note: "Pet‑friendly rooms, enclosed garden, £15/night dog fee.",
+          booking: "#",
+          opentable: "",
+        },
+      ];
+
+      function renderResults(filtered) {
+        const box = document.getElementById("resultsBox");
+        box.innerHTML = "";
+        if (!filtered.length) {
+          box.innerHTML =
+            '<div style="font-size:12px;color:#6b6f7a;margin-top:4px;">No demo results – in production this would query live data.</div>';
+          return;
+        }
+        filtered.forEach((v) => {
+          const el = document.createElement("div");
+          el.className = "result-card";
+          el.innerHTML = `
+          <div>
+            <h3>${v.name}</h3>
+            <small>${v.location} · ${v.type.toUpperCase()}</small>
+            <small>${v.note}</small>
+          </div>
+          <div class="result-actions">
+            ${
+              v.booking ? `<a href="${v.booking}" class="primary">Book</a>` : ""
+            }
+            ${v.opentable ? `<a href="${v.opentable}">OpenTable</a>` : ""}
+          </div>
+        `;
+          box.appendChild(el);
+        });
+      }
+
+      function demoSearch() {
+        const where = document.getElementById("whereInput").value.toLowerCase();
+        const type = document.getElementById("typeInput").value;
+        const time = document.getElementById("timeInput").value;
+
+        const mapText = document.getElementById("mapText");
+        mapText.textContent = where
+          ? `${where} · ${
+              type === "all" ? "dog‑friendly places & trails" : type + "s"
+            } (demo)`
+          : "Dog‑friendly venues & walks (demo)";
+
+        let filtered = demoVenues.filter(
+          (v) =>
+            (!where || v.location.toLowerCase().includes(where)) &&
+            (type === "all" || v.type === type)
+        );
+
+        // Simple “time of day” hint – just tweak notes in demo
+        if (time === "breakfast") {
+          filtered = filtered.filter(
+            (v) => v.type === "cafe" || v.type === "trail"
+          );
+        } else if (time === "dinner") {
+          filtered = filtered.filter(
+            (v) =>
+              v.type === "pub" || v.type === "restaurant" || v.type === "hotel"
+          );
+        }
+
+        renderResults(filtered);
+      }
+
+      document.getElementById("year").textContent = new Date().getFullYear();
+      demoSearch();
+    </script>
+  </body>
+</html>
