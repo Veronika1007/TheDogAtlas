@@ -55,8 +55,8 @@
             </div>
             <h1>Find dog‑friendly pubs, stays & walking trails in seconds.</h1>
             <p>
-              The UK's most comprehensive dog-friendly directory[cite: 31, 35].
-              Discover verified garden seating and off-lead policies.
+              The UK's most comprehensive dog-friendly directory. Discover
+              verified garden seating and off-lead policies.
             </p>
 
             <form
@@ -104,7 +104,7 @@
           </div>
           <aside class="hero-card" style="text-align: center">
             <h3>Smart Planner</h3>
-            <p>Build a curated day-by-day trip schedule[cite: 36, 63].</p>
+            <p>Build a curated day-by-day trip schedule.</p>
             <button onclick="showPage('planner-page')" class="primary-btn">
               Try Itinerary Planner
             </button>
@@ -128,10 +128,10 @@
             <div class="results" id="resultsBox"></div>
           </div>
           <aside class="panel" id="trails">
-            <h2>Featured Walking Trail [cite: 39]</h2>
+            <h2>Featured Walking Trail</h2>
             <div class="trail-card">
               <h3>Verulamium Park Loop</h3>
-              <small>4.2 km · Easy · Off-lead fields [cite: 75]</small>
+              <small>4.2 km · Easy · Off-lead fields </small>
               <div class="pill-row">
                 <span class="pill">Water access</span>
                 <span class="pill">Café stop</span>
@@ -144,10 +144,10 @@
       <div id="planner-page" class="page">
         <section class="hero">
           <div>
-            <h1>Intelligent Itinerary Planner [cite: 63]</h1>
+            <h1>Intelligent Itinerary Planner</h1>
             <p>
               Build a curated day-by-day schedule including breakfast, lunch,
-              and activities[cite: 65].
+              and activities.
             </p>
 
             <form
@@ -163,7 +163,7 @@
                 />
                 <select id="planStyle">
                   <option value="relaxed">Relaxed</option>
-                  <option value="active">Active Explorer [cite: 109]</option>
+                  <option value="active">Active Explorer</option>
                 </select>
               </div>
               <input
@@ -217,7 +217,7 @@
 
       let markersLayer = L.layerGroup().addTo(map);
 
-      // 3. Demo Data [cite: 412-424]
+      // 3. Demo Data
       const demoVenues = [
         {
           name: "The Wagging Tail Pub",
@@ -249,7 +249,7 @@
           location: "Hertfordshire",
           lat: 51.76,
           lng: -0.35,
-          note: "Pet-friendly rooms[cite: 59].",
+          note: "Pet-friendly rooms.",
         },
       ];
 
@@ -298,7 +298,7 @@
             .join("") || "<p>No results found.</p>";
       }
 
-      // 5. Itinerary Generator [cite: 65-70]
+      // 5. Itinerary Generator
       function generateItinerary() {
         const dest = document.getElementById("planDest").value;
         document.getElementById("itineraryResult").classList.remove("hidden");
@@ -307,8 +307,8 @@
         ).textContent = `Day Trip to ${dest}`;
         document.getElementById("itineraryTimeline").innerHTML = `
           <div class="result-card"><strong>09:00 Breakfast</strong><br>Paws & Beans Café</div>
-          <div class="result-card"><strong>11:30 Morning Activity</strong><br>Verulamium Trail Walk [cite: 68]</div>
-          <div class="result-card"><strong>13:30 Lunch</strong><br>The Wagging Tail Pub [cite: 66]</div>
+          <div class="result-card"><strong>11:30 Morning Activity</strong><br>Verulamium Trail Walk </div>
+          <div class="result-card"><strong>13:30 Lunch</strong><br>The Wagging Tail Pub </div>
         `;
       }
 
