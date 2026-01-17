@@ -9,6 +9,32 @@
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     />
     <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+      // Center the map on Hertfordshire
+      const map = L.map("mapBox").setView([51.7527, -0.3394], 12);
+
+      // Use free OpenStreetMap tiles
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "&copy; OpenStreetMap contributors",
+      }).addTo(map);
+
+      // Add a marker with your DogAtlas Logo!
+      const dogIcon = L.icon({
+        iconUrl: "Logo.png",
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+      });
+
+      L.marker([51.7527, -0.3394], { icon: dogIcon })
+        .addTo(map)
+        .bindPopup("<b>St Albans</b><br>Start your dog-friendly trip here!");
+    </script>
   </head>
   <body>
     <header>
