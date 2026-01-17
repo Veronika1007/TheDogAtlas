@@ -237,6 +237,19 @@
       /* --- FEATURED TRAIL MAP INITIALIZATION --- */
       window.addEventListener("load", function () {
         const trailCoords = [51.751, -0.345];
+
+        // Trail coordinates for the polyline route
+        const loopRoute = [
+          [51.751, -0.345],
+          [51.7495, -0.342],
+          [51.7485, -0.344],
+          [51.749, -0.347],
+          [51.7515, -0.349],
+          [51.7535, -0.3465],
+          [51.7525, -0.3435],
+          [51.751, -0.345],
+        ];
+
         const trailMap = L.map("trailMap", {
           zoomControl: false,
           attributionControl: false,
@@ -245,8 +258,16 @@
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
           trailMap
         );
+
+        // Draw the mapped trail route
+        L.polyline(loopRoute, {
+          color: "#2f855a",
+          weight: 4,
+          opacity: 0.8,
+          dashArray: "5, 10",
+        }).addTo(trailMap);
+
         L.marker(trailCoords).addTo(trailMap);
-        L.circle(trailCoords, { color: "green", radius: 500 }).addTo(trailMap);
       });
 
       /* --- VENUE DATA --- */
@@ -309,6 +330,9 @@
       /* --- PLANNER LOGIC --- */
       function generateItinerary() {
         document.getElementById("itineraryResult").classList.remove("hidden");
+        document.getElementById(
+          "itineraryTitle"
+        ).textContent = `Day Trip to St Albans`;
         document.getElementById("itineraryTimeline").innerHTML = `
           <div class="result-card"><strong>09:00 Breakfast</strong><br>Paws & Beans Café</div>
           <div class="result-card"><strong>13:30 Lunch</strong><br>The Wagging Tail Pub</div>
