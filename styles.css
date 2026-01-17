@@ -379,3 +379,35 @@ footer {
     overflow-x: auto;
   }
 }
+
+/* Page Toggling Logic */
+.page {
+  display: none;
+}
+.page.active {
+  display: block;
+}
+
+/* Multi-select Filter Styles */
+.multi-filter-container {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px;
+  max-height: 150px;
+  overflow-y: auto;
+  flex: 1 1 100%;
+  margin-bottom: 10px;
+}
+.filter-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  padding: 4px 0;
+  cursor: pointer;
+}
+.filter-option input {
+  width: auto !important;
+  flex: none !important;
+}
