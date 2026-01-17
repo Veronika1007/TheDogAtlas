@@ -140,11 +140,36 @@
             <h2>Search Results</h2>
             <div class="results" id="resultsBox"></div>
           </div>
+
           <aside class="panel" id="trails">
             <h2>Featured Walking Trail</h2>
             <div class="trail-card">
               <h3>Verulamium Park Loop</h3>
               <small>4.2 km · Easy · Off-lead fields</small>
+
+              <div
+                id="trailMap"
+                style="
+                  height: 180px;
+                  border-radius: 8px;
+                  margin: 12px 0;
+                  border: 1px solid var(--border);
+                  z-index: 1;
+                "
+              ></div>
+
+              <div
+                class="trail-meta"
+                style="font-size: 12px; color: var(--muted); margin-bottom: 8px"
+              >
+                A gentle riverside circuit with wide paths, green space for
+                off-lead play, and a dog-friendly café at the park edge.
+              </div>
+              <div class="pill-row">
+                <span class="pill">Water access</span>
+                <span class="pill">Café stop</span>
+                <span class="pill">Parking nearby</span>
+              </div>
             </div>
           </aside>
         </section>
@@ -190,27 +215,39 @@
         document
           .querySelectorAll(".nav-link")
           .forEach((n) => n.classList.remove("active"));
-        if (pageId === "map-page")
-          document.getElementById("nav-map").classList.add("active");
-        if (pageId === "planner-page")
-          document.getElementById("nav-planner").classList.add("active");
 
-        // Refresh map size if switching to map page
         if (pageId === "map-page") {
+          document.getElementById("nav-map").classList.add("active");
           setTimeout(() => {
             map.invalidateSize();
           }, 200);
+        } else if (pageId === "planner-page") {
+          document.getElementById("nav-planner").classList.add("active");
         }
       }
 
-      /* --- MAP INITIALIZATION --- */
-      // FIX: Only declare 'map' once globally to avoid redeclaration error
+      /* --- MAIN MAP INITIALIZATION --- */
       const map = L.map("mapBox").setView([51.7527, -0.3394], 13);
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: "&copy; OpenStreetMap",
       }).addTo(map);
 
       let markersLayer = L.layerGroup().addTo(map);
+
+      /* --- FEATURED TRAIL MAP INITIALIZATION --- */
+      window.addEventListener("load", function () {
+        const trailCoords = [51.751, -0.345];
+        const trailMap = L.map("trailMap", {
+          zoomControl: false,
+          attributionControl: false,
+        }).setView(trailCoords, 14);
+
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
+          trailMap
+        );
+        L.marker(trailCoords).addTo(trailMap);
+        L.circle(trailCoords, { color: "green", radius: 500 }).addTo(trailMap);
+      });
 
       /* --- VENUE DATA --- */
       const demoVenues = [
@@ -246,7 +283,6 @@
           (v) => selectedCats.length === 0 || selectedCats.includes(v.type)
         );
 
-        // Clear and update markers
         markersLayer.clearLayers();
         filtered.forEach((v) => {
           L.marker([v.lat, v.lng])
@@ -254,7 +290,6 @@
             .bindPopup(`<b>${v.name}</b><br>${v.note}`);
         });
 
-        // Update Results List
         document.getElementById("resultsBox").innerHTML =
           filtered
             .map(
@@ -280,7 +315,7 @@
         `;
       }
 
-      demoSearch(); // Run on load
+      demoSearch();
     </script>
   </body>
 </html>
