@@ -9,32 +9,6 @@
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     />
     <link rel="stylesheet" href="styles.css" />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-    <script>
-      // Center the map on Hertfordshire
-      const map = L.map("mapBox").setView([51.7527, -0.3394], 12);
-
-      // Use free OpenStreetMap tiles
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: "&copy; OpenStreetMap contributors",
-      }).addTo(map);
-
-      // Add a marker with your DogAtlas Logo!
-      const dogIcon = L.icon({
-        iconUrl: "Logo.png",
-        iconSize: [32, 32],
-        iconAnchor: [16, 32],
-      });
-
-      L.marker([51.7527, -0.3394], { icon: dogIcon })
-        .addTo(map)
-        .bindPopup("<b>St Albans</b><br>Start your dog-friendly trip here!");
-    </script>
   </head>
   <body>
     <header>
@@ -80,10 +54,6 @@
               <span>Hertfordshire Beta · Verified Venues Only</span>
             </div>
             <h1>Find dog‑friendly pubs, stays & walking trails in seconds.</h1>
-            <p>
-              The UK's most comprehensive dog-friendly directory. Discover
-              verified garden seating and off-lead policies.
-            </p>
 
             <form
               class="hero-form"
@@ -102,24 +72,40 @@
                   ><input type="checkbox" value="pub" /> Pubs & Bars</label
                 >
                 <label class="filter-option"
-                  ><input type="checkbox" value="cafe" /> Cafes &
+                  ><input type="checkbox" value="cafe" /> Cafe</label
+                >
+                <label class="filter-option"
+                  ><input type="checkbox" value="restaurant" />
                   Restaurants</label
                 >
                 <label class="filter-option"
-                  ><input type="checkbox" value="hotel" /> Hotels & B&Bs</label
+                  ><input type="checkbox" value="shop" /> Shops & Retail</label
                 >
                 <label class="filter-option"
-                  ><input type="checkbox" value="trail" /> Walking Trails</label
-                >
-                <label class="filter-option"
-                  ><input type="checkbox" value="vet" /> Vets & Groomers</label
-                >
-                <label class="filter-option"
-                  ><input type="checkbox" value="park" /> Parks & Beaches</label
-                >
-                <label class="filter-option"
-                  ><input type="checkbox" value="shop" /> Shops &
+                  ><input type="checkbox" value="attraction" />
                   Attractions</label
+                >
+                <label class="filter-option"
+                  ><input type="checkbox" value="park" /> Parks</label
+                >
+                <label class="filter-option"
+                  ><input type="checkbox" value="beach" /> Beaches</label
+                >
+                <label class="filter-option"
+                  ><input type="checkbox" value="hotel" /> Hotel & B&Bs</label
+                >
+                <label class="filter-option"
+                  ><input type="checkbox" value="vet" /> Vets</label
+                >
+                <label class="filter-option"
+                  ><input type="checkbox" value="groomer" /> Groomers</label
+                >
+                <label class="filter-option"
+                  ><input type="checkbox" value="trainer" /> Trainers</label
+                >
+                <label class="filter-option"
+                  ><input type="checkbox" value="service" /> Daycare &
+                  Kennels</label
                 >
               </div>
 
@@ -132,7 +118,7 @@
             <h3>Smart Planner</h3>
             <p>Build a curated day-by-day trip schedule.</p>
             <button onclick="showPage('planner-page')" class="primary-btn">
-              Try Itinerary Planner
+              Open Planner
             </button>
           </aside>
         </section>
@@ -147,6 +133,7 @@
                 border-radius: 12px;
                 margin-bottom: 15px;
                 border: 1px solid var(--border);
+                z-index: 1;
               "
             ></div>
 
@@ -157,11 +144,7 @@
             <h2>Featured Walking Trail</h2>
             <div class="trail-card">
               <h3>Verulamium Park Loop</h3>
-              <small>4.2 km · Easy · Off-lead fields </small>
-              <div class="pill-row">
-                <span class="pill">Water access</span>
-                <span class="pill">Café stop</span>
-              </div>
+              <small>4.2 km · Easy · Off-lead fields</small>
             </div>
           </aside>
         </section>
@@ -172,39 +155,23 @@
           <div>
             <h1>Intelligent Itinerary Planner</h1>
             <p>
-              Build a curated day-by-day schedule including breakfast, lunch,
-              and activities.
+              Suggested schedules for breakfast, lunch, and dog-friendly
+              activities.
             </p>
-
             <form
-              class="hero-form planner-form"
+              class="hero-form"
               onsubmit="event.preventDefault(); generateItinerary();"
             >
-              <div class="form-row">
-                <input
-                  type="text"
-                  id="planDest"
-                  placeholder="Destination"
-                  value="St Albans"
-                />
-                <select id="planStyle">
-                  <option value="relaxed">Relaxed</option>
-                  <option value="active">Active Explorer</option>
-                </select>
-              </div>
               <input
-                type="number"
-                id="planDays"
-                placeholder="Days"
-                value="1"
-                min="1"
-                max="7"
+                type="text"
+                id="planDest"
+                value="St Albans"
+                style="width: 100%; margin-bottom: 10px"
               />
               <button type="submit" style="width: 100%">Generate Trip</button>
             </form>
           </div>
         </section>
-
         <div id="itineraryResult" class="panel hidden">
           <h2 id="itineraryTitle">Your Trip</h2>
           <div id="itineraryTimeline"></div>
@@ -214,7 +181,7 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-      // 1. Navigation Logic
+      /* --- NAVIGATION LOGIC --- */
       function showPage(pageId) {
         document
           .querySelectorAll(".page")
@@ -227,7 +194,8 @@
           document.getElementById("nav-map").classList.add("active");
         if (pageId === "planner-page")
           document.getElementById("nav-planner").classList.add("active");
-        // Fix for leaflet grey tiles on hidden container
+
+        // Refresh map size if switching to map page
         if (pageId === "map-page") {
           setTimeout(() => {
             map.invalidateSize();
@@ -235,7 +203,8 @@
         }
       }
 
-      // 2. Free Map Initialization (Leaflet)
+      /* --- MAP INITIALIZATION --- */
+      // FIX: Only declare 'map' once globally to avoid redeclaration error
       const map = L.map("mapBox").setView([51.7527, -0.3394], 13);
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: "&copy; OpenStreetMap",
@@ -243,20 +212,18 @@
 
       let markersLayer = L.layerGroup().addTo(map);
 
-      // 3. Demo Data
+      /* --- VENUE DATA --- */
       const demoVenues = [
         {
           name: "The Wagging Tail Pub",
           type: "pub",
-          location: "St Albans",
           lat: 51.75,
           lng: -0.34,
-          note: "Verified garden, treats & bowls.",
+          note: "Verified garden seating.",
         },
         {
           name: "Paws & Beans Café",
           type: "cafe",
-          location: "St Albans",
           lat: 51.753,
           lng: -0.335,
           note: "Indoor dogs welcome.",
@@ -264,58 +231,38 @@
         {
           name: "Verulamium Riverside",
           type: "trail",
-          location: "St Albans",
           lat: 51.751,
           lng: -0.345,
-          note: "4.2km loop, off-lead fields.",
-        },
-        {
-          name: "Dog‑Friendly Inn",
-          type: "hotel",
-          location: "Hertfordshire",
-          lat: 51.76,
-          lng: -0.35,
-          note: "Pet-friendly rooms.",
+          note: "4.2km loop walk.",
         },
       ];
 
-      // 4. Search & Multi-filter Logic
+      /* --- SEARCH & MULTI-FILTER --- */
       function demoSearch() {
-        const where = document.getElementById("whereInput").value.toLowerCase();
         const selectedCats = Array.from(
           document.querySelectorAll("#categoryFilters input:checked")
         ).map((cb) => cb.value);
+        let filtered = demoVenues.filter(
+          (v) => selectedCats.length === 0 || selectedCats.includes(v.type)
+        );
 
-        let filtered = demoVenues.filter((v) => {
-          const matchLoc = !where || v.location.toLowerCase().includes(where);
-          const matchCat =
-            selectedCats.length === 0 || selectedCats.includes(v.type);
-          return matchLoc && matchCat;
-        });
-
-        renderMap(filtered);
-        renderResults(filtered);
-      }
-
-      function renderMap(venues) {
+        // Clear and update markers
         markersLayer.clearLayers();
-        venues.forEach((v) => {
+        filtered.forEach((v) => {
           L.marker([v.lat, v.lng])
             .addTo(markersLayer)
             .bindPopup(`<b>${v.name}</b><br>${v.note}`);
         });
-      }
 
-      function renderResults(venues) {
-        const box = document.getElementById("resultsBox");
-        box.innerHTML =
-          venues
+        // Update Results List
+        document.getElementById("resultsBox").innerHTML =
+          filtered
             .map(
               (v) => `
           <div class="result-card">
             <div>
               <h3>${v.name}</h3>
-              <small>${v.location} · ${v.type.toUpperCase()}</small>
+              <small>${v.type.toUpperCase()}</small>
               <p style="font-size: 12px; margin: 4px 0;">${v.note}</p>
             </div>
           </div>
@@ -324,21 +271,16 @@
             .join("") || "<p>No results found.</p>";
       }
 
-      // 5. Itinerary Generator
+      /* --- PLANNER LOGIC --- */
       function generateItinerary() {
-        const dest = document.getElementById("planDest").value;
         document.getElementById("itineraryResult").classList.remove("hidden");
-        document.getElementById(
-          "itineraryTitle"
-        ).textContent = `Day Trip to ${dest}`;
         document.getElementById("itineraryTimeline").innerHTML = `
           <div class="result-card"><strong>09:00 Breakfast</strong><br>Paws & Beans Café</div>
-          <div class="result-card"><strong>11:30 Morning Activity</strong><br>Verulamium Trail Walk </div>
-          <div class="result-card"><strong>13:30 Lunch</strong><br>The Wagging Tail Pub </div>
+          <div class="result-card"><strong>13:30 Lunch</strong><br>The Wagging Tail Pub</div>
         `;
       }
 
-      demoSearch(); // Initial load
+      demoSearch(); // Run on load
     </script>
   </body>
 </html>
