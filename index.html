@@ -2,9 +2,21 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>TheDogAtlas – Dog‑Friendly Map & Trails</title>
+    <title>TheDogAtlas – Dog‑Friendly Map & Planner</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* Page Toggling Logic */
+      .page {
+        display: none;
+      }
+      .page.active {
+        display: block;
+      }
+      .hidden {
+        display: none;
+      }
+    </style>
   </head>
   <body>
     <header>
@@ -12,279 +24,290 @@
         <img
           src="Logo.png"
           alt="TheDogAtlas Logo"
-          style="height: 40px; width: auto"
+          style="height: 36px; width: auto"
         />
         <div>
-          <div style="font-weight: 700; font-size: 18px; color: var(--accent)">
-            TheDogAtlas
-          </div>
+          <div style="font-weight: 700; font-size: 16px">TheDogAtlas</div>
           <div style="font-size: 11px; color: var(--muted)">
-            The dog-first travel & lifestyle platform
+            The dog-first travel platform
           </div>
         </div>
       </div>
       <nav>
-        <a href="#" class="active">Map</a>
+        <a
+          href="#"
+          onclick="showPage('map-page')"
+          class="nav-link active"
+          id="nav-map"
+          >Map</a
+        >
+        <a
+          href="#"
+          onclick="showPage('planner-page')"
+          class="nav-link"
+          id="nav-planner"
+          >Planner</a
+        >
         <a href="#trails">Trails</a>
         <a href="#community">Community</a>
-        <a href="#account">Sign in</a>
       </nav>
     </header>
 
     <main>
-      <section class="hero">
-        <div>
-          <div class="hero-tag">
-            <span>🗺️</span>
-            <span>Hertfordshire Beta · Verified Venues Only</span>
-          </div>
-          <h1>Find dog‑friendly pubs, stays & walking trails in seconds.</h1>
-          <p>
-            The UK's most comprehensive dog-friendly directory. Plan verified
-            trips with our smart itinerary planner[cite: 37, 129].
-          </p>
-
-          <form
-            class="hero-form"
-            onsubmit="event.preventDefault(); demoSearch();"
-          >
-            <input
-              id="whereInput"
-              type="text"
-              placeholder="Location (e.g. St Albans)"
-              value="Hertfordshire"
-            />
-
-            <select id="typeInput">
-              <option value="all">All types</option>
-              <option value="pub">Pubs & Bars</option>
-              <option value="cafe">Cafes & Restaurants</option>
-              <option value="hotel">Hotels & B&Bs</option>
-              <option value="park">Parks & Beaches</option>
-              <option value="trail">Walking Trails</option>
-              <option value="vet">Vets & Groomers</option>
-              <option value="service">Trainers & Daycare</option>
-              <option value="shop">Shops</option>
-            </select>
-
-            <select id="timeInput">
-              <option value="">Any time</option>
-              <option value="breakfast">Breakfast</option>
-              <option value="lunch">Lunch</option>
-              <option value="dinner">Dinner</option>
-            </select>
-            <button type="submit">Search map</button>
-          </form>
-
-          <div class="hero-meta">
-            Suggested: “St Albans · Pubs · Lunch” for verified garden
-            seating[cite: 52].
-          </div>
-        </div>
-
-        <aside class="hero-card">
-          <h2>Smart Itinerary: St Albans</h2>
-          <p style="font-size: 13px; color: var(--muted); margin: 0 0 8px">
-            Curated 1-day trip for you and your dog[cite: 66].
-          </p>
-          <div class="hero-pill-row">
-            <span class="pill"
-              ><strong>09:00</strong> Breakfast @ Paws Cafe</span
-            >
-            <span class="pill"
-              ><strong>11:00</strong> Verulamium Loop (4km)</span
-            >
-            <span class="pill"
-              ><strong>13:30</strong> Lunch @ The Wagging Tail</span
-            >
-            <span class="pill"
-              ><strong>15:30</strong> Off-lead Play @ Highfield</span
-            >
-          </div>
-          <small
-            >Premium Feature: Save and share itineraries[cite: 72, 273].</small
-          >
-        </aside>
-      </section>
-
-      <section class="layout">
-        <div class="panel">
-          <h2>Interactive Map Preview</h2>
-          <p>Verified dog-friendly layers across Hertfordshire[cite: 60].</p>
-
-          <div class="map-placeholder" id="mapBox">
-            <div class="map-pin"></div>
-            <div class="map-legend">
-              <span
-                ><span class="legend-dot" style="background: #ff7a4a"></span
-                >Pubs</span
-              >
-              <span
-                ><span class="legend-dot" style="background: #2f855a"></span
-                >Trails</span
-              >
-              <span
-                ><span class="legend-dot" style="background: #3182ce"></span
-                >Hotels</span
-              >
+      <div id="map-page" class="page active">
+        <section class="hero">
+          <div>
+            <div class="hero-tag">
+              <span>🗺️</span>
+              <span>Hertfordshire Beta · 1,500+ Verified Venues</span>
             </div>
-            <span id="mapText"
-              >Hertfordshire · 1,500+ Verified Venues [cite: 412]</span
-            >
-          </div>
-
-          <div class="results" id="resultsBox"></div>
-        </div>
-
-        <aside class="panel" id="trails">
-          <h2>Featured Walking Trail</h2>
-          <p>Curated routes with difficulty and terrain data[cite: 75, 76].</p>
-
-          <div class="trail-card">
-            <h3>Verulamium Park Riverside Loop</h3>
-            <div class="trail-meta">
-              St Albans · 4.2 km · Easy · Flat [cite: 77]
-            </div>
-            <div style="font-size: 12px; margin-bottom: 6px">
-              Gentle circuit with off‑lead fields and a dog‑friendly café.
-            </div>
-            <div
-              style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 11px"
-            >
-              <span class="pill">Water access</span>
-              <span class="pill">Parking</span>
-              <span class="pill">Café nearby</span>
-            </div>
-          </div>
-
-          <div class="community-section" id="community">
-            <h3>Community Snapshot</h3>
-            <p style="font-size: 12px">
-              Real-time tips from fellow owners[cite: 39, 82].
+            <h1>Find dog‑friendly pubs, stays & walking trails in seconds.</h1>
+            <p>
+              The UK's most comprehensive dog-friendly directory[cite: 483].
+              Explore verified garden seating and off-lead policies.
             </p>
-            <div class="community-list">
-              <div class="community-card">
-                <strong>@TruffleTheSpaniel</strong>
-                “Great off‑lead space, plenty of bins.”
-              </div>
-              <div class="community-card">
-                <strong>@HertsHounds</strong>
-                “Join our Sunday group walk here!”
-              </div>
-            </div>
+
+            <form
+              class="hero-form"
+              onsubmit="event.preventDefault(); demoSearch();"
+            >
+              <input
+                id="whereInput"
+                type="text"
+                placeholder="Location (e.g. St Albans)"
+                value="Hertfordshire"
+              />
+              <select id="typeInput">
+                <option value="all">All types</option>
+                <option value="pub">Pubs & Bars</option>
+                <option value="cafe">Cafes & Restaurants</option>
+                <option value="hotel">Hotels</option>
+                <option value="trail">Walking Trails</option>
+                <option value="vet">Vets & Groomers</option>
+              </select>
+              <button type="submit">Search map</button>
+            </form>
           </div>
-        </aside>
-      </section>
+          <aside class="hero-card" style="text-align: center">
+            <h3>New Feature!</h3>
+            <p>Plan multi-day dog trips with our smart AI assistant.</p>
+            <button
+              onclick="showPage('planner-page')"
+              style="
+                background: var(--accent);
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 99px;
+                cursor: pointer;
+              "
+            >
+              Try Itinerary Planner
+            </button>
+          </aside>
+        </section>
+
+        <section class="layout">
+          <div class="panel">
+            <h2>Interactive Map Preview</h2>
+            <div class="map-placeholder" id="mapBox">
+              <div class="map-pin"></div>
+              <span id="mapText"
+                >Hertfordshire · Dog‑friendly venues (demo)</span
+              >
+            </div>
+            <div class="results" id="resultsBox"></div>
+          </div>
+          <aside class="panel" id="trails">
+            <h2>Featured Walking Trail [cite: 522]</h2>
+            <div class="trail-card">
+              <h3>Verulamium Park Loop</h3>
+              <small>4.2 km · Easy · Off-lead fields</small>
+            </div>
+          </aside>
+        </section>
+      </div>
+
+      <div id="planner-page" class="page">
+        <section class="hero">
+          <div>
+            <h1>Intelligent Itinerary Planner</h1>
+            <p>
+              Build a curated day-by-day schedule including breakfast, lunch,
+              and dog-friendly activities[cite: 484, 513].
+            </p>
+
+            <form
+              class="hero-form"
+              onsubmit="event.preventDefault(); generateItinerary();"
+              style="
+                background: white;
+                padding: 20px;
+                border-radius: 16px;
+                border: 1px solid var(--border);
+              "
+            >
+              <div
+                style="
+                  width: 100%;
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  gap: 10px;
+                  margin-bottom: 10px;
+                "
+              >
+                <input
+                  type="text"
+                  id="planDest"
+                  placeholder="Destination (e.g. St Albans)"
+                  value="St Albans"
+                />
+                <select id="planStyle">
+                  <option value="relaxed">Relaxed (Low Activity)</option>
+                  <option value="active">Active (High Activity)</option>
+                </select>
+              </div>
+              <input
+                type="number"
+                id="planDays"
+                placeholder="Number of days (1-7)"
+                value="1"
+                min="1"
+                max="7"
+                style="margin-bottom: 10px; width: 100%"
+              />
+              <button type="submit" style="width: 100%">
+                Generate My Dog-Friendly Trip
+              </button>
+            </form>
+          </div>
+        </section>
+
+        <div id="itineraryResult" class="panel hidden">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
+            <h2 id="itineraryTitle">Your St Albans Trip</h2>
+            <span class="pill">Premium Preview</span>
+          </div>
+          <div id="itineraryTimeline" style="margin-top: 20px"></div>
+          <div
+            style="
+              margin-top: 20px;
+              padding-top: 15px;
+              border-top: 1px solid var(--border);
+            "
+          >
+            <small
+              >Save and share features coming in Phase 2[cite: 519, 612].</small
+            >
+          </div>
+        </div>
+      </div>
     </main>
 
-    <footer>
-      &copy; <span id="year"></span> TheDogAtlas · Hertfordshire MVP Phase[cite:
-      134].
-    </footer>
-
     <script>
-      // Expanded demo data to match Business Case categories [cite: 413-425]
+      // Navigation Logic
+      function showPage(pageId) {
+        document
+          .querySelectorAll(".page")
+          .forEach((p) => p.classList.remove("active"));
+        document.getElementById(pageId).classList.add("active");
+
+        document
+          .querySelectorAll(".nav-link")
+          .forEach((n) => n.classList.remove("active"));
+        if (pageId === "map-page")
+          document.getElementById("nav-map").classList.add("active");
+        if (pageId === "planner-page")
+          document.getElementById("nav-planner").classList.add("active");
+      }
+
+      // Itinerary Logic [cite: 513-516]
+      function generateItinerary() {
+        const dest = document.getElementById("planDest").value;
+        const days = document.getElementById("planDays").value;
+        const resultBox = document.getElementById("itineraryResult");
+        const timeline = document.getElementById("itineraryTimeline");
+
+        resultBox.classList.remove("hidden");
+        document.getElementById(
+          "itineraryTitle"
+        ).textContent = `1-Day Trip to ${dest}`;
+
+        timeline.innerHTML = `
+          <div class="result-card">
+            <div><strong>09:00 - Breakfast</strong><br><small>Paws & Beans Café · Verified Dog-Friendly [cite: 514]</small></div>
+            <a href="#" class="primary" style="font-size: 10px">Book Table</a>
+          </div>
+          <div class="result-card">
+            <div><strong>11:30 - Morning Walk</strong><br><small>Verulamium Riverside (4.2km) · Off-lead areas [cite: 516]</small></div>
+          </div>
+          <div class="result-card">
+            <div><strong>13:30 - Lunch</strong><br><small>The Wagging Tail · Garden seating available [cite: 514]</small></div>
+            <a href="#" class="primary" style="font-size: 10px">View Menu</a>
+          </div>
+          <div class="result-card">
+            <div><strong>15:30 - Afternoon Activity</strong><br><small>Local Pet Shop & Grooming visit [cite: 518]</small></div>
+          </div>
+        `;
+      }
+
+      // Re-use your existing search logic for the map page
       const demoVenues = [
         {
           name: "The Wagging Tail Pub",
           type: "pub",
           location: "St Albans",
-          note: "Verified: Garden seating, treats & bowls provided[cite: 61].",
+          note: "Verified garden, treats & bowls[cite: 508].",
           booking: "#",
         },
         {
           name: "Paws & Beans Café",
           type: "cafe",
           location: "St Albans",
-          note: "Indoor dogs welcome. Towels available[cite: 62].",
-          booking: "#",
-        },
-        {
-          name: "Herts Meadow Trailhead",
-          type: "trail",
-          location: "Hertfordshire",
-          note: "3 km circular. Off-lead fields[cite: 77].",
-          booking: "",
-        },
-        {
-          name: "Dog‑Friendly Inn",
-          type: "hotel",
-          location: "Hertfordshire",
-          note: "Pet-friendly rooms, enclosed garden[cite: 88].",
-          booking: "#",
-        },
-        {
-          name: "Herts Veterinary Centre",
-          type: "vet",
-          location: "St Albans",
-          note: "24/7 Emergency care for members[cite: 91].",
-          booking: "#",
-        },
-        {
-          name: "Grooming Marvellous",
-          type: "vet",
-          location: "Watford",
-          note: "Full spa services & puppy socialisation[cite: 419].",
+          note: "Indoor dogs welcome. Towels available.",
           booking: "#",
         },
       ];
 
       function renderResults(filtered) {
         const box = document.getElementById("resultsBox");
-        box.innerHTML = "";
-        if (!filtered.length) {
-          box.innerHTML =
-            '<div style="font-size:12px;color:#6b6f7a;margin-top:4px;">No venues matching your filters in the Beta area.</div>';
-          return;
-        }
-        filtered.forEach((v) => {
-          const el = document.createElement("div");
-          el.className = "result-card";
-          el.innerHTML = `
-          <div>
-            <span style="font-size: 10px; color: var(--primary); font-weight: 700;">VERIFIED</span>
-            <h3>${v.name}</h3>
-            <small>${v.location} · ${v.type.toUpperCase()}</small>
-            <small style="color: var(--text)">${v.note}</small>
-          </div>
-          <div class="result-actions">
-            ${
+        box.innerHTML = filtered
+          .map(
+            (v) => `
+          <div class="result-card">
+            <div>
+              <h3>${v.name}</h3>
+              <small>${v.location} · ${v.type.toUpperCase()}</small>
+              <small style="color: var(--muted)">${v.note}</small>
+            </div>
+            <div class="result-actions">${
               v.booking
-                ? `<a href="${v.booking}" class="primary">Book Now</a>`
+                ? `<a href="${v.booking}" class="primary">Details</a>`
                 : ""
-            }
+            }</div>
           </div>
-        `;
-          box.appendChild(el);
-        });
+        `
+          )
+          .join("");
       }
 
       function demoSearch() {
         const where = document.getElementById("whereInput").value.toLowerCase();
         const type = document.getElementById("typeInput").value;
-        const time = document.getElementById("timeInput").value;
-
         let filtered = demoVenues.filter(
           (v) =>
             (!where || v.location.toLowerCase().includes(where)) &&
-            (type === "all" ||
-              v.type === type ||
-              (type === "vet" && v.type === "vet"))
+            (type === "all" || v.type === type)
         );
-
-        if (time === "breakfast")
-          filtered = filtered.filter(
-            (v) => v.type === "cafe" || v.type === "trail"
-          );
-        if (time === "dinner")
-          filtered = filtered.filter(
-            (v) => v.type === "pub" || v.type === "hotel"
-          );
-
         renderResults(filtered);
       }
 
-      document.getElementById("year").textContent = new Date().getFullYear();
       demoSearch();
     </script>
   </body>
