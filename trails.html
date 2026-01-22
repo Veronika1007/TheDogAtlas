@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Trails – TheDogAtlas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        <img
+          src="Logo.png"
+          alt="TheDogAtlas Logo"
+          style="height: 36px; width: auto"
+        />
+        <div style="font-weight: 700; font-size: 16px">TheDogAtlas</div>
+      </div>
+      <nav>
+        <a href="index.html" class="nav-link">Map</a>
+        <a href="planner.html" class="nav-link">Planner</a>
+        <a href="trails.html" class="nav-link active">Trails</a>
+        <a href="community.html" class="nav-link">Community</a>
+      </nav>
+    </header>
+
+    <main>
+      <h1>Featured Walking Trails</h1>
+      <div class="panel">
+        <div class="trail-card">
+          <h3>Verulamium Park Loop</h3>
+          <small>4.2 km · Easy · Off-lead fields</small>
+          <div
+            id="trailMap"
+            style="
+              height: 300px;
+              border-radius: 8px;
+              margin: 12px 0;
+              border: 1px solid var(--border);
+            "
+          ></div>
+          <p>
+            A gentle riverside circuit with wide paths and off-lead play areas.
+          </p>
+          <div class="pill-row">
+            <span class="pill">Water access</span>
+            <span class="pill">Café stop</span>
+            <span class="pill">Parking nearby</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+      window.addEventListener("load", function () {
+        const trailCoords = [51.751, -0.345];
+        const loopRoute = [
+          [51.751, -0.345],
+          [51.7495, -0.342],
+          [51.7485, -0.344],
+          [51.749, -0.347],
+          [51.7515, -0.349],
+          [51.7535, -0.3465],
+          [51.7525, -0.3435],
+          [51.751, -0.345],
+        ];
+        const trailMap = L.map("trailMap").setView(trailCoords, 14);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
+          trailMap
+        );
+        L.polyline(loopRoute, {
+          color: "#2f855a",
+          weight: 4,
+          dashArray: "5, 10",
+        }).addTo(trailMap);
+        L.marker(trailCoords).addTo(trailMap);
+      });
+    </script>
+  </body>
+</html>

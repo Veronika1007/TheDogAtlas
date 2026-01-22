@@ -47,25 +47,20 @@ nav a {
   color: var(--muted);
   text-decoration: none;
   transition: color 0.2s;
+  padding-bottom: 4px;
 }
 
 nav a.active,
 nav a:hover {
   color: var(--primary);
+  border-bottom: 2px solid var(--primary);
 }
 
 main {
   max-width: 1140px;
   margin: 0 auto;
   padding: 24px 16px;
-}
-
-/* Page Toggling */
-.page {
-  display: none;
-}
-.page.active {
-  display: block;
+  min-height: calc(100vh - 70px);
 }
 
 /* Hero Section */
@@ -96,7 +91,6 @@ main {
   padding: 20px;
   margin-bottom: 16px;
   display: grid;
-  /* Three columns for desktop visibility */
   grid-template-columns: repeat(3, 1fr);
   gap: 12px 15px;
   width: 100%;
@@ -129,6 +123,7 @@ main {
   font-weight: 700;
   cursor: pointer;
   transition: background 0.2s;
+  text-align: center;
 }
 
 .primary-btn:hover {
@@ -136,25 +131,16 @@ main {
 }
 
 /* Layout Panels */
-.layout {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 24px;
-}
-
 .panel {
   background: white;
   padding: 24px;
   border-radius: 16px;
   border: 1px solid var(--border);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 24px;
 }
 
-#mapBox {
-  z-index: 1; /* Ensures map controls don't overlap header */
-}
-
-/* Itinerary & Result Cards  */
+/* Result Cards & Itinerary */
 .result-card {
   background: #fcfcff;
   border: 1px solid var(--border);
@@ -171,23 +157,39 @@ main {
   font-size: 15px;
 }
 
+/* Trail Specific Styles */
+.pill-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.pill {
+  background: #eef2f7;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
 .hidden {
   display: none;
 }
 
 /* Responsive Adjustments */
 @media (max-width: 850px) {
-  .hero,
-  .layout {
+  .hero {
     grid-template-columns: 1fr;
   }
   .multi-filter-container {
     grid-template-columns: 1fr 1fr;
-  } /* Two columns for tablets */
+  }
 }
 
 @media (max-width: 480px) {
   .multi-filter-container {
     grid-template-columns: 1fr;
-  } /* Single column for mobile */
+  }
 }

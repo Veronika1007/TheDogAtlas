@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Planner – TheDogAtlas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        <img
+          src="Logo.png"
+          alt="TheDogAtlas Logo"
+          style="height: 36px; width: auto"
+        />
+        <div style="font-weight: 700; font-size: 16px">TheDogAtlas</div>
+      </div>
+      <nav>
+        <a href="index.html" class="nav-link">Map</a>
+        <a href="planner.html" class="nav-link active">Planner</a>
+        <a href="trails.html" class="nav-link">Trails</a>
+        <a href="community.html" class="nav-link">Community</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <h1>Intelligent Itinerary Planner</h1>
+          <p>
+            Suggested schedules for breakfast, lunch, and dog-friendly
+            activities.
+          </p>
+          <form
+            class="hero-form"
+            onsubmit="event.preventDefault(); generateItinerary();"
+          >
+            <input
+              type="text"
+              id="planDest"
+              value="St Albans"
+              style="width: 100%; margin-bottom: 10px"
+            />
+            <button type="submit" style="width: 100%">Generate Trip</button>
+          </form>
+        </div>
+      </section>
+      <div id="itineraryResult" class="panel hidden">
+        <h2 id="itineraryTitle">Your Trip</h2>
+        <div id="itineraryTimeline"></div>
+      </div>
+    </main>
+
+    <script>
+      function generateItinerary() {
+        document.getElementById("itineraryResult").classList.remove("hidden");
+        document.getElementById(
+          "itineraryTitle"
+        ).textContent = `Day Trip to St Albans`;
+        document.getElementById("itineraryTimeline").innerHTML = `
+          <div class="result-card"><strong>09:00 Breakfast</strong><br>Paws & Beans Café</div>
+          <div class="result-card"><strong>13:30 Lunch</strong><br>The Wagging Tail Pub</div>
+        `;
+      }
+    </script>
+  </body>
+</html>
