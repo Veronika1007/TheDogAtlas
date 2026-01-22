@@ -50,29 +50,76 @@
               type="text"
               placeholder="Location (e.g. St Albans)"
               value="St Albans"
-              style="margin-bottom: 10px; width: 100%"
+              style="margin-bottom: 20px; width: 100%"
             />
-            <div class="multi-filter-container" id="categoryFilters">
-              <label class="filter-option"
-                ><input type="checkbox" value="pub" /> Pubs & Bars</label
-              >
-              <label class="filter-option"
-                ><input type="checkbox" value="cafe" /> Cafe</label
-              >
-              <label class="filter-option"
-                ><input type="checkbox" value="restaurant" /> Restaurants</label
-              >
-              <label class="filter-option"
-                ><input type="checkbox" value="shop" /> Shops</label
-              >
-              <label class="filter-option"
-                ><input type="checkbox" value="park" /> Parks</label
-              >
-              <label class="filter-option"
-                ><input type="checkbox" value="hotel" /> Hotels</label
-              >
+
+            <div id="categoryFilters">
+              <div class="filter-group">
+                <h4>Food & Drink</h4>
+                <div class="filter-grid">
+                  <label class="filter-option"
+                    ><input type="checkbox" value="cafe" /> Cafe</label
+                  >
+                  <label class="filter-option"
+                    ><input type="checkbox" value="pub" /> Pubs & Bars</label
+                  >
+                  <label class="filter-option"
+                    ><input type="checkbox" value="restaurant" />
+                    Restaurants</label
+                  >
+                </div>
+              </div>
+
+              <div class="filter-group">
+                <h4>Retail</h4>
+                <div class="filter-grid">
+                  <label class="filter-option"
+                    ><input type="checkbox" value="shop" /> Shops</label
+                  >
+                  <label class="filter-option"
+                    ><input type="checkbox" value="pet-store" /> Pet
+                    Stores</label
+                  >
+                </div>
+              </div>
+
+              <div class="filter-group">
+                <h4>Experience</h4>
+                <div class="filter-grid">
+                  <label class="filter-option"
+                    ><input type="checkbox" value="attraction" />
+                    Attractions</label
+                  >
+                  <label class="filter-option"
+                    ><input type="checkbox" value="park" /> Parks</label
+                  >
+                  <label class="filter-option"
+                    ><input type="checkbox" value="beach" /> Beaches</label
+                  >
+                </div>
+              </div>
+
+              <div class="filter-group">
+                <h4>Dog Services</h4>
+                <div class="filter-grid">
+                  <label class="filter-option"
+                    ><input type="checkbox" value="vet" /> Vets</label
+                  >
+                  <label class="filter-option"
+                    ><input type="checkbox" value="groomer" /> Groomers</label
+                  >
+                  <label class="filter-option"
+                    ><input type="checkbox" value="service" /> Doggy Daycare &
+                    Kennels</label
+                  >
+                  <label class="filter-option"
+                    ><input type="checkbox" value="trainer" /> Trainers</label
+                  >
+                </div>
+              </div>
             </div>
-            <button type="submit" style="width: 100%">
+
+            <button type="submit" style="width: 100%; margin-top: 10px">
               Search & Filter Map
             </button>
           </form>
