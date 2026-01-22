@@ -115,7 +115,7 @@
             <span><i class="fa-regular fa-comment"></i> 0 Comments</span>
           </div>
           <div class="post-caption">
-            <strong>Luna</strong> First time on the beach, loving the water
+            <strong>Luna</strong> First time on the beach, loving the water!
           </div>
         </div>
 
@@ -148,29 +148,108 @@
         </div>
       </div>
 
-      <div id="section-friends" class="community-section hidden">
-        <div class="reactive-friends-grid">
-          <div class="profile-card">
-            <div class="profile-main">
-              <img
-                src="https://placedog.net/300/300?id=12"
-                alt="Daisy"
-                class="profile-avatar"
-              />
-              <div class="profile-details">
-                <h3>Daisy</h3>
-                <span class="handle">@RedPheonix82</span>
-                <p class="stats">0 Followers • &lt; 1 Km away</p>
-                <div class="breed-info">
-                  <span class="breed-name">Yorkshire Terrier</span>
-                  <span class="gender-icon female"
-                    ><i class="fa-solid fa-venus"></i
-                  ></span>
-                </div>
-              </div>
+      <div
+        id="section-friends"
+        class="community-section reactive-friends-grid hidden"
+      >
+        <div class="profile-card">
+          <img
+            src="Media/Community image 1.jpeg"
+            alt="Sampson"
+            class="profile-avatar"
+          />
+          <div class="profile-details">
+            <h3>Sampson</h3>
+            <span class="handle">@Sampson_GSD</span>
+            <p class="stats">13 Woofs • 1 day ago</p>
+            <div class="breed-info">
+              <span class="breed-name">German Shepherd</span>
+              <span class="gender-icon female"
+                ><i class="fa-solid fa-venus"></i
+              ></span>
             </div>
-            <button class="follow-btn">Follow</button>
           </div>
+          <button class="follow-btn">Follow</button>
+        </div>
+
+        <div class="profile-card">
+          <img
+            src="Media/community image 2.jpg"
+            alt="Luna"
+            class="profile-avatar"
+          />
+          <div class="profile-details">
+            <h3>Luna</h3>
+            <span class="handle">@Luna_BeachDog</span>
+            <p class="stats">1 Woof • 2 hours ago</p>
+            <div class="breed-info">
+              <span class="breed-name">Retriever Mix</span>
+              <span class="gender-icon female"
+                ><i class="fa-solid fa-venus"></i
+              ></span>
+            </div>
+          </div>
+          <button class="follow-btn">Follow</button>
+        </div>
+
+        <div class="profile-card">
+          <img
+            src="Media/community image 3.jpg"
+            alt="Cooper"
+            class="profile-avatar"
+          />
+          <div class="profile-details">
+            <h3>Cooper</h3>
+            <span class="handle">@Cooper_Woodlands</span>
+            <p class="stats">3 Woofs • 2 hours ago</p>
+            <div class="breed-info">
+              <span class="breed-name">Beagle</span>
+              <span class="gender-icon male"
+                ><i class="fa-solid fa-mars"></i
+              ></span>
+            </div>
+          </div>
+          <button class="follow-btn">Follow</button>
+        </div>
+
+        <div class="profile-card">
+          <img
+            src="https://placedog.net/300/300?id=12"
+            alt="Daisy"
+            class="profile-avatar"
+          />
+          <div class="profile-details">
+            <h3>Daisy</h3>
+            <span class="handle">@RedPheonix82</span>
+            <p class="stats">0 Followers • &lt; 1 Km away</p>
+            <div class="breed-info">
+              <span class="breed-name">Yorkshire Terrier</span>
+              <span class="gender-icon female"
+                ><i class="fa-solid fa-venus"></i
+              ></span>
+            </div>
+          </div>
+          <button class="follow-btn">Follow</button>
+        </div>
+
+        <div class="profile-card">
+          <img
+            src="https://placedog.net/300/300?id=10"
+            alt="Willow"
+            class="profile-avatar"
+          />
+          <div class="profile-details">
+            <h3>Willow</h3>
+            <span class="handle">@Willow_Mixed</span>
+            <p class="stats">12 Followers • 2 Km away</p>
+            <div class="breed-info">
+              <span class="breed-name">Mixed Breed</span>
+              <span class="gender-icon female"
+                ><i class="fa-solid fa-venus"></i
+              ></span>
+            </div>
+          </div>
+          <button class="follow-btn">Follow</button>
         </div>
       </div>
 
@@ -193,9 +272,8 @@
         document
           .querySelectorAll(".tab-btn")
           .forEach((b) => b.classList.remove("active"));
-        document
-          .getElementById("section-" + section)
-          .classList.remove("hidden");
+        const target = document.getElementById("section-" + section);
+        if (target) target.classList.remove("hidden");
         document.getElementById("tab-" + section).classList.add("active");
       }
     </script>

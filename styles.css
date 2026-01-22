@@ -68,11 +68,13 @@ nav a:hover {
   text-align: center;
   margin-bottom: 40px;
 }
+
 .hero-simple h1 {
   font-size: 32px;
   color: var(--accent);
   margin-bottom: 8px;
 }
+
 .hero-simple p {
   color: var(--muted);
   font-size: 14px;
@@ -138,11 +140,13 @@ nav a:hover {
   color: var(--primary);
   text-transform: uppercase;
 }
+
 .filter-options {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
+
 .filter-option {
   display: flex;
   align-items: center;
@@ -170,7 +174,7 @@ nav a:hover {
 }
 
 .community-container .hidden {
-  display: none;
+  display: none !important;
 }
 
 .community-container .community-tabs {
@@ -195,12 +199,12 @@ nav a:hover {
   border-bottom-color: var(--primary);
 }
 
-/* Framed Posts Section (Reactive) */
+/* Framed Posts Section (Reactive & Uniform) */
 .community-container .post-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 24px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .community-container .post-frame {
@@ -209,6 +213,24 @@ nav a:hover {
   border-radius: var(--radius);
   padding: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.community-container .image-container {
+  width: 100%;
+  height: 250px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 10px 0;
+  background-color: #f0f0f0;
+}
+
+.community-container .post-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .community-container .user-header {
@@ -217,16 +239,12 @@ nav a:hover {
   align-items: center;
   gap: 10px;
 }
+
 .community-container .avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-}
-.community-container .post-image {
-  width: 100%;
-  border-radius: 8px;
-  display: block;
 }
 
 /* Friends Reactive Grid */
@@ -254,6 +272,7 @@ nav a:hover {
   object-fit: cover;
   margin-bottom: 12px;
 }
+
 .community-container .follow-btn {
   background: var(--teal);
   color: white;
@@ -263,12 +282,13 @@ nav a:hover {
   font-weight: 700;
   cursor: pointer;
   width: 100%;
-  margin-top: 12px;
+  margin-top: auto;
 }
 
 .community-container .gender-icon.female {
   color: #ff4d94;
 }
+
 .community-container .gender-icon.male {
   color: #4d94ff;
 }
