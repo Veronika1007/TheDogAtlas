@@ -33,113 +33,102 @@
       </nav>
     </header>
 
-    <main>
-      <section class="hero">
-        <div>
-          <div class="hero-tag">
-            <span>🗺️</span>
-            <span>Hertfordshire Beta · Verified Venues Only</span>
-          </div>
-          <h1>Find dog‑friendly pubs, stays & walking trails in seconds.</h1>
-          <form
-            class="hero-form"
-            onsubmit="event.preventDefault(); demoSearch();"
-          >
-            <input
-              id="whereInput"
-              type="text"
-              placeholder="Location (e.g. St Albans)"
-              value="St Albans"
-              style="margin-bottom: 20px; width: 100%"
-            />
+    <main class="central-container">
+      <section class="hero-simple">
+        <h1>Find dog‑friendly pubs, stays & walking trails in seconds.</h1>
+        <p>Hertfordshire Beta · Verified Venues Only</p>
 
-            <div id="categoryFilters">
-              <div class="filter-group">
-                <h4>Food & Drink</h4>
-                <div class="filter-grid">
-                  <label class="filter-option"
-                    ><input type="checkbox" value="cafe" /> Cafe</label
-                  >
-                  <label class="filter-option"
-                    ><input type="checkbox" value="pub" /> Pubs & Bars</label
-                  >
-                  <label class="filter-option"
-                    ><input type="checkbox" value="restaurant" />
-                    Restaurants</label
-                  >
-                </div>
-              </div>
+        <form
+          class="hero-form"
+          onsubmit="event.preventDefault(); demoSearch();"
+        >
+          <input
+            id="whereInput"
+            type="text"
+            placeholder="Location (e.g. St Albans)"
+            value="St Albans"
+            class="main-search-input"
+          />
 
-              <div class="filter-group">
-                <h4>Retail</h4>
-                <div class="filter-grid">
-                  <label class="filter-option"
-                    ><input type="checkbox" value="shop" /> Shops</label
-                  >
-                  <label class="filter-option"
-                    ><input type="checkbox" value="pet-store" /> Pet
-                    Stores</label
-                  >
-                </div>
-              </div>
-
-              <div class="filter-group">
-                <h4>Experience</h4>
-                <div class="filter-grid">
-                  <label class="filter-option"
-                    ><input type="checkbox" value="attraction" />
-                    Attractions</label
-                  >
-                  <label class="filter-option"
-                    ><input type="checkbox" value="park" /> Parks</label
-                  >
-                  <label class="filter-option"
-                    ><input type="checkbox" value="beach" /> Beaches</label
-                  >
-                </div>
-              </div>
-
-              <div class="filter-group">
-                <h4>Dog Services</h4>
-                <div class="filter-grid">
-                  <label class="filter-option"
-                    ><input type="checkbox" value="vet" /> Vets</label
-                  >
-                  <label class="filter-option"
-                    ><input type="checkbox" value="groomer" /> Groomers</label
-                  >
-                  <label class="filter-option"
-                    ><input type="checkbox" value="service" /> Doggy Daycare &
-                    Kennels</label
-                  >
-                  <label class="filter-option"
-                    ><input type="checkbox" value="trainer" /> Trainers</label
-                  >
-                </div>
+          <div id="categoryFilters" class="reactive-filter-grid">
+            <div class="filter-group">
+              <h4>Food & Drink</h4>
+              <div class="filter-options">
+                <label class="filter-option"
+                  ><input type="checkbox" value="cafe" /> Cafe</label
+                >
+                <label class="filter-option"
+                  ><input type="checkbox" value="pub" /> Pubs & Bars</label
+                >
+                <label class="filter-option"
+                  ><input type="checkbox" value="restaurant" />
+                  Restaurants</label
+                >
               </div>
             </div>
 
-            <button type="submit" style="width: 100%; margin-top: 10px">
-              Search & Filter Map
-            </button>
-          </form>
-        </div>
+            <div class="filter-group">
+              <h4>Retail</h4>
+              <div class="filter-options">
+                <label class="filter-option"
+                  ><input type="checkbox" value="shop" /> Shops</label
+                >
+                <label class="filter-option"
+                  ><input type="checkbox" value="pet-store" /> Pet Stores</label
+                >
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <h4>Experience</h4>
+              <div class="filter-options">
+                <label class="filter-option"
+                  ><input type="checkbox" value="attraction" />
+                  Attractions</label
+                >
+                <label class="filter-option"
+                  ><input type="checkbox" value="park" /> Parks</label
+                >
+                <label class="filter-option"
+                  ><input type="checkbox" value="beach" /> Beaches</label
+                >
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <h4>Dog Services</h4>
+              <div class="filter-options">
+                <label class="filter-option"
+                  ><input type="checkbox" value="vet" /> Vets</label
+                >
+                <label class="filter-option"
+                  ><input type="checkbox" value="groomer" /> Groomers</label
+                >
+                <label class="filter-option"
+                  ><input type="checkbox" value="service" /> Daycare</label
+                >
+                <label class="filter-option"
+                  ><input type="checkbox" value="trainer" /> Trainers</label
+                >
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="search-submit-btn">
+            Search & Filter Map
+          </button>
+        </form>
       </section>
 
-      <div class="panel">
-        <h2>Interactive Map</h2>
-        <div
-          id="mapBox"
-          style="
-            height: 500px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            border: 1px solid var(--border);
-            z-index: 1;
-          "
-        ></div>
-        <h2>Search Results</h2>
-        <div class="results" id="resultsBox"></div>
+      <div class="side-by-side-layout">
+        <div class="results-panel">
+          <h2>Search Results</h2>
+          <div class="results" id="resultsBox"></div>
+        </div>
+
+        <div class="map-panel">
+          <div id="mapBox"></div>
+        </div>
       </div>
     </main>
 
@@ -187,7 +176,7 @@
               (v) =>
                 `<div class="result-card"><div><h3>${
                   v.name
-                }</h3><small>${v.type.toUpperCase()}</small><p style="font-size: 12px; margin: 4px 0;">${
+                }</h3><small>${v.type.toUpperCase()}</small><p>${
                   v.note
                 }</p></div></div>`
             )
