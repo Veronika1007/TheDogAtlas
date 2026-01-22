@@ -33,11 +33,14 @@
       </nav>
     </header>
 
-    <main>
+    <main class="community-container">
       <div class="search-container">
         <div class="search-input-wrapper">
           <i class="fa fa-search"></i>
-          <input type="text" placeholder="Search by name, breed, or topic..." />
+          <input
+            type="text"
+            placeholder="Search for dogs, breeds, or topics..."
+          />
           <i class="fa fa-sliders"></i>
         </div>
       </div>
@@ -62,35 +65,8 @@
         </button>
       </div>
 
-      <div id="section-posts" class="community-section">
-        <div class="feed-card">
-          <div class="user-header">
-            <img
-              src="Media/community image 3.jpg"
-              alt="Cooper"
-              class="avatar"
-            />
-            <div>
-              <div class="username">Cooper</div>
-              <div class="post-time">2 hours ago</div>
-            </div>
-          </div>
-          <img
-            src="Media/community image 3.jpg"
-            alt="Dog sniffing in the woodlands"
-            class="post-image"
-          />
-          <div class="post-actions">
-            <span><i class="fa-solid fa-paw"></i> 24 Woofs</span>
-            <span><i class="fa-regular fa-comment"></i> 5 Comments</span>
-          </div>
-          <div class="post-caption">
-            <strong>Cooper</strong> Nothing beats the smells of the forest!
-            Found a very interesting trail today during our woodland walk. 🌲👃
-          </div>
-        </div>
-
-        <div class="feed-card">
+      <div id="section-posts" class="community-section post-grid">
+        <div class="feed-card post-frame">
           <div class="user-header">
             <img
               src="Media/Community image 1.jpeg"
@@ -102,19 +78,51 @@
               <div class="post-time">1 day ago</div>
             </div>
           </div>
-          <img
-            src="Media/Community image 1.jpeg"
-            alt="Sampson"
-            class="post-image"
-          />
+          <div class="image-container">
+            <img
+              src="Media/Community image 1.jpeg"
+              alt="Sampson"
+              class="post-image"
+            />
+          </div>
+          <div class="post-actions">
+            <span><i class="fa-solid fa-paw"></i> 13 Woofs</span>
+            <span><i class="fa-regular fa-comment"></i> 3 Comments</span>
+          </div>
           <div class="post-caption">
-            <strong>Sampson</strong> Just standing here waiting for treats! 🐶✨
+            <strong>Sampson</strong> And suddenly he's just standing there like
+            that. 🐶✨
+          </div>
+        </div>
+
+        <div class="feed-card post-frame">
+          <div class="user-header">
+            <img
+              src="Media/community image 3.jpg"
+              alt="Cooper"
+              class="avatar"
+            />
+            <div>
+              <div class="username">Cooper</div>
+              <div class="post-time">2 hours ago</div>
+            </div>
+          </div>
+          <div class="image-container">
+            <img
+              src="Media/community image 3.jpg"
+              alt="Woodland walk"
+              class="post-image"
+            />
+          </div>
+          <div class="post-caption">
+            <strong>Cooper</strong> It's like he wants to remind you that he is
+            a gift in your life. 🎁💖🥰
           </div>
         </div>
       </div>
 
       <div id="section-friends" class="community-section hidden">
-        <div class="central-friends-list">
+        <div class="reactive-friends-grid">
           <div class="profile-card">
             <div class="profile-main">
               <img
@@ -123,141 +131,13 @@
                 class="profile-avatar"
               />
               <div class="profile-details">
-                <div class="profile-header">
-                  <h3>Daisy</h3>
-                  <span class="handle">@RedPheonix82</span>
-                </div>
+                <h3>Daisy</h3>
+                <span class="handle">@RedPheonix82</span>
                 <p class="stats">0 Followers • &lt; 1 Km away</p>
                 <div class="breed-info">
                   <span class="breed-name">Yorkshire Terrier</span>
-                  <span class="age">2 Years Old</span>
                   <span class="gender-icon female"
                     ><i class="fa-solid fa-venus"></i
-                  ></span>
-                </div>
-              </div>
-            </div>
-            <button class="follow-btn">Follow</button>
-          </div>
-
-          <div class="profile-card">
-            <div class="profile-main">
-              <img
-                src="https://placedog.net/300/300?id=14"
-                alt="Lyra"
-                class="profile-avatar"
-              />
-              <div class="profile-details">
-                <div class="profile-header">
-                  <h3>Lyra</h3>
-                  <span class="handle">@AlexDaresTo</span>
-                </div>
-                <p class="stats">0 Followers • &lt; 1 Km away</p>
-                <div class="breed-info">
-                  <span class="breed-name">Corgie</span>
-                  <span class="age">3 Years Old</span>
-                  <span class="gender-icon female"
-                    ><i class="fa-solid fa-venus"></i
-                  ></span>
-                </div>
-              </div>
-            </div>
-            <button class="follow-btn">Follow</button>
-          </div>
-
-          <div class="profile-card">
-            <div class="profile-main">
-              <img
-                src="https://placedog.net/300/300?id=22"
-                alt="Austyn"
-                class="profile-avatar"
-              />
-              <div class="profile-details">
-                <div class="profile-header">
-                  <h3>Austyn</h3>
-                  <span class="handle">@Sherrine_Pinney_BjFj</span>
-                </div>
-                <p class="stats">0 Followers • &lt; 1 Km away</p>
-                <div class="breed-info">
-                  <span class="breed-name">Weimaraner</span>
-                  <span class="age">4 Years Old</span>
-                  <span class="gender-icon male"
-                    ><i class="fa-solid fa-mars"></i
-                  ></span>
-                </div>
-              </div>
-            </div>
-            <button class="follow-btn">Follow</button>
-          </div>
-
-          <div class="profile-card">
-            <div class="profile-main">
-              <img
-                src="https://placedog.net/300/300?id=10"
-                alt="Willow"
-                class="profile-avatar"
-              />
-              <div class="profile-details">
-                <div class="profile-header">
-                  <h3>Willow</h3>
-                  <span class="handle">@Willow_Mixed</span>
-                </div>
-                <p class="stats">12 Followers • 2 Km away</p>
-                <div class="breed-info">
-                  <span class="breed-name">Mixed Breed</span>
-                  <span class="age">1 Year Old</span>
-                  <span class="gender-icon female"
-                    ><i class="fa-solid fa-venus"></i
-                  ></span>
-                </div>
-              </div>
-            </div>
-            <button class="follow-btn">Follow</button>
-          </div>
-
-          <div class="profile-card">
-            <div class="profile-main">
-              <img
-                src="https://placedog.net/300/300?id=11"
-                alt="Gustav"
-                class="profile-avatar"
-              />
-              <div class="profile-details">
-                <div class="profile-header">
-                  <h3>Gustav</h3>
-                  <span class="handle">@Gustav_Cocker</span>
-                </div>
-                <p class="stats">8 Followers • 5 Km away</p>
-                <div class="breed-info">
-                  <span class="breed-name">Schnauzer</span>
-                  <span class="age">3 Years Old</span>
-                  <span class="gender-icon male"
-                    ><i class="fa-solid fa-mars"></i
-                  ></span>
-                </div>
-              </div>
-            </div>
-            <button class="follow-btn">Follow</button>
-          </div>
-
-          <div class="profile-card">
-            <div class="profile-main">
-              <img
-                src="https://placedog.net/300/300?id=30"
-                alt="Baobao"
-                class="profile-avatar"
-              />
-              <div class="profile-details">
-                <div class="profile-header">
-                  <h3>Baobao</h3>
-                  <span class="handle">@Maltese_Prince</span>
-                </div>
-                <p class="stats">5 Followers • 10 Km away</p>
-                <div class="breed-info">
-                  <span class="breed-name">Mixed Breed</span>
-                  <span class="age">1 Year Old</span>
-                  <span class="gender-icon male"
-                    ><i class="fa-solid fa-mars"></i
                   ></span>
                 </div>
               </div>
@@ -270,18 +150,9 @@
       <div id="section-forum" class="community-section hidden">
         <div class="panel">
           <div class="result-card">
-            <div>
-              <h3>Dog-Friendly Camping in Hertfordshire?</h3>
-              <p>Looking for quiet spots near St Albans for the weekend.</p>
-              <small>Last reply by Cooper · 2h ago</small>
-            </div>
-          </div>
-          <div class="result-card">
-            <div>
-              <h3>Best waterproof coats for Labradors?</h3>
-              <p>Needs to handle thick mud and heavy rain!</p>
-              <small>Last reply by Bella · 5h ago</small>
-            </div>
+            <h3>Dog-Friendly Camping in Hertfordshire?</h3>
+            <p>Looking for quiet spots near St Albans for the weekend.</p>
+            <small>Last reply by Cooper · 2h ago</small>
           </div>
         </div>
       </div>

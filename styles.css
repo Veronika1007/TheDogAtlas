@@ -15,6 +15,7 @@
 * {
   box-sizing: border-box;
 }
+
 body {
   margin: 0;
   font-family: system-ui, -apple-system, sans-serif;
@@ -22,6 +23,7 @@ body {
   color: var(--text);
   line-height: 1.5;
 }
+
 header {
   background: #ffffff;
   border-bottom: 1px solid var(--border);
@@ -33,6 +35,13 @@ header {
   top: 0;
   z-index: 1000;
 }
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 nav a {
   margin-left: 20px;
   font-size: 14px;
@@ -41,18 +50,20 @@ nav a {
   text-decoration: none;
   padding-bottom: 4px;
 }
+
 nav a.active,
 nav a:hover {
   color: var(--primary);
   border-bottom: 2px solid var(--primary);
 }
 
-/* Layouts */
+/* --- SHARED LAYOUT COMPONENTS --- */
 .central-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 16px;
 }
+
 .hero-simple {
   text-align: center;
   margin-bottom: 40px;
@@ -60,21 +71,30 @@ nav a:hover {
 .hero-simple h1 {
   font-size: 32px;
   color: var(--accent);
+  margin-bottom: 8px;
 }
+.hero-simple p {
+  color: var(--muted);
+  font-size: 14px;
+}
+
 .main-search-input {
   width: 100%;
   padding: 14px;
   border-radius: 8px;
   border: 1px solid var(--border);
   margin-bottom: 20px;
+  font-size: 16px;
 }
 
-/* Side-by-Side Map System */
+/* Side-by-Side Map Layout (Index) */
 .side-by-side-layout {
   display: flex;
   gap: 24px;
   height: 600px;
+  align-items: stretch;
 }
+
 .results-panel {
   flex: 1;
   background: white;
@@ -83,31 +103,35 @@ nav a:hover {
   padding: 20px;
   overflow-y: auto;
 }
+
 .map-panel {
   flex: 2;
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid var(--border);
 }
+
 #mapBox {
   height: 100%;
   width: 100%;
+  z-index: 1;
 }
 
-/* Reactive Filters */
+/* Reactive Filter Grid (Index) */
 .reactive-filter-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 16px;
   margin-bottom: 20px;
 }
+
 .filter-group {
   background: white;
   padding: 16px;
   border-radius: 12px;
   border: 1px solid var(--border);
-  text-align: left;
 }
+
 .filter-group h4 {
   margin: 0 0 12px;
   font-size: 13px;
@@ -126,6 +150,7 @@ nav a:hover {
   font-size: 13px;
   cursor: pointer;
 }
+
 .search-submit-btn {
   width: 100%;
   padding: 14px;
@@ -137,17 +162,25 @@ nav a:hover {
   cursor: pointer;
 }
 
-/* Community & Centralized Profiles */
-.hidden {
+/* --- SCOPED COMMUNITY STYLES (No impact on other pages) --- */
+.community-container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.community-container .hidden {
   display: none;
 }
-.community-tabs {
+
+.community-container .community-tabs {
   display: flex;
   border-bottom: 1px solid var(--border);
   margin-bottom: 24px;
   gap: 20px;
 }
-.tab-btn {
+
+.community-container .tab-btn {
   background: none;
   border: none;
   padding: 12px 4px;
@@ -156,63 +189,91 @@ nav a:hover {
   cursor: pointer;
   border-bottom: 3px solid transparent;
 }
-.tab-btn.active {
+
+.community-container .tab-btn.active {
   color: var(--primary);
   border-bottom-color: var(--primary);
 }
-.central-friends-list {
-  max-width: 600px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+
+/* Framed Posts Section (Reactive) */
+.community-container .post-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 24px;
+  align-items: start;
 }
-.profile-card {
+
+.community-container .post-frame {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.community-container .user-header {
+  padding: 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.community-container .avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.community-container .post-image {
+  width: 100%;
+  border-radius: 8px;
+  display: block;
+}
+
+/* Friends Reactive Grid */
+.community-container .reactive-friends-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.community-container .profile-card {
   background: white;
   border: 1px solid var(--border);
   border-radius: 20px;
   padding: 20px;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
+  text-align: center;
 }
-.profile-main {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-.profile-avatar {
-  width: 80px;
-  height: 80px;
+
+.community-container .profile-avatar {
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   object-fit: cover;
+  margin-bottom: 12px;
 }
-.breed-info {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 13px;
-  font-weight: 600;
-}
-.breed-name {
-  color: var(--teal);
-}
-.gender-icon.female {
-  color: #ff4d94;
-}
-.gender-icon.male {
-  color: #4d94ff;
-}
-.follow-btn {
+.community-container .follow-btn {
   background: var(--teal);
   color: white;
   border: none;
-  padding: 8px 24px;
+  padding: 10px 24px;
   border-radius: 20px;
   font-weight: 700;
   cursor: pointer;
+  width: 100%;
+  margin-top: 12px;
 }
 
+.community-container .gender-icon.female {
+  color: #ff4d94;
+}
+.community-container .gender-icon.male {
+  color: #4d94ff;
+}
+
+/* --- RESPONSIVE OVERRIDES --- */
 @media (max-width: 850px) {
   .side-by-side-layout {
     flex-direction: column;
@@ -220,5 +281,12 @@ nav a:hover {
   }
   .map-panel {
     height: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .community-container .post-grid,
+  .community-container .reactive-friends-grid {
+    grid-template-columns: 1fr;
   }
 }
