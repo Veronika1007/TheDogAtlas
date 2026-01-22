@@ -15,7 +15,6 @@
 * {
   box-sizing: border-box;
 }
-
 body {
   margin: 0;
   font-family: system-ui, -apple-system, sans-serif;
@@ -23,7 +22,6 @@ body {
   color: var(--text);
   line-height: 1.5;
 }
-
 header {
   background: #ffffff;
   border-bottom: 1px solid var(--border);
@@ -35,13 +33,6 @@ header {
   top: 0;
   z-index: 1000;
 }
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
 nav a {
   margin-left: 20px;
   font-size: 14px;
@@ -50,20 +41,18 @@ nav a {
   text-decoration: none;
   padding-bottom: 4px;
 }
-
 nav a.active,
 nav a:hover {
   color: var(--primary);
   border-bottom: 2px solid var(--primary);
 }
 
-/* Centralized Layout */
+/* Layouts */
 .central-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 16px;
 }
-
 .hero-simple {
   text-align: center;
   margin-bottom: 40px;
@@ -71,20 +60,38 @@ nav a:hover {
 .hero-simple h1 {
   font-size: 32px;
   color: var(--accent);
-  margin-bottom: 8px;
 }
-.hero-simple p {
-  color: var(--muted);
-  font-size: 14px;
-}
-
 .main-search-input {
   width: 100%;
   padding: 14px;
   border-radius: 8px;
   border: 1px solid var(--border);
   margin-bottom: 20px;
-  font-size: 16px;
+}
+
+/* Side-by-Side Map System */
+.side-by-side-layout {
+  display: flex;
+  gap: 24px;
+  height: 600px;
+}
+.results-panel {
+  flex: 1;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  padding: 20px;
+  overflow-y: auto;
+}
+.map-panel {
+  flex: 2;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+#mapBox {
+  height: 100%;
+  width: 100%;
 }
 
 /* Reactive Filters */
@@ -94,21 +101,19 @@ nav a:hover {
   gap: 16px;
   margin-bottom: 20px;
 }
-
 .filter-group {
   background: white;
   padding: 16px;
   border-radius: 12px;
   border: 1px solid var(--border);
+  text-align: left;
 }
-
 .filter-group h4 {
   margin: 0 0 12px;
   font-size: 13px;
   color: var(--primary);
   text-transform: uppercase;
 }
-
 .filter-options {
   display: flex;
   flex-direction: column;
@@ -121,12 +126,6 @@ nav a:hover {
   font-size: 13px;
   cursor: pointer;
 }
-.filter-option input {
-  accent-color: var(--primary);
-  width: 16px;
-  height: 16px;
-}
-
 .search-submit-btn {
   width: 100%;
   padding: 14px;
@@ -138,55 +137,82 @@ nav a:hover {
   cursor: pointer;
 }
 
-/* Side-by-Side Map Layout */
-.side-by-side-layout {
+/* Community & Centralized Profiles */
+.hidden {
+  display: none;
+}
+.community-tabs {
   display: flex;
-  gap: 24px;
-  height: 600px;
-  align-items: stretch;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+  gap: 20px;
 }
-
-.results-panel {
-  flex: 1;
-  background: white;
-  border-radius: 16px;
-  border: 1px solid var(--border);
-  padding: 20px;
-  overflow-y: auto;
-}
-
-.map-panel {
-  flex: 2;
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-}
-
-#mapBox {
-  height: 100%;
-  width: 100%;
-  z-index: 1;
-}
-
-.result-card {
-  background: #fcfcff;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 16px;
-  margin-bottom: 12px;
-}
-
-.result-card h3 {
-  margin: 0;
-  font-size: 16px;
-}
-.result-card p {
-  font-size: 12px;
-  margin: 4px 0 0;
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 12px 4px;
+  font-weight: 700;
   color: var(--muted);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+}
+.tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+.central-friends-list {
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.profile-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.profile-main {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.breed-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.breed-name {
+  color: var(--teal);
+}
+.gender-icon.female {
+  color: #ff4d94;
+}
+.gender-icon.male {
+  color: #4d94ff;
+}
+.follow-btn {
+  background: var(--teal);
+  color: white;
+  border: none;
+  padding: 8px 24px;
+  border-radius: 20px;
+  font-weight: 700;
+  cursor: pointer;
 }
 
-/* Responsive adjustments */
 @media (max-width: 850px) {
   .side-by-side-layout {
     flex-direction: column;
@@ -194,9 +220,5 @@ nav a:hover {
   }
   .map-panel {
     height: 400px;
-    order: 1;
-  }
-  .results-panel {
-    order: 2;
   }
 }
