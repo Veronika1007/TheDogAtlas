@@ -32,112 +32,163 @@
       <div class="search-container">
         <div class="search-input-wrapper">
           <i class="fa fa-search"></i>
-          <input
-            type="text"
-            placeholder="Search for dogs, breeds, or topics..."
-          />
+          <input type="text" placeholder="Search by name, breed, or topic..." />
           <i class="fa fa-sliders"></i>
         </div>
       </div>
 
       <div class="community-tabs">
-        <button class="tab-btn active" onclick="switchSection('posts')">
+        <button
+          id="tab-posts"
+          class="tab-btn active"
+          onclick="showSection('posts')"
+        >
           Posts
         </button>
-        <button class="tab-btn" onclick="switchSection('friends')">
+        <button
+          id="tab-friends"
+          class="tab-btn"
+          onclick="showSection('friends')"
+        >
           Friends
         </button>
-        <button class="tab-btn" onclick="switchSection('forum')">Forum</button>
+        <button id="tab-forum" class="tab-btn" onclick="showSection('forum')">
+          Forum
+        </button>
       </div>
 
-      <div id="posts-section" class="community-content">
+      <div id="section-posts" class="community-section">
         <div class="feed-card">
           <div class="user-header">
             <img
               src="https://placedog.net/50/50?id=1"
-              alt="User"
+              alt="Sampson"
               class="avatar"
             />
             <div>
-              <span class="username">Sampson</span>
-              <span class="post-time">1 day ago</span>
+              <div class="username">Sampson</div>
+              <div class="post-time">1 day ago</div>
             </div>
           </div>
           <img
-            src="https://placedog.net/600/400?id=1"
+            src="https://placedog.net/600/600?id=1"
             alt="Dog Post"
             class="post-image"
           />
           <div class="post-actions">
-            <button class="action-btn">
-              <i class="fa-solid fa-paw"></i> 13 Woofs
-            </button>
-            <button class="action-btn">
-              <i class="fa-regular fa-comment"></i> 3 Comments
-            </button>
+            <span><i class="fa-solid fa-paw"></i> 13 Woofs</span>
+            <span><i class="fa-regular fa-comment"></i> 3 Comments</span>
           </div>
           <div class="post-caption">
-            <strong>Sampson</strong> Und plötzlich steht er so da. 🐶✨
+            <strong>Sampson</strong> Just standing here waiting for treats! 🐶✨
+          </div>
+        </div>
+
+        <div class="feed-card">
+          <div class="user-header">
+            <img
+              src="https://placedog.net/50/50?id=5"
+              alt="Luna"
+              class="avatar"
+            />
+            <div>
+              <div class="username">Luna</div>
+              <div class="post-time">3 hours ago</div>
+            </div>
+          </div>
+          <img
+            src="https://placedog.net/600/600?id=5"
+            alt="Beach Day"
+            class="post-image"
+          />
+          <div class="post-caption">
+            <strong>Luna</strong> First time at the beach! The sand is a bit
+            weird but I love the waves. 🌊
           </div>
         </div>
       </div>
 
-      <div id="friends-section" class="community-content hidden">
+      <div id="section-friends" class="community-section hidden">
         <div class="grid-layout">
           <div class="friend-card">
-            <img src="https://placedog.net/200/200?id=2" alt="Willow" />
+            <img src="https://placedog.net/300/300?id=10" alt="Willow" />
             <div class="friend-info">
               <h3>Willow</h3>
-              <p>Female - 1 year</p>
-              <span class="breed-tag">MIXED</span>
+              <p>Female · 1 year</p>
+              <span class="breed-tag">Mixed Breed</span>
             </div>
           </div>
           <div class="friend-card">
-            <img src="https://placedog.net/200/200?id=3" alt="Gustav" />
+            <img src="https://placedog.net/300/300?id=11" alt="Gustav" />
             <div class="friend-info">
               <h3>Gustav</h3>
-              <p>Male - 3 years</p>
-              <span class="breed-tag">COCKER SPANIEL</span>
+              <p>Male · 3 years</p>
+              <span class="breed-tag">Cocker Spaniel</span>
+            </div>
+          </div>
+          <div class="friend-card">
+            <img src="https://placedog.net/300/300?id=12" alt="Daisy" />
+            <div class="friend-info">
+              <h3>Daisy</h3>
+              <p>Female · 2 years</p>
+              <span class="breed-tag">Yorkshire Terrier</span>
+            </div>
+          </div>
+          <div class="friend-card">
+            <img src="https://placedog.net/300/300?id=13" alt="Boo" />
+            <div class="friend-info">
+              <h3>Boo</h3>
+              <p>Male · 12 years</p>
+              <span class="breed-tag">Jack Russell</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div id="forum-section" class="community-content hidden">
+      <div id="section-forum" class="community-section hidden">
         <div class="panel">
-          <div class="result-card">
+          <div class="result-card forum-item">
             <div>
-              <h3>Dog-Friendly Camping in Herts?</h3>
-              <small>Last reply by Cooper • 2h ago</small>
+              <h3>Dog-Friendly Camping in Hertfordshire?</h3>
+              <p>Looking for sites with electric hookups that allow 2+ dogs.</p>
+              <small>Posted by Cooper · 2 hours ago</small>
             </div>
-            <i class="fa fa-chevron-right"></i>
           </div>
-          <div class="result-card">
+          <div class="result-card forum-item">
             <div>
               <h3>Best waterproof coats for Labradors?</h3>
-              <small>Last reply by Bella • 5h ago</small>
+              <p>Needs to be durable for forest walks.</p>
+              <small>Posted by Bella · 5 hours ago</small>
             </div>
-            <i class="fa fa-chevron-right"></i>
+          </div>
+          <div class="result-card forum-item">
+            <div>
+              <h3>Recall training tips for high-prey drive?</h3>
+              <p>My beagle keeps disappearing after squirrels!</p>
+              <small>Posted by Max · 1 day ago</small>
+            </div>
           </div>
         </div>
       </div>
     </main>
 
     <script>
-      function switchSection(sectionId) {
-        // Hide all
+      function showSection(section) {
+        // Hide all sections
         document
-          .querySelectorAll(".community-content")
-          .forEach((el) => el.classList.add("hidden"));
+          .querySelectorAll(".community-section")
+          .forEach((s) => s.classList.add("hidden"));
+        // Remove active class from all tabs
         document
           .querySelectorAll(".tab-btn")
-          .forEach((btn) => btn.classList.remove("active"));
+          .forEach((b) => b.classList.remove("active"));
 
-        // Show selected
+        // Show the selected section
         document
-          .getElementById(sectionId + "-section")
+          .getElementById("section-" + section)
           .classList.remove("hidden");
-        event.currentTarget.classList.add("active");
+        // Set the clicked tab to active
+        document.getElementById("tab-" + section).classList.add("active");
       }
     </script>
   </body>

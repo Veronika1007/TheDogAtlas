@@ -1,3 +1,4 @@
+/* --- ROOT VARIABLES & BASE STYLES --- */
 :root {
   --primary: #ff7a4a;
   --primary-dark: #e15f32;
@@ -63,7 +64,7 @@ main {
   min-height: calc(100vh - 70px);
 }
 
-/* Hero Section */
+/* --- HERO & LAYOUT PANELS --- */
 .hero {
   display: grid;
   grid-template-columns: 1.5fr 1fr;
@@ -83,36 +84,16 @@ main {
   margin-bottom: 24px;
 }
 
-/* Multi-Column Filters  */
-.multi-filter-container {
-  background: #fff;
+.panel {
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
-  margin-bottom: 16px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px 15px;
-  width: 100%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 24px;
 }
 
-.filter-option {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  cursor: pointer;
-  color: var(--text);
-}
-
-.filter-option input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  accent-color: var(--primary);
-  cursor: pointer;
-}
-
-/* Buttons */
+/* --- BUTTONS & FILTERS --- */
 .primary-btn,
 .hero-form button {
   padding: 12px 24px;
@@ -130,116 +111,70 @@ main {
   background: var(--primary-dark);
 }
 
-/* Layout Panels */
-.panel {
-  background: white;
-  padding: 24px;
-  border-radius: 16px;
+.multi-filter-container {
+  background: #fff;
   border: 1px solid var(--border);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  margin-bottom: 24px;
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px 15px;
 }
 
-/* Result Cards & Itinerary */
-.result-card {
-  background: #fcfcff;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 16px;
-  margin-bottom: 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.result-card h3 {
-  margin: 0 0 4px;
-  font-size: 15px;
-}
-
-/* Trail Specific Styles */
-.pill-row {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 12px;
-}
-
-.pill {
-  background: #eef2f7;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  color: var(--muted);
-  font-weight: 500;
-}
-
+/* --- COMMUNITY INTERACTIVITY & TABS --- */
 .hidden {
   display: none;
 }
 
-/* Responsive Adjustments */
-@media (max-width: 850px) {
-  .hero {
-    grid-template-columns: 1fr;
-  }
-  .multi-filter-container {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (max-width: 480px) {
-  .multi-filter-container {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Community Specific Styles */
 .search-input-wrapper {
-  background: white;
+  background: #fff;
   border: 1px solid var(--border);
   border-radius: 25px;
-  padding: 10px 20px;
+  padding: 10px 18px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 12px;
+  margin-bottom: 24px;
 }
 
 .search-input-wrapper input {
   border: none;
   flex: 1;
   outline: none;
+  font-size: 14px;
 }
 
 .community-tabs {
   display: flex;
-  justify-content: space-around;
   border-bottom: 1px solid var(--border);
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  gap: 20px;
 }
 
 .tab-btn {
   background: none;
   border: none;
-  padding: 10px 20px;
-  font-weight: 600;
+  padding: 12px 4px;
+  font-weight: 700;
   color: var(--muted);
   cursor: pointer;
+  font-size: 15px;
+  border-bottom: 3px solid transparent;
 }
 
 .tab-btn.active {
   color: var(--primary);
-  border-bottom: 2px solid var(--primary);
+  border-bottom-color: var(--primary);
 }
 
-/* Feed Post (Template 1) */
+/* --- FEED & FRIEND GRID STYLES --- */
 .feed-card {
   background: white;
-  border-radius: var(--radius);
-  overflow: hidden;
-  margin-bottom: 24px;
   border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 24px;
+  overflow: hidden;
 }
 
 .user-header {
@@ -253,6 +188,7 @@ main {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  object-fit: cover;
 }
 
 .post-image {
@@ -260,47 +196,44 @@ main {
   display: block;
 }
 
-.post-actions {
-  padding: 12px;
-  display: flex;
-  gap: 15px;
-}
-
-.action-btn {
-  background: none;
-  border: none;
-  color: var(--text);
-  font-size: 14px;
-  cursor: pointer;
-}
-
-/* Grid Layout (Template 3) */
 .grid-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 16px;
 }
 
 .friend-card {
   background: white;
+  border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
-  border: 1px solid var(--border);
 }
 
 .friend-card img {
   width: 100%;
-  height: 150px;
+  height: 180px;
   object-fit: cover;
-}
-
-.friend-info {
-  padding: 12px;
 }
 
 .breed-tag {
   font-size: 10px;
-  font-weight: 700;
-  color: var(--muted);
+  font-weight: 800;
+  color: var(--primary);
   text-transform: uppercase;
+}
+
+/* --- RESPONSIVE ADJUSTMENTS --- */
+@media (max-width: 850px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+  .multi-filter-container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .multi-filter-container {
+    grid-template-columns: 1fr;
+  }
 }
