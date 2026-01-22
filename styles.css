@@ -64,64 +64,6 @@ main {
   min-height: calc(100vh - 70px);
 }
 
-/* --- HERO & LAYOUT PANELS --- */
-.hero {
-  display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  gap: 32px;
-  margin-bottom: 40px;
-  align-items: start;
-}
-
-.hero h1 {
-  font-size: 32px;
-  margin: 0 0 12px;
-  color: var(--accent);
-}
-
-.hero p {
-  color: var(--muted);
-  margin-bottom: 24px;
-}
-
-.panel {
-  background: white;
-  padding: 24px;
-  border-radius: 16px;
-  border: 1px solid var(--border);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  margin-bottom: 24px;
-}
-
-/* --- BUTTONS & FILTERS --- */
-.primary-btn,
-.hero-form button {
-  padding: 12px 24px;
-  background: var(--primary);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.2s;
-  text-align: center;
-}
-
-.primary-btn:hover {
-  background: var(--primary-dark);
-}
-
-.multi-filter-container {
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
-  margin-bottom: 16px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px 15px;
-}
-
 /* --- COMMUNITY INTERACTIVITY & TABS --- */
 .hidden {
   display: none;
@@ -168,7 +110,7 @@ main {
   border-bottom-color: var(--primary);
 }
 
-/* --- FEED & FRIEND GRID STYLES --- */
+/* --- FEED POSTS --- */
 .feed-card {
   background: white;
   border: 1px solid var(--border);
@@ -183,57 +125,92 @@ main {
   align-items: center;
   gap: 10px;
 }
-
 .avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
 }
-
 .post-image {
   width: 100%;
   display: block;
 }
+.post-caption {
+  padding: 12px;
+  font-size: 14px;
+}
 
-.grid-layout {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+/* --- CENTRALIZED FRIENDS PROFILE CARDS --- */
+.central-friends-list {
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
   gap: 16px;
 }
 
-.friend-card {
+.profile-card {
   background: white;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.friend-card img {
-  width: 100%;
-  height: 180px;
+.profile-main {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
   object-fit: cover;
+  border: 2px solid #f0f0f0;
 }
 
-.breed-tag {
-  font-size: 10px;
-  font-weight: 800;
-  color: var(--primary);
-  text-transform: uppercase;
+.breed-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.breed-name {
+  color: #2a9d8f;
+} /* Teal accent */
+
+.follow-btn {
+  background: #2a9d8f;
+  color: white;
+  border: none;
+  padding: 8px 24px;
+  border-radius: 20px;
+  font-weight: 700;
+  cursor: pointer;
 }
 
-/* --- RESPONSIVE ADJUSTMENTS --- */
+/* --- FORUM & RESULTS --- */
+.result-card {
+  background: #fcfcff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+/* --- RESPONSIVE --- */
 @media (max-width: 850px) {
-  .hero {
-    grid-template-columns: 1fr;
+  .profile-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
   }
-  .multi-filter-container {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (max-width: 480px) {
-  .multi-filter-container {
-    grid-template-columns: 1fr;
+  .follow-btn {
+    width: 100%;
   }
 }
