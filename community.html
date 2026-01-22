@@ -18,7 +18,12 @@
           alt="TheDogAtlas Logo"
           style="height: 36px; width: auto"
         />
-        <div style="font-weight: 700; font-size: 16px">TheDogAtlas</div>
+        <div>
+          <div style="font-weight: 700; font-size: 16px">TheDogAtlas</div>
+          <div style="font-size: 11px; color: var(--muted)">
+            The dog-first travel platform
+          </div>
+        </div>
       </div>
       <nav>
         <a href="index.html" class="nav-link">Map</a>
@@ -61,6 +66,33 @@
         <div class="feed-card">
           <div class="user-header">
             <img
+              src="https://placedog.net/50/50?id=3"
+              alt="Cooper"
+              class="avatar"
+            />
+            <div>
+              <div class="username">Cooper</div>
+              <div class="post-time">2 hours ago</div>
+            </div>
+          </div>
+          <img
+            src="Media/community image 3.jpg"
+            alt="Dog sniffing in the woodlands"
+            class="post-image"
+          />
+          <div class="post-actions">
+            <span><i class="fa-solid fa-paw"></i> 24 Woofs</span>
+            <span><i class="fa-regular fa-comment"></i> 5 Comments</span>
+          </div>
+          <div class="post-caption">
+            <strong>Cooper</strong> Nothing beats the smells of the forest!
+            Found a very interesting trail today during our woodland walk. 🌲👃
+          </div>
+        </div>
+
+        <div class="feed-card">
+          <div class="user-header">
+            <img
               src="https://placedog.net/50/50?id=1"
               alt="Sampson"
               class="avatar"
@@ -72,13 +104,9 @@
           </div>
           <img
             src="https://placedog.net/600/600?id=1"
-            alt="Dog Post"
+            alt="Sampson"
             class="post-image"
           />
-          <div class="post-actions">
-            <span><i class="fa-solid fa-paw"></i> 13 Woofs</span>
-            <span><i class="fa-regular fa-comment"></i> 3 Comments</span>
-          </div>
           <div class="post-caption">
             <strong>Sampson</strong> Just standing here waiting for treats! 🐶✨
           </div>
@@ -102,8 +130,8 @@
             class="post-image"
           />
           <div class="post-caption">
-            <strong>Luna</strong> First time at the beach! The sand is a bit
-            weird but I love the waves. 🌊
+            <strong>Luna</strong> First time at the beach! The waves are big but
+            I'm brave. 🌊
           </div>
         </div>
       </div>
@@ -135,11 +163,11 @@
             </div>
           </div>
           <div class="friend-card">
-            <img src="https://placedog.net/300/300?id=13" alt="Boo" />
+            <img src="https://placedog.net/300/300?id=14" alt="Lyra" />
             <div class="friend-info">
-              <h3>Boo</h3>
-              <p>Male · 12 years</p>
-              <span class="breed-tag">Jack Russell</span>
+              <h3>Lyra</h3>
+              <p>Female · 3 years</p>
+              <span class="breed-tag">Jackapoo</span>
             </div>
           </div>
         </div>
@@ -147,25 +175,25 @@
 
       <div id="section-forum" class="community-section hidden">
         <div class="panel">
-          <div class="result-card forum-item">
+          <div class="result-card">
             <div>
               <h3>Dog-Friendly Camping in Hertfordshire?</h3>
-              <p>Looking for sites with electric hookups that allow 2+ dogs.</p>
-              <small>Posted by Cooper · 2 hours ago</small>
+              <p>Looking for quiet spots near St Albans for the weekend.</p>
+              <small>Last reply by Cooper · 2h ago</small>
             </div>
           </div>
-          <div class="result-card forum-item">
+          <div class="result-card">
             <div>
               <h3>Best waterproof coats for Labradors?</h3>
-              <p>Needs to be durable for forest walks.</p>
-              <small>Posted by Bella · 5 hours ago</small>
+              <p>Needs to handle thick mud and heavy rain!</p>
+              <small>Last reply by Bella · 5h ago</small>
             </div>
           </div>
-          <div class="result-card forum-item">
+          <div class="result-card">
             <div>
-              <h3>Recall training tips for high-prey drive?</h3>
-              <p>My beagle keeps disappearing after squirrels!</p>
-              <small>Posted by Max · 1 day ago</small>
+              <h3>Any puppy meetups happening this Sunday?</h3>
+              <p>Socializing my 4-month-old Golden Retriever.</p>
+              <small>Last reply by Max · 1d ago</small>
             </div>
           </div>
         </div>
@@ -178,16 +206,15 @@
         document
           .querySelectorAll(".community-section")
           .forEach((s) => s.classList.add("hidden"));
-        // Remove active class from all tabs
+        // Reset all tabs
         document
           .querySelectorAll(".tab-btn")
           .forEach((b) => b.classList.remove("active"));
 
-        // Show the selected section
+        // Show target
         document
           .getElementById("section-" + section)
           .classList.remove("hidden");
-        // Set the clicked tab to active
         document.getElementById("tab-" + section).classList.add("active");
       }
     </script>
