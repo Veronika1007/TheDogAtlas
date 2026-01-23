@@ -16,12 +16,21 @@
   box-sizing: border-box;
 }
 
+/* STICKY FOOTER LOGIC: html and body must be 100% height */
+html,
+body {
+  height: 100%;
+}
+
 body {
   margin: 0;
   font-family: system-ui, -apple-system, sans-serif;
   background: var(--bg);
   color: var(--text);
   line-height: 1.5;
+  /* Flex container to push footer down */
+  display: flex;
+  flex-direction: column;
 }
 
 header {
@@ -34,6 +43,14 @@ header {
   position: sticky;
   top: 0;
   z-index: 1000;
+  flex-shrink: 0;
+}
+
+/* Ensure main content grows to fill empty space */
+main,
+.central-container,
+.community-container {
+  flex: 1 0 auto;
 }
 
 .brand {
@@ -62,6 +79,7 @@ nav a:hover {
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 16px;
+  width: 100%;
 }
 
 .hero-simple {
@@ -89,7 +107,7 @@ nav a:hover {
   font-size: 16px;
 }
 
-/* Side-by-Side Map Layout (Index) */
+/* Side-by-Side Map Layout */
 .side-by-side-layout {
   display: flex;
   gap: 24px;
@@ -119,7 +137,7 @@ nav a:hover {
   z-index: 1;
 }
 
-/* Reactive Filter Grid (Index) */
+/* --- UPDATED: TWO-COLUMN FILTERS --- */
 .reactive-filter-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -141,10 +159,9 @@ nav a:hover {
   text-transform: uppercase;
 }
 
-/* UPDATED: Two-column filter options */
 .filter-options {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr; /* Force two columns */
   gap: 8px 12px;
 }
 
@@ -173,6 +190,7 @@ nav a:hover {
   max-width: 1140px;
   margin: 0 auto;
   padding: 24px 16px;
+  width: 100%;
 }
 
 .community-container .hidden {
@@ -205,7 +223,6 @@ nav a:hover {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 24px;
-  align-items: stretch;
 }
 
 .community-container .post-frame {
@@ -214,8 +231,6 @@ nav a:hover {
   border-radius: var(--radius);
   padding: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
 }
 
 .community-container .image-container {
@@ -234,62 +249,11 @@ nav a:hover {
   display: block;
 }
 
-.community-container .user-header {
-  padding: 8px 0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
 .community-container .avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-}
-
-.community-container .reactive-friends-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
-}
-
-.community-container .profile-card {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.community-container .profile-avatar {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 12px;
-}
-
-.community-container .follow-btn {
-  background: var(--teal);
-  color: white;
-  border: none;
-  padding: 10px 24px;
-  border-radius: 20px;
-  font-weight: 700;
-  cursor: pointer;
-  width: 100%;
-  margin-top: auto;
-}
-
-.community-container .gender-icon.female {
-  color: #ff4d94;
-}
-.community-container .gender-icon.male {
-  color: #4d94ff;
 }
 
 /* --- RESPONSIVE OVERRIDES --- */
@@ -304,17 +268,14 @@ nav a:hover {
 }
 
 @media (max-width: 480px) {
-  .community-container .post-grid,
-  .community-container .reactive-friends-grid {
-    grid-template-columns: 1fr;
-  }
   .filter-options {
-    grid-template-columns: 1fr; /* Single column on very small screens */
+    grid-template-columns: 1fr; /* Back to one column on tiny screens */
   }
 }
 
 /* --- LEGAL & FOOTER STYLES --- */
 footer {
+  flex-shrink: 0;
   background: #ffffff;
   border-top: 1px solid var(--border);
   padding: 40px 24px;
@@ -327,6 +288,7 @@ footer {
   justify-content: center;
   gap: 24px;
   margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .footer-links a {
@@ -396,7 +358,7 @@ footer {
   letter-spacing: 0.5px;
 }
 
-/* Contact Form Specifics */
+/* Contact Form Textarea */
 .contact-form textarea {
   width: 100%;
   min-height: 150px;
