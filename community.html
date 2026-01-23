@@ -118,138 +118,56 @@
             <strong>Luna</strong> First time on the beach, loving the water!
           </div>
         </div>
-
-        <div class="feed-card post-frame">
-          <div class="user-header">
-            <img
-              src="Media/community image 3.jpg"
-              alt="Cooper"
-              class="avatar"
-            />
-            <div>
-              <div class="username">Cooper</div>
-              <div class="post-time">2 hours ago</div>
-            </div>
-          </div>
-          <div class="image-container">
-            <img
-              src="Media/community image 3.jpg"
-              alt="Woodland walk"
-              class="post-image"
-            />
-          </div>
-          <div class="post-actions">
-            <span><i class="fa-solid fa-paw"></i> 3 Woofs</span>
-            <span><i class="fa-regular fa-comment"></i> 5 Comments</span>
-          </div>
-          <div class="post-caption">
-            <strong>Cooper</strong> Enjoying a lovely woodland walk and sniffs.
-          </div>
-        </div>
       </div>
 
-      <div
-        id="section-friends"
-        class="community-section reactive-friends-grid hidden"
-      >
-        <div class="profile-card">
-          <img
-            src="Media/Community image 1.jpeg"
-            alt="Sampson"
-            class="profile-avatar"
-          />
-          <div class="profile-details">
-            <h3>Sampson</h3>
-            <span class="handle">@Sampson_GSD</span>
-            <p class="stats">15 Followers • &lt; 1 Km away</p>
-            <div class="breed-info">
-              <span class="breed-name">Springer Spaniel</span>
-              <span class="gender-icon female"
-                ><i class="fa-solid fa-venus"></i
-              ></span>
-            </div>
-          </div>
-          <button class="follow-btn">Follow</button>
+      <div id="section-friends" class="community-section hidden">
+        <div class="toggle-container">
+          <button class="pill-toggle active">Nearby</button>
+          <button class="pill-toggle">Same breed</button>
         </div>
 
-        <div class="profile-card">
-          <img
-            src="Media/community image 2.jpg"
-            alt="Luna"
-            class="profile-avatar"
-          />
-          <div class="profile-details">
-            <h3>Luna</h3>
-            <span class="handle">@Luna_BeachDog</span>
-            <p class="stats">10 Followers • 5 Km away</p>
-            <div class="breed-info">
-              <span class="breed-name">Retriever Mix</span>
-              <span class="gender-icon female"
-                ><i class="fa-solid fa-venus"></i
-              ></span>
+        <div class="reactive-friends-list">
+          <div class="friend-row-card">
+            <img
+              src="Media/Community image 1.jpeg"
+              alt="Sampson"
+              class="row-avatar"
+            />
+            <div class="row-info">
+              <div class="row-header">
+                <h3>Sampson</h3>
+                <button class="follow-btn-small">Follow</button>
+              </div>
+              <span class="handle">@Sampson_GSD</span>
+              <p class="stats">15 Followers • &lt; 1 Km away</p>
+              <div class="row-footer">
+                <span class="breed-tag">Springer Spaniel</span>
+                <span class="age-text">2 Years Old</span>
+                <i class="fa-solid fa-venus gender-female"></i>
+              </div>
             </div>
           </div>
-          <button class="follow-btn">Follow</button>
-        </div>
 
-        <div class="profile-card">
-          <img
-            src="Media/community image 3.jpg"
-            alt="Cooper"
-            class="profile-avatar"
-          />
-          <div class="profile-details">
-            <h3>Cooper</h3>
-            <span class="handle">@Cooper_Woodlands</span>
-            <p class="stats">0 Followers • 15 Km away</p>
-            <div class="breed-info">
-              <span class="breed-name">Beagle</span>
-              <span class="gender-icon male"
-                ><i class="fa-solid fa-mars"></i
-              ></span>
+          <div class="friend-row-card">
+            <img
+              src="Media/community image 2.jpg"
+              alt="Luna"
+              class="row-avatar"
+            />
+            <div class="row-info">
+              <div class="row-header">
+                <h3>Luna</h3>
+                <button class="follow-btn-small">Follow</button>
+              </div>
+              <span class="handle">@Luna_BeachDog</span>
+              <p class="stats">10 Followers • 5 Km away</p>
+              <div class="row-footer">
+                <span class="breed-tag">Retriever Mix</span>
+                <span class="age-text">1 Year Old</span>
+                <i class="fa-solid fa-venus gender-female"></i>
+              </div>
             </div>
           </div>
-          <button class="follow-btn">Follow</button>
-        </div>
-
-        <div class="profile-card">
-          <img
-            src="https://placedog.net/300/300?id=12"
-            alt="Daisy"
-            class="profile-avatar"
-          />
-          <div class="profile-details">
-            <h3>Daisy</h3>
-            <span class="handle">@RedPheonix82</span>
-            <p class="stats">0 Followers • 1 Km away</p>
-            <div class="breed-info">
-              <span class="breed-name">Yorkshire Terrier</span>
-              <span class="gender-icon female"
-                ><i class="fa-solid fa-venus"></i
-              ></span>
-            </div>
-          </div>
-          <button class="follow-btn">Follow</button>
-        </div>
-
-        <div class="profile-card">
-          <img
-            src="https://placedog.net/300/300?id=10"
-            alt="Willow"
-            class="profile-avatar"
-          />
-          <div class="profile-details">
-            <h3>Willow</h3>
-            <span class="handle">@Willow_Mixed</span>
-            <p class="stats">12 Followers • 2 Km away</p>
-            <div class="breed-info">
-              <span class="breed-name">Mixed Breed</span>
-              <span class="gender-icon female"
-                ><i class="fa-solid fa-venus"></i
-              ></span>
-            </div>
-          </div>
-          <button class="follow-btn">Follow</button>
         </div>
       </div>
 
@@ -263,6 +181,19 @@
         </div>
       </div>
     </main>
+
+    <footer>
+      <div class="footer-links">
+        <a href="Footer/privacy.html">Privacy Policy</a>
+        <a href="Footer/terms.html">Terms of Service</a>
+        <a href="Footer/cookies.html">Cookie Policy</a>
+        <a href="Footer/contact.html">Contact</a>
+      </div>
+      <div class="copyright">
+        &copy; 2024 TheDogAtlas. The dog-first travel platform.
+        <br />Always check with venues directly for current dog policies.
+      </div>
+    </footer>
 
     <script>
       function showSection(section) {
@@ -278,17 +209,4 @@
       }
     </script>
   </body>
-
-  <footer>
-    <div class="footer-links">
-      <a href="Footer/privacy.html">Privacy Policy</a>
-      <a href="Footer/terms.html">Terms of Service</a>
-      <a href="Footer/cookies.html">Cookie Policy</a>
-      <a href="Footer/contact.html">Contact</a>
-    </div>
-    <div class="copyright">
-      &copy; 2024 TheDogAtlas. The dog-first travel platform.
-      <br />Always check with venues directly for current dog policies.
-    </div>
-  </footer>
 </html>
