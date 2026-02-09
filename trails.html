@@ -2,13 +2,167 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Trails – TheDogAtlas</title>
+    <title>Trails in Ware, Hertfordshire – TheDogAtlas</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
     <link
       rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
-    <link rel="stylesheet" href="styles.css" />
+
+    <style>
+      :root {
+        --at-green: #428a13;
+        --at-text: #2a2d36;
+        --at-muted: #6b6f7a;
+        --at-bg: #ffffff;
+        --at-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Trails-Specific Hero */
+      .trails-hero {
+        position: relative;
+        height: 350px;
+        background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)),
+          url("https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=1200&q=80")
+            center/cover;
+        display: flex;
+        align-items: flex-end;
+        padding-bottom: 40px;
+        color: white;
+      }
+
+      .trails-hero-content {
+        max-width: 1140px;
+        margin: 0 auto;
+        width: 100%;
+        padding: 0 16px;
+      }
+
+      .trails-hero h1 {
+        font-size: 2.5rem;
+        margin: 0;
+        font-weight: 800;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Trail Grid Layout */
+      .trails-container {
+        max-width: 1140px;
+        margin: 40px auto;
+        padding: 0 16px;
+      }
+
+      .trail-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 24px;
+      }
+
+      .trail-card-at {
+        background: var(--at-bg);
+        border: 1px solid #e0e2e8;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.2s, box-shadow 0.2s;
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .trail-card-at:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      }
+
+      .trail-card-thumb {
+        height: 180px;
+        background-color: #f0f0f0;
+        position: relative;
+      }
+
+      .trail-card-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .difficulty-badge {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+      }
+
+      .trail-card-body {
+        padding: 16px;
+      }
+
+      .trail-card-body h3 {
+        margin: 0 0 8px 0;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--at-text);
+      }
+
+      .trail-meta-at {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 0.85rem;
+        color: var(--at-muted);
+        margin-bottom: 12px;
+      }
+
+      .trail-meta-at i {
+        color: var(--at-green);
+        width: 14px;
+      }
+
+      .trail-stats-row {
+        display: flex;
+        gap: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--at-text);
+        border-top: 1px solid #f0f0f0;
+        padding-top: 12px;
+      }
+
+      .stat-item {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .stat-label {
+        font-size: 0.65rem;
+        color: var(--at-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      /* Category Pills */
+      .trail-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .trail-pill-small {
+        font-size: 0.7rem;
+        padding: 2px 8px;
+        background: #f1f5f9;
+        color: #475569;
+        border-radius: 4px;
+      }
+    </style>
   </head>
   <body>
     <header>
@@ -18,7 +172,12 @@
           alt="TheDogAtlas Logo"
           style="height: 36px; width: auto"
         />
-        <div style="font-weight: 700; font-size: 16px">TheDogAtlas</div>
+        <div>
+          <div style="font-weight: 700; font-size: 16px">TheDogAtlas</div>
+          <div style="font-size: 11px; color: var(--muted)">
+            The dog-first travel platform
+          </div>
+        </div>
       </div>
       <nav>
         <a href="index.html" class="nav-link">Map</a>
@@ -29,71 +188,93 @@
     </header>
 
     <main>
-      <h1>Featured Walking Trails</h1>
-      <div class="panel">
-        <div class="trail-card">
-          <h3>Verulamium Park Loop</h3>
-          <small>4.2 km · Easy · Off-lead fields</small>
-          <div
-            id="trailMap"
-            style="
-              height: 300px;
-              border-radius: 8px;
-              margin: 12px 0;
-              border: 1px solid var(--border);
-            "
-          ></div>
-          <p>
-            A gentle riverside circuit with wide paths and off-lead play areas.
-          </p>
-          <div class="pill-row">
-            <span class="pill">Water access</span>
-            <span class="pill">Café stop</span>
-            <span class="pill">Parking nearby</span>
-          </div>
+      <section class="trails-hero">
+        <div class="trails-hero-content">
+          <h1>Best dog trails in Ware</h1>
+          <p>Explore 12+ verified routes in Ware, Hertfordshire</p>
+        </div>
+      </section>
+
+      <div class="trails-container">
+        <div class="trail-grid">
+          <a href="#" class="trail-card-at">
+            <div class="trail-card-thumb">
+              <span class="difficulty-badge">EASY</span>
+              <img
+                src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=400&q=80"
+                alt="River Walk"
+              />
+            </div>
+            <div class="trail-card-body">
+              <h3>River Lea Navigation Walk</h3>
+              <div class="trail-meta-at">
+                <span
+                  ><i class="fa fa-map-marker-alt"></i> Ware,
+                  Hertfordshire</span
+                >
+              </div>
+              <div class="trail-stats-row">
+                <div class="stat-item">
+                  <span class="stat-label">Length</span>
+                  <span>4.8 km</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Est. Time</span>
+                  <span>1h 15m</span>
+                </div>
+              </div>
+              <div class="trail-pills">
+                <span class="trail-pill-small">Water access</span>
+                <span class="trail-pill-small">Dog friendly</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="#" class="trail-card-at">
+            <div class="trail-card-thumb">
+              <span class="difficulty-badge">MODERATE</span>
+              <img
+                src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=400&q=80"
+                alt="Woodland Trail"
+              />
+            </div>
+            <div class="trail-card-body">
+              <h3>Panshanger Park Woodland Loop</h3>
+              <div class="trail-meta-at">
+                <span><i class="fa fa-map-marker-alt"></i> Hertford/Ware</span>
+              </div>
+              <div class="trail-stats-row">
+                <div class="stat-item">
+                  <span class="stat-label">Length</span>
+                  <span>7.2 km</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Est. Time</span>
+                  <span>2h 10m</span>
+                </div>
+              </div>
+              <div class="trail-pills">
+                <span class="trail-pill-small">Woodland</span>
+                <span class="trail-pill-small">Off-lead areas</span>
+              </div>
+            </div>
+          </a>
         </div>
       </div>
     </main>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-      window.addEventListener("load", function () {
-        const trailCoords = [51.751, -0.345];
-        const loopRoute = [
-          [51.751, -0.345],
-          [51.7495, -0.342],
-          [51.7485, -0.344],
-          [51.749, -0.347],
-          [51.7515, -0.349],
-          [51.7535, -0.3465],
-          [51.7525, -0.3435],
-          [51.751, -0.345],
-        ];
-        const trailMap = L.map("trailMap").setView(trailCoords, 14);
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
-          trailMap
-        );
-        L.polyline(loopRoute, {
-          color: "#2f855a",
-          weight: 4,
-          dashArray: "5, 10",
-        }).addTo(trailMap);
-        L.marker(trailCoords).addTo(trailMap);
-      });
-    </script>
+    <footer>
+      <div class="footer-links">
+        <a href="Footer/privacy.html">Privacy Policy</a>
+        <a href="Footer/terms.html">Terms of Service</a>
+        <a href="Footer/cookies.html">Cookie Policy</a>
+        <a href="Footer/contact.html">Contact</a>
+        <a href="Footer/about.html">About Us</a>
+      </div>
+      <div class="copyright">
+        &copy; 2024 TheDogAtlas. The dog-first travel platform.
+        <br />Always check with venues directly for current dog policies.
+      </div>
+    </footer>
   </body>
-
-  <footer>
-    <div class="footer-links">
-      <a href="Footer/privacy.html">Privacy Policy</a>
-      <a href="Footer/terms.html">Terms of Service</a>
-      <a href="Footer/cookies.html">Cookie Policy</a>
-      <a href="Footer/contact.html">Contact</a>
-      <a href="Footer/about.html">About Us</a>
-    </div>
-    <div class="copyright">
-      &copy; 2024 TheDogAtlas. The dog-first travel platform.
-      <br />Always check with venues directly for current dog policies.
-    </div>
-  </footer>
 </html>
