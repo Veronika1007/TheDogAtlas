@@ -56,10 +56,10 @@
         letter-spacing: 0.5px;
       }
 
-      /* Organizes checkboxes in 2 columns */
+      /* Checkboxes in a single column to prevent text splitting */
       .filter-options {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
+        display: flex;
+        flex-direction: column;
         gap: 8px;
         font-size: 0.8rem;
       }
@@ -157,7 +157,7 @@
               <h4>Food & Drink</h4>
               <div class="filter-options">
                 <label
-                  ><input type="checkbox" value="cafe" /> Cafe & TeaRoom</label
+                  ><input type="checkbox" value="cafe" /> Cafe & TeamRoom</label
                 >
                 <label><input type="checkbox" value="pub" /> Pubs & Bars</label>
                 <label
@@ -165,8 +165,8 @@
                   Restaurants</label
                 >
                 <label
-                  ><input type="checkbox" value="dessert" /> Desserts &
-                  IceCream</label
+                  ><input type="checkbox" value="dessert" /> Dessert & Ice
+                  Cream</label
                 >
               </div>
             </div>
@@ -176,10 +176,10 @@
               <div class="filter-options">
                 <label><input type="checkbox" value="shop" /> Shops</label>
                 <label
-                  ><input type="checkbox" value="pet-store" /> Pet Shops</label
+                  ><input type="checkbox" value="pet-store" /> Pet Stores</label
                 >
                 <label
-                  ><input type="checkbox" value="Butchers" /> Butcher</label
+                  ><input type="checkbox" value="Butchers" /> Butchers</label
                 >
                 <label><input type="checkbox" value="Florist" /> Florist</label>
               </div>
@@ -195,35 +195,32 @@
                 <label
                   ><input type="checkbox" value="park" /> Parks & Gardens</label
                 >
-                <label><input type="checkbox" value="beach" /> Beach</label>
+                <label><input type="checkbox" value="beach" /> Beaches</label>
                 <label><input type="checkbox" value="trails" /> Trails</label>
               </div>
             </div>
 
             <div class="filter-group">
-              <h4>Accommodation</h4>
+              <h4>Accommodations</h4>
               <div class="filter-options">
-                <label><input type="checkbox" value="hotel" /> Hotel</label>
-                <label><input type="checkbox" value="b&b" /> B & B</label>
+                <label><input type="checkbox" value="hotel" /> Hotels</label>
+                <label
+                  ><input type="checkbox" value="b&b" /> Bed & Breakfasts</label
+                >
               </div>
             </div>
 
             <div class="filter-group">
-              <h4>Services</h4>
+              <h4>Dog Services</h4>
               <div class="filter-options">
                 <label><input type="checkbox" value="vet" /> Vets</label>
                 <label
                   ><input type="checkbox" value="groomer" /> Groomers</label
                 >
+                <label><input type="checkbox" value="service" /> Daycare</label>
                 <label
-                  ><input type="checkbox" value="service" /> DoggyDayCare</label
-                >
-                <label><input type="checkbox" value="kennels" /> Kennels</label>
-                <label
-                  ><input type="checkbox" value="trainers" /> Trainers</label
-                >
-                <label
-                  ><input type="checkbox" value="dog-field" /> Dog Field</label
+                  ><input type="checkbox" value="dog-field" /> Secure
+                  Fields</label
                 >
               </div>
             </div>
