@@ -10,7 +10,7 @@
     />
     <link rel="stylesheet" href="styles.css" />
     <style>
-      /* Layout specific to the new design */
+      /* Layout specific to the new design - Isolated to index only */
       .hero-simple {
         text-align: center;
         padding: 40px 20px;
@@ -26,45 +26,52 @@
         margin-bottom: 30px;
       }
       .main-search-input {
-        max-width: 800px;
+        max-width: 100%;
         margin: 0 auto 20px auto;
         display: block;
       }
+
+      /* Single row for 5 columns on desktop */
       .reactive-filter-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 15px;
-        max-width: 900px;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 12px;
+        max-width: 1200px;
         margin: 0 auto 25px auto;
       }
+
       .filter-group {
         background: #fff;
         border: 1px solid var(--border);
         border-radius: 8px;
-        padding: 15px;
+        padding: 12px;
         text-align: left;
       }
       .filter-group h4 {
         margin-top: 0;
         margin-bottom: 10px;
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         text-transform: uppercase;
         color: var(--primary);
         letter-spacing: 0.5px;
       }
+
+      /* Organizes checkboxes in 2 columns */
       .filter-options {
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
         gap: 8px;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
       }
+
       .search-submit-btn {
         width: 100%;
-        max-width: 800px;
+        max-width: 1200px;
         margin: 0 auto;
         display: block;
       }
-      /* Side-by-side layout adjustments */
+
+      /* Side-by-side layout for search results and map */
       .side-by-side-layout {
         display: flex;
         gap: 20px;
@@ -91,9 +98,16 @@
         height: 600px;
         width: 100%;
       }
-      @media (max-width: 768px) {
+
+      /* Reactive: Adjusts layout based on screen width */
+      @media (max-width: 1100px) {
         .reactive-filter-grid {
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 600px) {
+        .reactive-filter-grid {
+          grid-template-columns: 1fr;
         }
         .side-by-side-layout {
           flex-direction: column;
@@ -142,70 +156,54 @@
             <div class="filter-group">
               <h4>Food & Drink</h4>
               <div class="filter-options">
+                <label><input type="checkbox" value="cafe" /> Cafe</label>
+                <label><input type="checkbox" value="pub" /> Pubs</label>
                 <label
-                  ><input type="checkbox" value="cafe" /> Cafe & TeaRoom</label
+                  ><input type="checkbox" value="restaurant" /> Resto</label
                 >
-
-                <label><input type="checkbox" value="pub" /> Pubs & Bars</label>
-                <label
-                  ><input type="checkbox" value="restaurant" />
-                  Restaurants</label
-                >
-                <label
-                  ><input type="checkbox" value="dessert" /> Desster &
-                  IceCream</label
-                >
+                <label><input type="checkbox" value="dessert" /> Dessert</label>
               </div>
             </div>
+
             <div class="filter-group">
               <h4>Retail</h4>
               <div class="filter-options">
                 <label><input type="checkbox" value="shop" /> Shops</label>
+                <label><input type="checkbox" value="pet-store" /> Pets</label>
                 <label
-                  ><input type="checkbox" value="pet-store" /> Pet Stores</label
-                >
-                <label
-                  ><input type="checkbox" value="Butchers" /> Butchers</label
+                  ><input type="checkbox" value="Butchers" /> Butcher</label
                 >
                 <label><input type="checkbox" value="Florist" /> Florist</label>
               </div>
             </div>
+
             <div class="filter-group">
               <h4>Experience</h4>
               <div class="filter-options">
                 <label
-                  ><input type="checkbox" value="attraction" />
-                  Attractions</label
+                  ><input type="checkbox" value="attraction" /> Attr.</label
                 >
-                <label
-                  ><input type="checkbox" value="park" /> Parks & Gardens</label
-                >
-                <label><input type="checkbox" value="beach" /> Beaches</label>
-                <label><input type="checkbox" value="markets" /> Markets</label>
+                <label><input type="checkbox" value="park" /> Parks</label>
+                <label><input type="checkbox" value="beach" /> Beach</label>
                 <label><input type="checkbox" value="trails" /> Trails</label>
               </div>
             </div>
+
             <div class="filter-group">
-              <h4>Accomodations</h4>
+              <h4>Accommod.</h4>
               <div class="filter-options">
-                <label><input type="checkbox" value="hotel" /> sHotel</label>
-                <label><input type="checkbox" value="b&b" /> B & B</label>
+                <label><input type="checkbox" value="hotel" /> Hotel</label>
+                <label><input type="checkbox" value="b&b" /> B&B</label>
               </div>
             </div>
+
             <div class="filter-group">
-              <h4>Dog Services</h4>
+              <h4>Services</h4>
               <div class="filter-options">
                 <label><input type="checkbox" value="vet" /> Vets</label>
-                <label
-                  ><input type="checkbox" value="groomer" /> Groomers</label
-                >
-                <label><input type="checkbox" value="service" /> Daycare</label>
-                <label
-                  ><input type="checkbox" value="trainer" /> Trainers</label
-                >
-                <label
-                  ><input type="checkbox" value="dog-field" /> Dog Field</label
-                >
+                <label><input type="checkbox" value="groomer" /> Groom</label>
+                <label><input type="checkbox" value="service" /> Care</label>
+                <label><input type="checkbox" value="dog-field" /> Field</label>
               </div>
             </div>
           </div>
