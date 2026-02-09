@@ -2,9 +2,209 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Planner – TheDogAtlas</title>
+    <title>Smart Itinerary – TheDogAtlas</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+      /* Isolated Styles for the Smart Planner - No global impact */
+      :root {
+        --trip-primary: #ff7a4a;
+        --trip-dark: #1c3250;
+        --trip-bg: #fdfdfd;
+        --trip-card: #ffffff;
+      }
+
+      .planner-main {
+        background: var(--trip-bg);
+        min-height: 100vh;
+      }
+
+      /* Hero Builder Section */
+      .planner-hero {
+        background: linear-gradient(
+            rgba(28, 50, 80, 0.7),
+            rgba(28, 50, 80, 0.7)
+          ),
+          url("Media/Trails/header-image.jpg") center/cover;
+        padding: 80px 20px;
+        text-align: center;
+        color: white;
+      }
+
+      .planner-hero h1 {
+        font-size: 2.8rem;
+        margin-bottom: 15px;
+        font-weight: 800;
+      }
+
+      .builder-box {
+        background: white;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 24px;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .builder-box input {
+        flex: 1;
+        border: 1px solid #e0e2e8;
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-size: 1rem;
+      }
+
+      .generate-btn {
+        background: var(--trip-primary);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+
+      .generate-btn:hover {
+        transform: scale(1.02);
+      }
+
+      /* Two-Column Itinerary Layout */
+      .trip-container {
+        max-width: 1140px;
+        margin: -40px auto 60px auto;
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 30px;
+        padding: 0 20px;
+      }
+
+      /* Main Itinerary Column */
+      .itinerary-main {
+        background: var(--trip-card);
+        border-radius: 16px;
+        padding: 40px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+
+      .day-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 15px;
+        margin-bottom: 30px;
+      }
+
+      .stop-card {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 40px;
+        position: relative;
+      }
+
+      /* Timeline connector */
+      .stop-card:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        left: 20px;
+        top: 40px;
+        bottom: -40px;
+        width: 2px;
+        background: #f0f0f0;
+      }
+
+      .stop-time {
+        min-width: 60px;
+        font-weight: 800;
+        color: var(--trip-primary);
+        font-size: 0.9rem;
+      }
+
+      .stop-visual {
+        width: 150px;
+        height: 100px;
+        border-radius: 8px;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+
+      .stop-visual img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .stop-content h3 {
+        margin: 0 0 5px 0;
+        color: var(--trip-dark);
+      }
+      .stop-tag {
+        font-size: 0.7rem;
+        background: #eefdf8;
+        color: #1b8a6b;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      .dog-logic {
+        background: #fff8f5;
+        border-left: 3px solid var(--trip-primary);
+        padding: 10px;
+        margin-top: 10px;
+        font-size: 0.85rem;
+        color: #555;
+      }
+
+      /* Sidebar Column */
+      .sidebar-column {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .sidebar-widget {
+        background: white;
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+
+      .ai-chat {
+        background: var(--trip-dark);
+        color: white;
+      }
+
+      .ai-bubble {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 12px;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        line-height: 1.4;
+      }
+
+      @media (max-width: 768px) {
+        .trip-container {
+          grid-template-columns: 1fr;
+        }
+        .stop-card {
+          flex-direction: column;
+        }
+        .stop-visual {
+          width: 100%;
+          height: 180px;
+        }
+      }
+    </style>
   </head>
   <body>
     <header>
@@ -24,60 +224,165 @@
       </nav>
     </header>
 
-    <main>
-      <section class="hero">
-        <div>
-          <h1>Intelligent Itinerary Planner</h1>
-          <p>Build a curated day-by-day trip schedule.</p>
-          <p>
-            Suggested schedules for breakfast, lunch, and dog-friendly
-            activities.
-          </p>
-          <form
-            class="hero-form"
-            onsubmit="event.preventDefault(); generateItinerary();"
-          >
-            <input
-              type="text"
-              id="planDest"
-              value="St Albans"
-              style="width: 100%; margin-bottom: 10px"
-            />
-            <button type="submit" style="width: 100%">Generate Trip</button>
-          </form>
-        </div>
+    <main class="planner-main">
+      <section class="planner-hero">
+        <h1>Where are you heading?</h1>
+        <p style="margin-bottom: 30px">
+          Let our smart engine build your perfect dog-friendly trip.
+        </p>
+        <form
+          class="builder-box"
+          onsubmit="event.preventDefault(); showTrip();"
+        >
+          <input
+            type="text"
+            id="dest"
+            value="St Albans, Hertfordshire"
+            placeholder="e.g. St Albans"
+          />
+          <button type="submit" class="generate-btn">Build Trip</button>
+        </form>
       </section>
-      <div id="itineraryResult" class="panel hidden">
-        <h2 id="itineraryTitle">Your Trip</h2>
-        <div id="itineraryTimeline"></div>
+
+      <div id="tripOutput" class="trip-container hidden">
+        <article class="itinerary-main">
+          <div class="day-header">
+            <div>
+              <h2 style="margin: 0">Day 1: Historic Dog Adventure</h2>
+              <span style="color: var(--muted); font-size: 0.9rem"
+                >St Albans Gateway</span
+              >
+            </div>
+            <div class="stop-tag">Verified Dog Friendly</div>
+          </div>
+
+          <div class="stop-card">
+            <div class="stop-time">09:30 AM</div>
+            <div class="stop-visual">
+              <img
+                src="Media/Community/Community image 1.jpeg"
+                alt="Breakfast Stop"
+              />
+            </div>
+            <div class="stop-content">
+              <span class="stop-tag">Breakfast</span>
+              <h3>Street Café St Albans</h3>
+              <p>
+                Kick off your morning at this local favorite known for its warm
+                welcome to four-legged guests.
+              </p>
+              <div class="dog-logic">
+                <strong>Dog Logic:</strong> Indoor seating allowed; water bowls
+                and treats provided at the door.
+              </div>
+            </div>
+          </div>
+
+          <div class="stop-card">
+            <div class="stop-time">11:30 AM</div>
+            <div class="stop-visual">
+              <img src="Media/Trails/panshanger park.jpg" alt="Park Walk" />
+            </div>
+            <div class="stop-content">
+              <span class="stop-tag">Activity</span>
+              <h3>Verulamium Park</h3>
+              <p>
+                Explore 100 acres of parkland and Roman ruins. Huge open spaces
+                for long-leash walking.
+              </p>
+              <div class="dog-logic">
+                <strong>Dog Logic:</strong> Off-lead areas are clearly marked
+                near the hills; great social spot for pups.
+              </div>
+            </div>
+          </div>
+
+          <div class="stop-card">
+            <div class="stop-time">01:30 PM</div>
+            <div class="stop-visual">
+              <img src="Media/Trails/River Lee.jpeg" alt="Pub Lunch" />
+            </div>
+            <div class="stop-content">
+              <span class="stop-tag">Lunch</span>
+              <h3>The Fighting Cocks</h3>
+              <p>
+                Enjoy a meal at Britain's oldest pub. A historic spot with a
+                fantastic dog-friendly garden.
+              </p>
+              <div class="dog-logic">
+                <strong>Dog Logic:</strong> Very popular with dog owners;
+                "Paw-friendly" areas inside the historic bar.
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <aside class="sidebar-column">
+          <div class="sidebar-widget ai-chat">
+            <h4 style="margin-top: 0">
+              <i class="fa fa-robot"></i> Trip Assistant
+            </h4>
+            <div class="ai-bubble">
+              "I've optimized this route for St Albans to ensure minimal
+              leash-time and maximum coffee stops! Would you like me to find a
+              hotel nearby?"
+            </div>
+          </div>
+
+          <div class="sidebar-widget">
+            <h4>Trip Stats</h4>
+            <div style="font-size: 0.85rem; line-height: 2">
+              <div><i class="fa fa-walking"></i> 2.4 Miles Total</div>
+              <div><i class="fa fa-dog"></i> 100% Dog Friendly</div>
+              <div><i class="fa fa-clock"></i> 6 Hours Duration</div>
+            </div>
+          </div>
+
+          <div class="sidebar-widget" style="text-align: center">
+            <button
+              class="nav-link"
+              style="
+                width: 100%;
+                border: 1px solid var(--border);
+                margin-bottom: 10px;
+                padding: 10px;
+              "
+            >
+              Save to Profile
+            </button>
+            <button
+              class="nav-link"
+              style="
+                width: 100%;
+                border: 1px solid var(--border);
+                padding: 10px;
+              "
+            >
+              Print Itinerary
+            </button>
+          </div>
+        </aside>
       </div>
     </main>
 
     <script>
-      function generateItinerary() {
-        document.getElementById("itineraryResult").classList.remove("hidden");
-        document.getElementById(
-          "itineraryTitle"
-        ).textContent = `Day Trip to St Albans`;
-        document.getElementById("itineraryTimeline").innerHTML = `
-          <div class="result-card"><strong>09:00 Breakfast</strong><br>Paws & Beans Café</div>
-          <div class="result-card"><strong>13:30 Lunch</strong><br>The Wagging Tail Pub</div>
-        `;
+      function showTrip() {
+        document.getElementById("tripOutput").classList.remove("hidden");
+        window.scrollTo({ top: 500, behavior: "smooth" });
       }
     </script>
-  </body>
 
-  <footer>
-    <div class="footer-links">
-      <a href="Footer/privacy.html">Privacy Policy</a>
-      <a href="Footer/terms.html">Terms of Service</a>
-      <a href="Footer/cookies.html">Cookie Policy</a>
-      <a href="Footer/contact.html">Contact</a>
-      <a href="Footer/about.html">About Us</a>
-    </div>
-    <div class="copyright">
-      &copy; 2024 TheDogAtlas. The dog-first travel platform.
-      <br />Always check with venues directly for current dog policies.
-    </div>
-  </footer>
+    <footer>
+      <div class="footer-links">
+        <a href="Footer/privacy.html">Privacy Policy</a>
+        <a href="Footer/terms.html">Terms of Service</a>
+        <a href="Footer/cookies.html">Cookie Policy</a>
+        <a href="Footer/contact.html">Contact</a>
+        <a href="Footer/about.html">About Us</a>
+      </div>
+      <div class="copyright">
+        &copy; 2024 TheDogAtlas. The dog-first travel platform.
+      </div>
+    </footer>
+  </body>
 </html>
