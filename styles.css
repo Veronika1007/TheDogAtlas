@@ -10,7 +10,7 @@
   --accent: #1c3250;
 }
 
-/* --- STICKY FOOTER & BASE --- */
+/* --- BASE STYLES --- */
 html,
 body {
   height: 100%;
@@ -24,14 +24,14 @@ body {
   flex-direction: column;
 }
 
-/* --- HEADER (Centered Logo + Grey Background) --- */
+/* --- UPDATED HEADER (Centered Logo + Tagline + Grey Background) --- */
 header {
   background: #f4f4f4; /* Light grey background */
   border-bottom: 1px solid var(--border);
-  padding: 12px 24px;
+  padding: 15px 24px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; /* Centers the brand container */
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -40,14 +40,28 @@ header {
 
 .brand {
   display: flex;
+  flex-direction: column; /* Stacks logo and text vertically */
+  align-items: center; /* Centers items horizontally */
+  text-align: center;
+}
+
+.brand a {
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
   align-items: center;
 }
 
-.brand div,
-.brand span {
-  display: none !important;
+/* Ensures the tagline is visible and styled correctly */
+.brand div {
+  display: block !important;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 5px;
+  line-height: 1.2;
 }
 
+/* Positions navigation to the right side of the centered logo */
 nav {
   position: absolute;
   right: 24px;
@@ -60,8 +74,10 @@ nav {
   color: var(--text);
   font-weight: 600;
   font-size: 14px;
+  transition: color 0.2s;
 }
 
+.nav-link:hover,
 .nav-link.active {
   color: var(--primary);
 }
@@ -206,10 +222,10 @@ main,
   transform: translateY(-2px);
 }
 
-/* --- UPDATED FOOTER (Matches Header) --- */
+/* --- UPDATED FOOTER (Matches Header Background) --- */
 footer {
   flex-shrink: 0;
-  background: #f4f4f4; /* Matches header background */
+  background: #f4f4f4; /* Matches header grey */
   border-top: 1px solid var(--border);
   padding: 40px 24px;
   margin-top: 60px;
@@ -232,21 +248,25 @@ footer {
   color: var(--muted);
 }
 
-/* Mobile Adjustments */
+/* --- MOBILE ADJUSTMENTS --- */
+@media (max-width: 768px) {
+  nav {
+    position: static;
+    margin-top: 15px;
+    justify-content: center;
+    width: 100%;
+  }
+  header {
+    flex-direction: column;
+    padding-bottom: 20px;
+  }
+}
+
 @media (max-width: 600px) {
   .friends-grid-container {
     grid-template-columns: 1fr;
   }
   .filter-options {
     grid-template-columns: 1fr;
-  }
-  nav {
-    position: static;
-    margin-top: 10px;
-    justify-content: center;
-    width: 100%;
-  }
-  header {
-    flex-direction: column;
   }
 }
