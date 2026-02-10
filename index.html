@@ -10,7 +10,6 @@
     />
     <link rel="stylesheet" href="styles.css" />
     <style>
-      /* Layout specific to the new design - Isolated to index only */
       .hero-simple {
         text-align: center;
         padding: 40px 20px;
@@ -26,12 +25,14 @@
         margin-bottom: 30px;
       }
       .main-search-input {
-        max-width: 100%;
+        max-width: 600px;
         margin: 0 auto 20px auto;
         display: block;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        width: 100%;
       }
-
-      /* Single row for 5 columns on desktop */
       .reactive-filter-grid {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
@@ -39,7 +40,6 @@
         max-width: 1200px;
         margin: 0 auto 25px auto;
       }
-
       .filter-group {
         background: #fff;
         border: 1px solid var(--border);
@@ -55,24 +55,25 @@
         color: var(--primary);
         letter-spacing: 0.5px;
       }
-
-      /* Checkboxes in a single column to prevent text splitting */
       .filter-options {
         display: flex;
         flex-direction: column;
         gap: 8px;
         font-size: 0.8rem;
       }
-
       .search-submit-btn {
         width: 100%;
         max-width: 1200px;
         margin: 0 auto;
         display: block;
-        color: #ff7a4a;
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 15px;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
       }
-
-      /* Side-by-side layout for search results and map */
       .side-by-side-layout {
         display: flex;
         gap: 20px;
@@ -99,8 +100,11 @@
         height: 600px;
         width: 100%;
       }
+      .rating-stars {
+        color: #ffc107;
+        font-weight: bold;
+      }
 
-      /* Reactive: Adjusts layout based on screen width */
       @media (max-width: 1100px) {
         .reactive-filter-grid {
           grid-template-columns: repeat(2, 1fr);
@@ -138,7 +142,6 @@
           </div>
         </a>
       </div>
-
       <nav>
         <a href="index.html" class="nav-link active">Map</a>
         <a href="planner.html" class="nav-link">Planner</a>
@@ -149,17 +152,14 @@
 
     <main>
       <section class="hero-simple">
-        <h1>
-          Find dog-friendly venues, stays, walking trails & more in seconds.
-        </h1>
-        <p>Hertfordshire Beta · Verified Venues Only</p>
+        <h1>Find dog-friendly venues, stays & more in seconds.</h1>
+        <p>Verified Venues Only • Live Updates</p>
 
-        <form onsubmit="event.preventDefault(); demoSearch();">
+        <form onsubmit="event.preventDefault(); runSearch();">
           <input
             id="whereInput"
             type="text"
-            placeholder="Location (e.g. St Albans)"
-            value="St Albans"
+            placeholder="Search by venue name, city, or county (e.g. London)..."
             class="main-search-input"
           />
 
@@ -168,7 +168,7 @@
               <h4>Food & Drink</h4>
               <div class="filter-options">
                 <label
-                  ><input type="checkbox" value="cafe" /> Cafe & TeamRoom</label
+                  ><input type="checkbox" value="cafe" /> Cafe & TeaRoom</label
                 >
                 <label><input type="checkbox" value="pub" /> Pubs & Bars</label>
                 <label
@@ -181,7 +181,6 @@
                 >
               </div>
             </div>
-
             <div class="filter-group">
               <h4>Retail</h4>
               <div class="filter-options">
@@ -195,7 +194,6 @@
                 <label><input type="checkbox" value="Florist" /> Florist</label>
               </div>
             </div>
-
             <div class="filter-group">
               <h4>Experience</h4>
               <div class="filter-options">
@@ -206,45 +204,33 @@
                 <label
                   ><input type="checkbox" value="park" /> Parks & Gardens</label
                 >
-                <label><input type="checkbox" value="beach" /> Beaches</label>
-                <label><input type="checkbox" value="trails" /> Trails</label>
               </div>
             </div>
-
             <div class="filter-group">
-              <h4>Accommodations</h4>
+              <h4>Stays</h4>
               <div class="filter-options">
                 <label><input type="checkbox" value="hotel" /> Hotels</label>
-                <label
-                  ><input type="checkbox" value="b&b" /> Bed & Breakfasts</label
-                >
               </div>
             </div>
-
             <div class="filter-group">
               <h4>Dog Services</h4>
               <div class="filter-options">
-                <label><input type="checkbox" value="vet" /> Vets</label>
                 <label
                   ><input type="checkbox" value="groomer" /> Groomers</label
-                >
-                <label><input type="checkbox" value="service" /> Daycare</label>
-                <label
-                  ><input type="checkbox" value="dog-field" /> Secure
-                  Fields</label
                 >
               </div>
             </div>
           </div>
           <button type="submit" class="search-submit-btn">
-            Search & Filter Map
+            Update Map & Results
           </button>
         </form>
       </section>
+
       <div class="side-by-side-layout">
         <div class="results-panel">
           <h2 style="margin-top: 0">Search Results</h2>
-          <div class="results" id="resultsBox"></div>
+          <div class="results" id="resultsBox">Loading verified data...</div>
         </div>
         <div class="map-panel">
           <div id="mapBox"></div>
@@ -252,74 +238,98 @@
       </div>
     </main>
 
-    <footer>
-      <div class="footer-links">
-        <a href="Footer/privacy.html">Privacy Policy</a>
-        <a href="Footer/terms.html">Terms of Service</a>
-        <a href="Footer/cookies.html">Cookie Policy</a>
-        <a href="Footer/contact.html">Contact</a>
-        <a href="Footer/about.html">About Us</a>
-      </div>
-      <div class="copyright">
-        &copy; 2025 TheDogAtlas. The dog-first travel platform.
-        <br />Always check with venues directly for current dog policies.
-      </div>
-    </footer>
-
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-      const map = L.map("mapBox").setView([51.7527, -0.3394], 13);
+      const map = L.map("mapBox").setView([51.5074, -0.1278], 9);
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: "&copy; OpenStreetMap",
       }).addTo(map);
+
       let markersLayer = L.layerGroup().addTo(map);
+      let allVenues = [];
 
-      const demoVenues = [
-        {
-          name: "The Wagging Tail Pub",
-          type: "pub",
-          lat: 51.755,
-          lng: -0.335,
-          note: "Verified garden seating.",
-        },
-        {
-          name: "Paws & Beans Café",
-          type: "cafe",
-          lat: 51.75,
-          lng: -0.34,
-          note: "Indoor dogs welcome.",
-        },
-      ];
+      const categoryMap = {
+        restaurant: "Restaurant",
+        pub: "Pubs & Bars",
+        cafe: "Café & TeaRoom",
+        dessert: "Dessert & IceCream",
+        shop: "Shops",
+        "pet-store": "Pet Stores",
+        Butchers: "Butchers",
+        Florist: "Florist",
+        hotel: "Hotel",
+        groomer: "Groomers",
+        park: "Parks & Garden",
+        attraction: "Attractions",
+      };
 
-      function demoSearch() {
-        const selectedCats = Array.from(
-          document.querySelectorAll("#categoryFilters input:checked")
-        ).map((cb) => cb.value);
-
-        let filtered = demoVenues.filter(
-          (v) => selectedCats.length === 0 || selectedCats.includes(v.type)
-        );
-
-        markersLayer.clearLayers();
-        filtered.forEach((v) => {
-          L.marker([v.lat, v.lng])
-            .addTo(markersLayer)
-            .bindPopup(`<b>${v.name}</b><br>${v.note}`);
+      fetch("venues.json")
+        .then((response) => response.json())
+        .then((data) => {
+          allVenues = data;
+          runSearch();
+        })
+        .catch((err) => {
+          console.error("Data load error:", err);
+          document.getElementById("resultsBox").innerHTML =
+            "<p>Please view this via a local server (e.g. VS Code Live Server).</p>";
         });
 
+      function runSearch() {
+        const selectedKeys = Array.from(
+          document.querySelectorAll("#categoryFilters input:checked")
+        ).map((cb) => categoryMap[cb.value]);
+
+        const searchTerm = document
+          .getElementById("whereInput")
+          .value.toLowerCase();
+
+        let filtered = allVenues.filter((v) => {
+          const matchesCat =
+            selectedKeys.length === 0 || selectedKeys.includes(v.type);
+          const matchesTerm =
+            v.name.toLowerCase().includes(searchTerm) ||
+            v.city.toLowerCase().includes(searchTerm) ||
+            v.county.toLowerCase().includes(searchTerm);
+          return matchesCat && matchesTerm;
+        });
+
+        markersLayer.clearLayers();
+
+        const resultsHTML = filtered
+          .map((v) => {
+            if (v.lat && v.lng) {
+              L.marker([v.lat, v.lng])
+                .addTo(markersLayer)
+                .bindPopup(
+                  `<b>${v.name}</b><br>Rating: ${v.rating}/5<br>${v.note}`
+                );
+            }
+
+            return `
+            <div style="margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+              <h3 style="margin-bottom: 5px;">${v.name}</h3>
+              <p style="font-size: 0.75rem; color: var(--primary); font-weight: bold; text-transform: uppercase;">
+                ${v.type} • <span class="rating-stars">${"★".repeat(
+              v.rating
+            )}</span>
+              </p>
+              <p style="font-size: 0.85rem; color: var(--muted); margin-bottom: 8px;">${
+                v.city
+              }, ${v.county}</p>
+              <p style="font-size: 0.9rem; color: var(--text);">${v.note}</p>
+            </div>`;
+          })
+          .join("");
+
         document.getElementById("resultsBox").innerHTML =
-          filtered
-            .map(
-              (v) =>
-                `<div style="margin-bottom: 25px;">
-                  <h3 style="margin-bottom: 5px;">${v.name}</h3>
-                  <p style="font-size: 0.75rem; color: var(--muted); margin-bottom: 10px;">${v.type.toUpperCase()}</p>
-                  <p style="font-size: 0.9rem;">${v.note}</p>
-                </div>`
-            )
-            .join("") || "<p>No results found.</p>";
+          resultsHTML || "<p>No verified venues found for this search.</p>";
+
+        if (filtered.length > 0) {
+          const group = new L.featureGroup(markersLayer.getLayers());
+          map.fitBounds(group.getBounds().pad(0.1));
+        }
       }
-      demoSearch();
     </script>
   </body>
 </html>

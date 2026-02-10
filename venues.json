@@ -1,0 +1,1372 @@
+[
+  {
+    "name": "28-50 Wine Workshop & Kitchen",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5163928,
+    "lng": -0.1504631,
+    "note": "Basic: Dogs are allowed indoors, but it\u2019s a more formal wine setting\u2014on-lead and well-behaved is a must.",
+    "rating": 2
+  },
+  {
+    "name": "Abercamlais Arms",
+    "type": "Pubs & Bars",
+    "city": "Brecon",
+    "county": "Powys",
+    "lat": 51.9476,
+    "lng": -3.56828,
+    "note": "Basic: Traditional country pub vibes; dogs generally okay in the bar.",
+    "rating": 2
+  },
+  {
+    "name": "Aberglais Inn",
+    "type": "Restaurant",
+    "city": "Merthyr Tydfil",
+    "county": "Glamorgan (Morgannwg)",
+    "lat": 51.7780378,
+    "lng": -3.3875047,
+    "note": "Friendly: Known for being a \"walker's pub\"\u2014dogs are warmly accepted indoors in the bar area.",
+    "rating": 3
+  },
+  {
+    "name": "Abuelo",
+    "type": "Caf\u00e9 & TeaRoom",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5112307,
+    "lng": -0.1224736,
+    "note": "Welcoming: A neighborhood favorite where pups are treated like regulars with plenty of indoor attention.",
+    "rating": 4
+  },
+  {
+    "name": "Adam & Eve",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.6770759,
+    "lng": -0.1277425,
+    "note": "Friendly: Dogs are warmly welcomed in the bar and outdoor gardens with water bowls and a dedicated biscuit treat bucket on the counter.",
+    "rating": 3
+  },
+  {
+    "name": "Afternoon Tea at The Parlour",
+    "type": "Caf\u00e9 & TeaRoom",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5063788,
+    "lng": -0.1263579,
+    "note": "Red Carpet: Offers a full \"Doggy Afternoon Tea\" menu with canine nutrition in mind. Truly the VIP treatment.",
+    "rating": 5
+  },
+  {
+    "name": "Alema coffee",
+    "type": "Caf\u00e9 & TeaRoom",
+    "city": "Bury Saint Edmunds",
+    "county": "Suffolk",
+    "lat": 52.2443,
+    "lng": 0.7135,
+    "note": "Friendly: Small but very welcoming to the morning dog-walking crowd.",
+    "rating": 3
+  },
+  {
+    "name": "Alice House Queen's Park",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5348333,
+    "lng": -0.2045056,
+    "note": "Friendly: Very accommodating to local dog owners; water bowls and treats are standard.",
+    "rating": 3
+  },
+  {
+    "name": "Allison's Eatery",
+    "type": "Restaurant",
+    "city": "Bury Saint Edmunds",
+    "county": "Suffolk",
+    "lat": 52.2612,
+    "lng": 0.7077,
+    "note": "Friendly: A vegan spot that extends its kindness to animals; dogs are welcome inside the dining area.",
+    "rating": 3
+  },
+  {
+    "name": "Altonapoli Italian Restaurant Kings Cross",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5301897,
+    "lng": -0.1228832,
+    "note": "Basic: Dogs are welcome inside and out, with standard amenities like water bowls provided upon request.",
+    "rating": 2
+  },
+  {
+    "name": "Anchor Cambridge",
+    "type": "Pubs & Bars",
+    "city": "Cambridge",
+    "county": "Cambridgeshire",
+    "lat": 52.2022495,
+    "lng": 0.1168116,
+    "note": "Basic: Restricted to the bar/terrace; standard amenities like water bowls are available.",
+    "rating": 2
+  },
+  {
+    "name": "Anspach & Hobday: The Arch House",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.4986198,
+    "lng": -0.0734285,
+    "note": "Friendly: A classic \"brewery dog\" vibe. Very relaxed and inclusive of four-legged companions.",
+    "rating": 3
+  },
+  {
+    "name": "APULIA",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5197538,
+    "lng": -0.0985955,
+    "note": "Basic: Italian hospitality is great, but space is often tight; best for smaller, calm dogs.",
+    "rating": 2
+  },
+  {
+    "name": "ARABICA KINGS CROSS",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.537718,
+    "lng": -0.1249874,
+    "note": "Tolerant: Great terrace for pups, but they are restricted to the outdoor seating areas only.",
+    "rating": 1
+  },
+  {
+    "name": "Aragon House",
+    "type": "Hotel",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.472506,
+    "lng": -0.200322,
+    "note": "Welcoming: Dogs are welcome in the bar, garden, and hotel rooms. They are well-known for their \"pup-centric\" staff.",
+    "rating": 4
+  },
+  {
+    "name": "Archers Tea Room & Coffee house",
+    "type": "Caf\u00e9 & TeaRoom",
+    "city": "Bishop's Stortford",
+    "county": "Hertfordshire",
+    "lat": 51.8673413,
+    "lng": 0.1605597,
+    "note": "Friendly: Staff are notably affectionate toward pets; water and treats are usually ready and waiting.",
+    "rating": 3
+  },
+  {
+    "name": "Assembly House",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.550993,
+    "lng": -0.1403407,
+    "note": "Basic: Good local pub for dogs, though doesn't offer a specific dog-focused \"menu\" or zone.",
+    "rating": 2
+  },
+  {
+    "name": "Ave Mario",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5108935,
+    "lng": -0.1238784,
+    "note": "Tolerant: Due to the high-energy, packed nature of the restaurant, it\u2019s best for dogs only on the terrace.",
+    "rating": 1
+  },
+  {
+    "name": "Babel Beerhouse",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5377081,
+    "lng": -0.125856,
+    "note": "Friendly: A modern, inclusive taproom where dogs are warmly accepted alongside craft beer fans.",
+    "rating": 3
+  },
+  {
+    "name": "Bank House Hotel",
+    "type": "Hotel",
+    "city": "King's Lynn",
+    "county": "Norfolk",
+    "lat": 52.7532467,
+    "lng": 0.3932493,
+    "note": "Welcoming: As they allow dogs in all bedrooms and the restaurant.",
+    "rating": 3
+  },
+  {
+    "name": "BAO Kings Cross",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5332,
+    "lng": 0.1246,
+    "note": "Tolerant: Dogs are strictly allowed in the outside seating area only.",
+    "rating": 1
+  },
+  {
+    "name": "Barnabys Florists",
+    "type": "Florist",
+    "city": "Stevenage",
+    "county": "Hertfordshire",
+    "lat": 51.9108709,
+    "lng": -0.2079125,
+    "note": "Tolerant: Primarily a retail florist; dogs are tolerated for quick visits but no specific amenities are provided.",
+    "rating": 1
+  },
+  {
+    "name": "Baron of Beef",
+    "type": "Pubs & Bars",
+    "city": "Cambridge",
+    "county": "Cambridgeshire",
+    "lat": 52.2089164,
+    "lng": 0.1181145,
+    "note": "Welcoming: Provides water bowls and \"tasty treats\" for all \"waggy tailed good boys and girls\".",
+    "rating": 4
+  },
+  {
+    "name": "Barrafina Coal Drops Yard",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5355,
+    "lng": 0.1251,
+    "note": "Basic: Small, well-behaved dogs are allowed on-lead but must stay on the floor at all times.",
+    "rating": 2
+  },
+  {
+    "name": "Barrio - Soho (La Familia)",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5141806,
+    "lng": -0.136505,
+    "note": "Tolerant: While technically allowed for drinks, the dark environment and loud music mean it is often not suitable for many dogs.",
+    "rating": 1
+  },
+  {
+    "name": "Battersea Brewery",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.4828518,
+    "lng": -0.147044,
+    "note": "Friendly: Highly welcoming both inside and out; they often have doggy treats ready at the bar.",
+    "rating": 3
+  },
+  {
+    "name": "Battersea Park",
+    "type": "Parks & Garden",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.4725596,
+    "lng": -0.1636613,
+    "note": "Red Carpet: An outdoor space with off-leash areas and even a doggy swimming spot.",
+    "rating": 5
+  },
+  {
+    "name": "Battersea Power Station",
+    "type": "Shops",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.4817519,
+    "lng": -0.1460471,
+    "note": "Friendly: The complex is very dog-friendly; many shops provide water and treats at the ready.",
+    "rating": 3
+  },
+  {
+    "name": "Bay Tree Cafe",
+    "type": "Restaurant",
+    "city": "Bury Saint Edmunds",
+    "county": "Suffolk",
+    "lat": 52.2476718,
+    "lng": 0.7118224,
+    "note": "Friendly: An independent cafe in Bury St Edmunds that explicitly lists itself as dog-friendly.",
+    "rating": 3
+  },
+  {
+    "name": "BEER + BURGER",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5367464,
+    "lng": -0.1225604,
+    "note": "Friendly: A casual spot that explicitly welcomes dogs to join for a pint and a burger.",
+    "rating": 3
+  },
+  {
+    "name": "Beer Shop | Hitchin",
+    "type": "Pubs & Bars",
+    "city": "Hitchin",
+    "county": "Hertfordshire",
+    "lat": 51.949359,
+    "lng": -0.2749907,
+    "note": "Friendly: A dedicated dog-friendly environment where four-legged friends are a standard sight.",
+    "rating": 3
+  },
+  {
+    "name": "Bella Vista",
+    "type": "Caf\u00e9 & TeaRoom",
+    "city": "Stevenage",
+    "county": "Hertfordshire",
+    "lat": 51.9003832,
+    "lng": -0.2011726,
+    "note": "Basic: A dog-friendly guest house and dining area that provides standard access for pets.",
+    "rating": 2
+  },
+  {
+    "name": "Bellanger",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5365453,
+    "lng": -0.1026836,
+    "note": "Friendly: A very accommodating French brasserie where dogs are welcome throughout the entire restaurant.",
+    "rating": 3
+  },
+  {
+    "name": "Belmeis",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.592877,
+    "lng": -0.1432972,
+    "note": "Basic: Known as a neighborhood spot that allows dogs indoors, though it maintains a standard caf\u00e9 environment without specific canine amenities.",
+    "rating": 2
+  },
+  {
+    "name": "Betjeman Arms",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5303041,
+    "lng": -0.1247771,
+    "note": "Friendly: A spacious St Pancras gastropub that welcomes dogs into its grand interior.",
+    "rating": 3
+  },
+  {
+    "name": "Betto Tapas Restaurant & Cocktail Bar",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.4429502,
+    "lng": -0.1492592,
+    "note": "Friendly: Highly rated for welcoming dogs inside and out; they typically provide water bowls and have a designated terrace area.",
+    "rating": 3
+  },
+  {
+    "name": "Big Penny Social",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5906099,
+    "lng": -0.0415502,
+    "note": "Friendly: An open-hearted venue that warmly welcomes everyone and their dogs.",
+    "rating": 3
+  },
+  {
+    "name": "Birdcage",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5283093,
+    "lng": -0.0710235,
+    "note": "Friendly: Staff are self-proclaimed dog lovers who treat visiting pooches like royalty.",
+    "rating": 3
+  },
+  {
+    "name": "Bishop's Butchers",
+    "type": "Butchers",
+    "city": "Bishop's Stortford",
+    "county": "Hertfordshire",
+    "lat": 51.8711272,
+    "lng": 0.1591045,
+    "note": "Tolerant: As a traditional butcher shop, dogs are tolerated for quick visits but have no amenities.",
+    "rating": 1
+  },
+  {
+    "name": "Bistrotheque",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5340961,
+    "lng": -0.0560633,
+    "note": "Friendly: Well-behaved dogs are welcome to sit quietly with their owners in this chic warehouse space.",
+    "rating": 3
+  },
+  {
+    "name": "Black Cock Inn",
+    "type": "Pubs & Bars",
+    "city": "Brecon",
+    "county": "Powys",
+    "lat": 51.9427,
+    "lng": 3.2952,
+    "note": "Friendly: Staff \"shower pooches with treats\" and provide water bowls near cozy log fires.",
+    "rating": 3
+  },
+  {
+    "name": "Black Rabbit Pub",
+    "type": "Pubs & Bars",
+    "city": "Maldon",
+    "county": "Essex",
+    "lat": 51.7290903,
+    "lng": 0.6851048,
+    "note": "Friendly: Features free treats on the bar and plenty of space in Maldon's biggest beer garden.",
+    "rating": 3
+  },
+  {
+    "name": "Black Sheep Coffee",
+    "type": "Caf\u00e9 & TeaRoom",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5198905,
+    "lng": -0.1340612,
+    "note": "Friendly: A cozy, inviting space that welcomes all dogs, big or small.",
+    "rating": 3
+  },
+  {
+    "name": "Blackfriars Antiques",
+    "type": "Shops",
+    "city": "King's Lynn",
+    "county": "Norfolk",
+    "lat": 52.7523275,
+    "lng": 0.3979028,
+    "note": "Basic: Well-behaved dogs on leads are welcome; water and biscuits are usually available.",
+    "rating": 2
+  },
+  {
+    "name": "Bluebird",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.4849308,
+    "lng": -0.1754374,
+    "note": "Welcoming: Voted one of London's best dog-friendly spots; pets are highly celebrated in the cafe and terrace.",
+    "rating": 4
+  },
+  {
+    "name": "Boosh",
+    "type": "Pubs & Bars",
+    "city": "Bury Saint Edmunds",
+    "county": "Suffolk",
+    "lat": 52.2447,
+    "lng": 0.7131,
+    "note": "Friendly: A beautiful Grade 2 listed building that hosts a highly dog-friendly venue.",
+    "rating": 3
+  },
+  {
+    "name": "Bow Wow London",
+    "type": "Groomers",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5138327,
+    "lng": -0.1261367,
+    "note": "Red Carpet: While primarily a boutique/groomer, they provide VIP treats and beds for nearby hotels.",
+    "rating": 5
+  },
+  {
+    "name": "Brad & Dills",
+    "type": "Caf\u00e9 & TeaRoom",
+    "city": "Hertford",
+    "county": "Hertfordshire",
+    "lat": 51.7964377,
+    "lng": -0.0771861,
+    "note": "Friendly: As they are well-known local spots that accommodate pets as part of their community focus.",
+    "rating": 3
+  },
+  {
+    "name": "Brad & Dills",
+    "type": "Caf\u00e9 & TeaRoom",
+    "city": "Harpenden",
+    "county": "Hertfordshire",
+    "lat": 51.8180331,
+    "lng": -0.3575003,
+    "note": "Friendly: As they are well-known local spots that accommodate pets as part of their community focus.",
+    "rating": 3
+  },
+  {
+    "name": "Bread Street Kitchen - Limehouse",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5096232,
+    "lng": -0.0378413,
+    "note": "Friendly: A \"boathouse-inspired\" waterside spot where the whole family, including dogs, is welcome both inside and on the terrace.",
+    "rating": 3
+  },
+  {
+    "name": "Brecon Tap",
+    "type": "Pubs & Bars",
+    "city": "Brecon",
+    "county": "Powys",
+    "lat": 51.9468971,
+    "lng": -3.3897394,
+    "note": "Friendly: A very welcoming ale and pie house where dogs are a common sight inside after local hikes and canal walks.",
+    "rating": 3
+  },
+  {
+    "name": "Brew Garden",
+    "type": "Caf\u00e9 & TeaRoom",
+    "city": "Hertford",
+    "county": "Hertfordshire",
+    "lat": 51.7965352,
+    "lng": -0.0783883,
+    "note": "Friendly: Known for a \"pawsome time\" with a warming ambience designed for families and their dogs.",
+    "rating": 3
+  },
+  {
+    "name": "BrewDog Canary Wharf",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5046438,
+    "lng": -0.0146973,
+    "note": "Welcoming: Famous for their \"Paw-ties\"; they are super dog-friendly throughout the large indoor space.",
+    "rating": 4
+  },
+  {
+    "name": "BrewDog Chancery Lane",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5166863,
+    "lng": -0.1089721,
+    "note": "Welcoming: Famous for their \"Paw-ties\"; they are super dog-friendly throughout the large indoor space.",
+    "rating": 4
+  },
+  {
+    "name": "BrewDog Clerkenwell",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5224247,
+    "lng": -0.1037538,
+    "note": "Welcoming: Famous for their \"Paw-ties\"; they are super dog-friendly throughout the large indoor space.",
+    "rating": 4
+  },
+  {
+    "name": "BrewDog Ealing",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5136797,
+    "lng": -0.3069417,
+    "note": "Welcoming: Famous for their \"Paw-ties\"; they are super dog-friendly throughout the large indoor space.",
+    "rating": 4
+  },
+  {
+    "name": "BrewDog Paddington",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5190539,
+    "lng": -0.1705643,
+    "note": "Welcoming: Famous for their \"Paw-ties\"; they are super dog-friendly throughout the large indoor space.",
+    "rating": 4
+  },
+  {
+    "name": "BrewDog Seven Dials",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5133622,
+    "lng": -0.1286269,
+    "note": "Welcoming: Famous for their \"Paw-ties\"; they are super dog-friendly throughout the large indoor space.",
+    "rating": 4
+  },
+  {
+    "name": "BrewDog Soho",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5150856,
+    "lng": -0.1371339,
+    "note": "Red Carpet: Dedicated \"Paws of Fame\" wall, pup menus (dog beer/sorbet), and \u00a36 \"Pawty\" packages with hats and sundae.",
+    "rating": 5
+  },
+  {
+    "name": "BrewDog Tower Hill Outpost",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5097173,
+    "lng": -0.0812296,
+    "note": "Red Carpet: Dedicated \"Paws of Fame\" wall, pup menus (dog beer/sorbet), and \u00a36 \"Pawty\" packages with hats and sundae.",
+    "rating": 5
+  },
+  {
+    "name": "BrewDog Wandsworth",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.4554419,
+    "lng": -0.194131,
+    "note": "Red Carpet: Dedicated \"Paws of Fame\" wall, pup menus (dog beer/sorbet), and \u00a36 \"Pawty\" packages with hats and sundae.",
+    "rating": 5
+  },
+  {
+    "name": "BrewDog Waterloo",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5021808,
+    "lng": -0.1154758,
+    "note": "Red Carpet: Dedicated \"Paws of Fame\" wall, pup menus (dog beer/sorbet), and \u00a36 \"Pawty\" packages with hats and sundae.",
+    "rating": 5
+  },
+  {
+    "name": "Brewhouse & Kitchen - Islington",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5322222,
+    "lng": -0.1053913,
+    "note": "Friendly: Explicitly welcomes well-behaved dogs in the bar area and provides homemade dog treats on request.",
+    "rating": 3
+  },
+  {
+    "name": "Bridge House",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.4181201,
+    "lng": -0.0604523,
+    "note": "Welcoming: Dogs are treated to special snacks and can even join a \"doggie hall of fame\" on Instagram.",
+    "rating": 4
+  },
+  {
+    "name": "Briki",
+    "type": "Caf\u00e9 & TeaRoom",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.52571,
+    "lng": -0.1094845,
+    "note": "Friendly: A lively spot where it's common to see dogs resting by their owners' tables.",
+    "rating": 3
+  },
+  {
+    "name": "Brocket Arms",
+    "type": "Hotel",
+    "city": "Welwyn",
+    "county": "Hertfordshire",
+    "lat": 51.8350967,
+    "lng": -0.2580284,
+    "note": "Friendly: A traditional country pub that welcomes dogs warmly in the bar area and outside.",
+    "rating": 3
+  },
+  {
+    "name": "Browns Cambridge",
+    "type": "Restaurant",
+    "city": "Cambridge",
+    "county": "Cambridgeshire",
+    "lat": 52.1995886,
+    "lng": 0.1215509,
+    "note": "Friendly: A historic brasserie that welcomes dogs both inside the restaurant and in their outdoor seating areas.",
+    "rating": 3
+  },
+  {
+    "name": "Brutto",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5199489,
+    "lng": -0.1023567,
+    "note": "Friendly: Welcomes dogs into its warm, traditional Italian trattoria environment.",
+    "rating": 3
+  },
+  {
+    "name": "Bucks Head",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5402926,
+    "lng": -0.1434358,
+    "note": "Red Carpet: A true canine haven in Camden with a dedicated dog menu, indoor areas, and even waste bags provided.",
+    "rating": 5
+  },
+  {
+    "name": "Bull & Gate",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5517798,
+    "lng": -0.1415665,
+    "note": "Friendly: A historic community gastropub in Kentish Town that is officially dog-friendly and welcomes pets into its main bar areas.",
+    "rating": 3
+  },
+  {
+    "name": "Bull Highgate",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.575457,
+    "lng": -0.1509585,
+    "note": "Friendly: Traditional pubs that maintain a welcoming \"local\" atmosphere for neighborhood dogs.",
+    "rating": 3
+  },
+  {
+    "name": "Bulls Head",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.486424,
+    "lng": -0.2798847,
+    "note": "Friendly: Offers biscuits and fresh water with designated cozy nooks inside for you and your dog.",
+    "rating": 3
+  },
+  {
+    "name": "Bussey Rooftop Bar",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.4699669,
+    "lng": -0.0670028,
+    "note": "Basic: They love \"wooftop\" guests on the roof, provided they stay on a lead and are well-behaved.",
+    "rating": 2
+  },
+  {
+    "name": "Cafe 77 Hitchin",
+    "type": "Caf\u00e9 & TeaRoom",
+    "city": "Hitchin",
+    "county": "Hertfordshire",
+    "lat": 51.9503692,
+    "lng": -0.276632,
+    "note": "Tolerant: Dogs are allowed but only in restricted areas (like outside) with no amenities.",
+    "rating": 1
+  },
+  {
+    "name": "Cafe Brera",
+    "type": "Caf\u00e9 & TeaRoom",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5030646,
+    "lng": -0.0185857,
+    "note": "Basic: Dogs allowed; standard facilities like a shared water bowl or a dog bin are available.",
+    "rating": 2
+  },
+  {
+    "name": "Cafe Foy",
+    "type": "Caf\u00e9 & TeaRoom",
+    "city": "Cambridge",
+    "county": "Cambridgeshire",
+    "lat": 52.2099727,
+    "lng": 0.1172091,
+    "note": "Basic: Dogs allowed; standard facilities like a shared water bowl or a dog bin are available.",
+    "rating": 2
+  },
+  {
+    "name": "Cafe in the Park",
+    "type": "Caf\u00e9 & TeaRoom",
+    "city": "Matlock",
+    "county": "Derbyshire",
+    "lat": 53.138211,
+    "lng": -1.5543624,
+    "note": "Basic: Dogs allowed; standard facilities like a shared water bowl or a dog bin are available.",
+    "rating": 2
+  },
+  {
+    "name": "Caffe Luna",
+    "type": "Caf\u00e9 & TeaRoom",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.4276667,
+    "lng": -0.0871581,
+    "note": "Friendly: Known as a perfect pitstop for \"feel-good food\" while out with your pooch.",
+    "rating": 3
+  },
+  {
+    "name": "Caffe Massarella",
+    "type": "Restaurant",
+    "city": "Matlock",
+    "county": "Derbyshire",
+    "lat": 53.1906,
+    "lng": 1.6191,
+    "note": "Friendly: Wholeheartedly welcomes well-behaved dogs on leads inside the restaurant.  Located in a wider \"dog-friendly\" shopping village (Peak Village) that includes a nature reserve for walks.",
+    "rating": 3
+  },
+  {
+    "name": "Caff\u00e8 Nero",
+    "type": "Caf\u00e9 & TeaRoom",
+    "city": "Hertford",
+    "county": "Hertfordshire",
+    "lat": 51.7966896,
+    "lng": -0.0771544,
+    "note": "Friendly: Very accommodating; dogs are allowed both upstairs and downstairs, with water often offered.",
+    "rating": 3
+  },
+  {
+    "name": "Canonbury Tavern",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5399435,
+    "lng": -0.0985372,
+    "note": "Friendly: A family and dog-friendly classic where furry friends are \"always welcome\".",
+    "rating": 3
+  },
+  {
+    "name": "Canton Arms",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.4771539,
+    "lng": -0.122896,
+    "note": "Friendly: Features a dog-friendly bar and a small outdoor area.",
+    "rating": 3
+  },
+  {
+    "name": "Caravan Exmouth Market Restaurant",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5254684,
+    "lng": -0.110094,
+    "note": "Basic: Dogs are allowed in this lively market setting, with standard amenities like shared water bowls.",
+    "rating": 2
+  },
+  {
+    "name": "Caravan King's Cross Restaurant",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5448129,
+    "lng": -0.1085965,
+    "note": "Tolerant: Specifically restricted to outdoor seating only; dogs are not permitted inside the main dining room.",
+    "rating": 1
+  },
+  {
+    "name": "Cardies",
+    "type": "Shops",
+    "city": "Stevenage",
+    "county": "Hertfordshire",
+    "lat": 51.9132282,
+    "lng": -0.2088766,
+    "note": "Friendly: Dogs are warmly accepted indoors; water and basic treats are typically provided.",
+    "rating": 3
+  },
+  {
+    "name": "Carriage House Cafe",
+    "type": "Restaurant",
+    "city": "Bakewell",
+    "county": "Derbyshire",
+    "lat": 53.2275,
+    "lng": 1.6117,
+    "note": "Basic: Dogs allowed; standard facilities like a shared water bowl or a dog bin are available.",
+    "rating": 2
+  },
+  {
+    "name": "Casa Pastor",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5356,
+    "lng": 0.125,
+    "note": "Basic: Welcomes dogs in the outdoor plaza area.",
+    "rating": 2
+  },
+  {
+    "name": "Casa Tua King's Cross",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5276612,
+    "lng": -0.123561,
+    "note": "Basic: Dogs allowed; standard facilities like a shared water bowl or a dog bin are available.",
+    "rating": 2
+  },
+  {
+    "name": "Castle Inn",
+    "type": "Pubs & Bars",
+    "city": "Brecon",
+    "county": "Powys",
+    "lat": 51.9589635,
+    "lng": -3.2035435,
+    "note": "Basic: Dogs allowed; standard facilities like a shared water bowl or a dog bin are available.",
+    "rating": 2
+  },
+  {
+    "name": "Champion Of The Thames",
+    "type": "Pubs & Bars",
+    "city": "Cambridge",
+    "county": "Cambridgeshire",
+    "lat": 52.2073062,
+    "lng": 0.1244397,
+    "note": "Friendly: A traditional Cambridge pub where dogs are common indoor guests.",
+    "rating": 3
+  },
+  {
+    "name": "Chandos Arms",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.593239,
+    "lng": -0.255385,
+    "note": "Friendly: A local favorite that encourages bringing your furry friends.",
+    "rating": 3
+  },
+  {
+    "name": "Charles Holden",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.417946,
+    "lng": -0.1786769,
+    "note": "Basic: Dogs allowed; standard facilities like a shared water bowl or a dog bin are available.",
+    "rating": 2
+  },
+  {
+    "name": "Chatsworth House",
+    "type": "Attractions",
+    "city": "Bakewell",
+    "county": "Derbyshire",
+    "lat": 53.2148429,
+    "lng": -1.6758613,
+    "note": "Basic: Dogs are allowed in the gardens and parkland on leads.",
+    "rating": 2
+  },
+  {
+    "name": "Chequers",
+    "type": "Pubs & Bars",
+    "city": "Hitchin",
+    "county": "Hertfordshire",
+    "lat": 52.0163,
+    "lng": 0.2223,
+    "note": "Basic: Dogs allowed; standard facilities like a shared water bowl or a dog bin are available.",
+    "rating": 2
+  },
+  {
+    "name": "Chestnut Bakery, Covent Garden",
+    "type": "Caf\u00e9 & TeaRoom",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5131616,
+    "lng": -0.1230803,
+    "note": "Friendly: Dogs are warmly accepted indoors; water and basic treats are typically provided.",
+    "rating": 3
+  },
+  {
+    "name": "Chez Antoinette",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.4983581,
+    "lng": -0.135433,
+    "note": "Friendly: A pet-friendly French bistro in Victoria.",
+    "rating": 3
+  },
+  {
+    "name": "Chieftain",
+    "type": "Pubs & Bars",
+    "city": "Welwyn Garden City",
+    "county": "Hertfordshire",
+    "lat": 51.791461,
+    "lng": -0.1910817,
+    "note": "Basic: Dogs allowed; standard facilities available.",
+    "rating": 2
+  },
+  {
+    "name": "Chin Chin Labs (Chin Chin Ice Cream)",
+    "type": "Dessert & IceCream",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.514,
+    "lng": 0.1265,
+    "note": "Friendly: Dogs are warmly accepted indoors; water and basic treats are typically provided.",
+    "rating": 3
+  },
+  {
+    "name": "ChoJo",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5151098,
+    "lng": -0.1916163,
+    "note": "Friendly: A dog-friendly restaurant in London.",
+    "rating": 3
+  },
+  {
+    "name": "Cinnamon Kitchen",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5171424,
+    "lng": -0.078597,
+    "note": "Friendly: Dogs are warmly accepted indoors; water and basic treats are typically provided.",
+    "rating": 3
+  },
+  {
+    "name": "Circolo Popolare",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5171677,
+    "lng": -0.1338609,
+    "note": "Basic: Dogs allowed; standard facilities available.",
+    "rating": 2
+  },
+  {
+    "name": "Cliff Inn",
+    "type": "Pubs & Bars",
+    "city": "Matlock",
+    "county": "Derbyshire",
+    "lat": 53.0897864,
+    "lng": -1.4874117,
+    "note": "Basic: Dogs allowed; standard facilities available.",
+    "rating": 2
+  },
+  {
+    "name": "Coach & Horses",
+    "type": "Pubs & Bars",
+    "city": "Llangynidr",
+    "county": "Powys",
+    "lat": 51.8711028,
+    "lng": -3.2420145,
+    "note": "Basic: Dogs allowed; standard facilities available.",
+    "rating": 2
+  },
+  {
+    "name": "Coal Office Restaurant",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5349224,
+    "lng": -0.126399,
+    "note": "Tolerant: Dogs are allowed but only in restricted areas (alfresco only).",
+    "rating": 1
+  },
+  {
+    "name": "Cock & Bottle",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5154218,
+    "lng": -0.1975389,
+    "note": "Basic: Dogs allowed; standard facilities available.",
+    "rating": 3
+  },
+  {
+    "name": "Coffee#1 Brecon",
+    "type": "Caf\u00e9 & TeaRoom",
+    "city": "Brecon",
+    "county": "Powys",
+    "lat": 51.9473789,
+    "lng": -3.390844,
+    "note": "Basic: Dogs allowed; standard facilities available.",
+    "rating": 3
+  },
+  {
+    "name": "Colbert",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.4927707,
+    "lng": -0.1566389,
+    "note": "Basic: Small dogs are allowed in the bar and outdoor terrace area.",
+    "rating": 2
+  },
+  {
+    "name": "Common Room - Fresh Whole Food Bowls",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5243211,
+    "lng": -0.123785,
+    "note": "Basic: A community-focused space where dogs are allowed to accompany owners during their meal.",
+    "rating": 2
+  },
+  {
+    "name": "Coopers Arms",
+    "type": "Pubs & Bars",
+    "city": "Hitchin",
+    "county": "Hertfordshire",
+    "lat": 51.9470888,
+    "lng": -0.28142,
+    "note": "Basic: Dogs allowed; standard facilities available.",
+    "rating": 3
+  },
+  {
+    "name": "Coqfighter Soho",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5128693,
+    "lng": -0.1365611,
+    "note": "Friendly: Dogs are welcomed inside this trendy spot, though the environment can get quite loud and buzzy.",
+    "rating": 3
+  },
+  {
+    "name": "Cowper Arms",
+    "type": "Pubs & Bars",
+    "city": "Welwyn",
+    "county": "Hertfordshire",
+    "lat": 51.8240915,
+    "lng": -0.1924915,
+    "note": "Basic: A traditional pub setting where dogs are permitted in designated bar or garden areas.",
+    "rating": 2
+  },
+  {
+    "name": "Cowper Arms Hertford",
+    "type": "Pubs & Bars",
+    "city": "Hertford",
+    "county": "Hertfordshire",
+    "lat": 51.7834494,
+    "lng": -0.1387207,
+    "note": "Basic: Dogs are allowed throughout the pub and its large garden areas.",
+    "rating": 2
+  },
+  {
+    "name": "Craft & Cleaver",
+    "type": "Restaurant",
+    "city": "Hitchin",
+    "county": "Hertfordshire",
+    "lat": 51.9495676,
+    "lng": -0.2773636,
+    "note": "Basic: This American-style BBQ joint allows dogs in the bar area for those seeking a \"dive bar\" vibe with their pet.",
+    "rating": 2
+  },
+  {
+    "name": "Creature Comforts",
+    "type": "Pet Stores",
+    "city": "Harpenden",
+    "county": "Hertfordshire",
+    "lat": 51.8091386,
+    "lng": -0.3461382,
+    "note": "Red Carpet: Being a pet store, they offer the ultimate welcome for dogs.",
+    "rating": 5
+  },
+  {
+    "name": "Cricklade House Hotel",
+    "type": "Hotel",
+    "city": "Swindon",
+    "county": "Wiltshire",
+    "lat": 51.6366513,
+    "lng": -1.874912,
+    "note": "Basic: Two specific rooms are dog-friendly; they are allowed elsewhere but strictly excluded from the conservatory.",
+    "rating": 2
+  },
+  {
+    "name": "Crooked Billet",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.4214666,
+    "lng": -0.2277948,
+    "note": "Basic: A classic village pub where dogs are a common sight both in the bar and on the common outside.",
+    "rating": 2
+  },
+  {
+    "name": "Crossover Blendery",
+    "type": "Pubs & Bars",
+    "city": "Hitchin",
+    "county": "Hertfordshire",
+    "lat": 51.9614,
+    "lng": 0.1983,
+    "note": "Basic: Standard dog-friendly brewery taproom environment where pets are welcome while you sample local beers.",
+    "rating": 2
+  },
+  {
+    "name": "Crutched Friar",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5111918,
+    "lng": -0.0788844,
+    "note": "Basic: Dogs are allowed in the bar and the outdoor courtyard, which is a rare find in this part of the City.",
+    "rating": 2
+  },
+  {
+    "name": "Cultivo Lounge",
+    "type": "Restaurant",
+    "city": "Letchworth Garden City",
+    "county": "Hertfordshire",
+    "lat": 51.9791987,
+    "lng": -0.2260556,
+    "note": "Friendly: Very dog-friendly with treats and water always available.",
+    "rating": 3
+  },
+  {
+    "name": "Currys",
+    "type": "Shops",
+    "city": "Stevenage",
+    "county": "Hertfordshire",
+    "lat": 51.8923282,
+    "lng": -0.198447,
+    "note": "Friendly: Surprisingly welcoming for a retail shop; they permit dogs in the indoor bar area and the outdoor courtyard.",
+    "rating": 3
+  },
+  {
+    "name": "Cutty Sark",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.4863743,
+    "lng": -0.0004177,
+    "note": "Friendly: Dogs are welcome on the ground floor bar of this riverside pub.",
+    "rating": 3
+  },
+  {
+    "name": "d'Arry's Restaurant, Bar & Cheesemonger",
+    "type": "Pubs & Bars",
+    "city": "Cambridge",
+    "county": "Cambridgeshire",
+    "lat": 52.2072308,
+    "lng": 0.1216997,
+    "note": "Basic: Dogs are allowed within this restaurant and bar setting, which offers a mix of traditional and modern dining.",
+    "rating": 2
+  },
+  {
+    "name": "De Beauvoir Arms",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.541646,
+    "lng": -0.085144,
+    "note": "Basic: A neighborhood pub where dogs are permitted to join their owners in the bar area.",
+    "rating": 2
+  },
+  {
+    "name": "De Vere Cotswold Water Park",
+    "type": "Hotel",
+    "city": "Cirencester",
+    "county": "Gloucestershire",
+    "lat": 51.6695748,
+    "lng": -1.8998815,
+    "note": "Basic: Pets are allowed at this lakeside hotel, making it a convenient stop for those traveling with dogs.",
+    "rating": 2
+  },
+  {
+    "name": "Devonshire Terrace",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5140148,
+    "lng": -0.1802964,
+    "note": "Friendly: Dogs are welcomed in the bar area and the impressive glass-covered outside terrace.",
+    "rating": 3
+  },
+  {
+    "name": "Dial Arch",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.4925643,
+    "lng": 0.0699635,
+    "note": "Basic: This historic pub allows dogs throughout, offering plenty of space in its large indoor and outdoor areas.",
+    "rating": 2
+  },
+  {
+    "name": "Dinnio Restaurant",
+    "type": "Restaurant",
+    "city": "Hertford",
+    "county": "Hertfordshire",
+    "lat": 51.7960538,
+    "lng": -0.077628,
+    "note": "Tolerant: Dog access is strictly limited to the outdoor seating areas only.",
+    "rating": 1
+  },
+  {
+    "name": "Dishoom King's Cross",
+    "type": "Restaurant",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5361156,
+    "lng": -0.1255161,
+    "note": "Tolerant: Dogs are allowed for alfresco dining only on the terrace; they are not permitted inside the restaurant.",
+    "rating": 1
+  },
+  {
+    "name": "Doctors Tonic",
+    "type": "Pubs & Bars",
+    "city": "Welwyn Garden City",
+    "county": "Hertfordshire",
+    "lat": 51.8004219,
+    "lng": -0.2077338,
+    "note": "Basic: A standard dog-friendly pub environment in the heart of Welwyn Garden City.",
+    "rating": 2
+  },
+  {
+    "name": "Dog & Partridge Bury St Edmunds",
+    "type": "Pubs & Bars",
+    "city": "Bury Saint Edmunds",
+    "county": "Suffolk",
+    "lat": 52.2427,
+    "lng": 0.7188,
+    "note": "Basic: Dogs are permitted in this traditional Greene King pub.",
+    "rating": 2
+  },
+  {
+    "name": "Dog & Whistle",
+    "type": "Pubs & Bars",
+    "city": "Hertford",
+    "county": "Hertfordshire",
+    "lat": 51.7965738,
+    "lng": -0.0754395,
+    "note": "Friendly: Exceptionally welcoming; well-behaved dogs are allowed \"everywhere\" in the pub and garden until 7 PM.",
+    "rating": 3
+  },
+  {
+    "name": "Doggy Doo\u2019s",
+    "type": "Groomers",
+    "city": "Hitchin",
+    "county": "Hertfordshire",
+    "lat": 51.9413945,
+    "lng": -0.2700701,
+    "note": "Friendly: As a professional groomer, dogs are the primary guests here and are fully accommodated.",
+    "rating": 3
+  },
+  {
+    "name": "Dogs Head",
+    "type": "Pubs & Bars",
+    "city": "Bishop's Stortford ",
+    "county": "Hertfordshire",
+    "lat": 51.8706574,
+    "lng": 0.1590189,
+    "note": "Basic: A dog-friendly town-center pub where pets are allowed in the bar areas.",
+    "rating": 2
+  },
+  {
+    "name": "Drake & Morgan at King's Cross",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5333771,
+    "lng": -0.1258455,
+    "note": "Basic: Dogs are allowed within this modern bar and restaurant setting.",
+    "rating": 2
+  },
+  {
+    "name": "Drovers Arms",
+    "type": "Pubs & Bars",
+    "city": "Merthyr Tydfil",
+    "county": "Wales",
+    "lat": 51.7619484,
+    "lng": -3.4047497,
+    "note": "Basic: A traditional pub environment in Wales where dogs are permitted.",
+    "rating": 2
+  },
+  {
+    "name": "Drovers Arms",
+    "type": "Pubs & Bars",
+    "city": "Brecon",
+    "county": "Powys",
+    "lat": 51.9448707,
+    "lng": -3.4058335,
+    "note": "Basic: A traditional pub environment in Wales where dogs are permitted.",
+    "rating": 2
+  },
+  {
+    "name": "Duke Of Wellington",
+    "type": "Pubs & Bars",
+    "city": "London",
+    "county": "Great London",
+    "lat": 51.5123164,
+    "lng": -0.1331249,
+    "note": "Basic: This classic Soho pub permits dogs, fitting for a central London \"local\".",
+    "rating": 2
+  }
+]
