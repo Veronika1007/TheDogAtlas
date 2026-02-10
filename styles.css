@@ -24,14 +24,14 @@ body {
   flex-direction: column;
 }
 
-/* --- UPDATED HEADER (Centered Logo + Grey Background) --- */
+/* --- HEADER (Centered Logo + Grey Background) --- */
 header {
   background: #f4f4f4; /* Light grey background */
   border-bottom: 1px solid var(--border);
   padding: 12px 24px;
   display: flex;
   align-items: center;
-  justify-content: center; /* Centers the brand/logo */
+  justify-content: center;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -43,13 +43,11 @@ header {
   align-items: center;
 }
 
-/* Hides any title text if it remains in HTML */
 .brand div,
 .brand span {
   display: none !important;
 }
 
-/* Positions navigation to the far right */
 nav {
   position: absolute;
   right: 24px;
@@ -208,10 +206,10 @@ main,
   transform: translateY(-2px);
 }
 
-/* --- FOOTER --- */
+/* --- UPDATED FOOTER (Matches Header) --- */
 footer {
   flex-shrink: 0;
-  background: #ffffff;
+  background: #f4f4f4; /* Matches header background */
   border-top: 1px solid var(--border);
   padding: 40px 24px;
   margin-top: 60px;
