@@ -23,18 +23,51 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+/* --- UPDATED HEADER (Centered Logo + Grey Background) --- */
 header {
-  background: #ffffff;
+  background: #f4f4f4; /* Light grey background */
   border-bottom: 1px solid var(--border);
   padding: 12px 24px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center; /* Centers the brand/logo */
   position: sticky;
   top: 0;
   z-index: 1000;
   flex-shrink: 0;
 }
+
+.brand {
+  display: flex;
+  align-items: center;
+}
+
+/* Hides any title text if it remains in HTML */
+.brand div,
+.brand span {
+  display: none !important;
+}
+
+/* Positions navigation to the far right */
+nav {
+  position: absolute;
+  right: 24px;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.nav-link.active {
+  color: var(--primary);
+}
+
 main,
 .community-container {
   flex: 1 0 auto;
@@ -208,5 +241,14 @@ footer {
   }
   .filter-options {
     grid-template-columns: 1fr;
+  }
+  nav {
+    position: static;
+    margin-top: 10px;
+    justify-content: center;
+    width: 100%;
+  }
+  header {
+    flex-direction: column;
   }
 }
