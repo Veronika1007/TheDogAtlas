@@ -24,15 +24,36 @@
         color: var(--muted);
         margin-bottom: 30px;
       }
-      .main-search-input {
+
+      /* --- NEW FLEXBOX SEARCH LAYOUT --- */
+      .search-container {
+        display: flex;
         max-width: 600px;
-        margin: 0 auto 20px auto;
-        display: block;
-        padding: 12px;
-        border-radius: 8px;
-        border: 1px solid var(--border);
-        width: 100%;
+        margin: 0 auto 25px auto;
+        gap: 0; /* Keeps them touching */
       }
+      .main-search-input {
+        flex: 1; /* Makes input grow to fill space */
+        padding: 12px 15px;
+        border: 1px solid var(--border);
+        border-right: none; /* Merges with button */
+        border-radius: 8px 0 0 8px; /* Rounded only on left */
+        font-size: 1rem;
+      }
+      .search-submit-inline {
+        padding: 12px 25px;
+        background: var(--primary);
+        color: white;
+        border: 1px solid var(--primary);
+        border-radius: 0 8px 8px 0; /* Rounded only on right */
+        font-weight: bold;
+        cursor: pointer;
+        transition: opacity 0.2s;
+      }
+      .search-submit-inline:hover {
+        opacity: 0.9;
+      }
+
       .reactive-filter-grid {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
@@ -61,19 +82,7 @@
         gap: 8px;
         font-size: 0.8rem;
       }
-      .search-submit-btn {
-        width: 100%;
-        max-width: 1200px;
-        margin: 0 auto;
-        display: block;
-        background: var(--primary);
-        color: white;
-        border: none;
-        padding: 15px;
-        border-radius: 8px;
-        font-weight: bold;
-        cursor: pointer;
-      }
+
       .side-by-side-layout {
         display: flex;
         gap: 20px;
@@ -110,12 +119,17 @@
           grid-template-columns: repeat(2, 1fr);
         }
       }
+      @media (max-width: 768px) {
+        .side-by-side-layout {
+          flex-direction: column;
+        }
+        .search-container {
+          max-width: 100%;
+        }
+      }
       @media (max-width: 600px) {
         .reactive-filter-grid {
           grid-template-columns: 1fr;
-        }
-        .side-by-side-layout {
-          flex-direction: column;
         }
       }
     </style>
@@ -152,16 +166,19 @@
 
     <main>
       <section class="hero-simple">
-        <h1>Find dog-friendly venues, stays & more in seconds.</h1>
-        <p>Verified Venues Only • Live Updates</p>
+        <h1>Find dog-friendly venues & stays in seconds.</h1>
+        <p>Hertfordshire Beta · 137 Verified Locations</p>
 
         <form onsubmit="event.preventDefault(); runSearch();">
-          <input
-            id="whereInput"
-            type="text"
-            placeholder="Search by venue name, city, or county (e.g. London)..."
-            class="main-search-input"
-          />
+          <div class="search-container">
+            <input
+              id="whereInput"
+              type="text"
+              placeholder="Search by venue, city, or county..."
+              class="main-search-input"
+            />
+            <button type="submit" class="search-submit-inline">Search</button>
+          </div>
 
           <div id="categoryFilters" class="reactive-filter-grid">
             <div class="filter-group">
@@ -176,26 +193,24 @@
                   Restaurants</label
                 >
                 <label
-                  ><input type="checkbox" value="dessert" /> Desserts &
-                  IceCream</label
+                  ><input type="checkbox" value="dessert" /> Dessert & Ice
+                  Cream</label
                 >
               </div>
             </div>
-
             <div class="filter-group">
               <h4>Retail</h4>
               <div class="filter-options">
                 <label><input type="checkbox" value="shop" /> Shops</label>
                 <label
-                  ><input type="checkbox" value="pet-store" /> Pet Shops</label
+                  ><input type="checkbox" value="pet-store" /> Pet Stores</label
                 >
                 <label
-                  ><input type="checkbox" value="Butchers" /> Butcher</label
+                  ><input type="checkbox" value="Butchers" /> Butchers</label
                 >
                 <label><input type="checkbox" value="Florist" /> Florist</label>
               </div>
             </div>
-
             <div class="filter-group">
               <h4>Experience</h4>
               <div class="filter-options">
@@ -206,43 +221,23 @@
                 <label
                   ><input type="checkbox" value="park" /> Parks & Gardens</label
                 >
-                <label><input type="checkbox" value="beach" /> Beach</label>
-                <label><input type="checkbox" value="trails" /> Trails</label>
               </div>
             </div>
-
             <div class="filter-group">
-              <h4>Accommodation</h4>
+              <h4>Stays</h4>
               <div class="filter-options">
-                <label><input type="checkbox" value="hotel" /> Hotel</label>
-                <label><input type="checkbox" value="b&b" /> B & B</label>
+                <label><input type="checkbox" value="hotel" /> Hotels</label>
               </div>
             </div>
-
             <div class="filter-group">
-              <h4>Services</h4>
+              <h4>Dog Services</h4>
               <div class="filter-options">
-                <label><input type="checkbox" value="vet" /> Vets</label>
                 <label
                   ><input type="checkbox" value="groomer" /> Groomers</label
-                >
-                <label
-                  ><input type="checkbox" value="service" /> DoggyDayCare &
-                  Kennels</label
-                >
-                <label
-                  ><input type="checkbox" value="trainers" /> Trainers</label
-                >
-                <label
-                  ><input type="checkbox" value="dog-field" /> Dog Field</label
                 >
               </div>
             </div>
           </div>
-
-          <button type="submit" class="search-submit-btn">
-            Update Map & Results
-          </button>
         </form>
       </section>
 
@@ -259,7 +254,7 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-      const map = L.map("mapBox").setView([51.5074, -0.1278], 9);
+      const map = L.map("mapBox").setView([51.75, -0.15], 10);
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: "&copy; OpenStreetMap",
       }).addTo(map);
@@ -282,6 +277,7 @@
         attraction: "Attractions",
       };
 
+      // FETCH FROM YOUR JSON FILE
       fetch("venues.json")
         .then((response) => response.json())
         .then((data) => {
@@ -291,7 +287,7 @@
         .catch((err) => {
           console.error("Data load error:", err);
           document.getElementById("resultsBox").innerHTML =
-            "<p>Please view this via a local server (e.g. VS Code Live Server).</p>";
+            "<p>Please view this via a local server.</p>";
         });
 
       function runSearch() {
@@ -342,7 +338,7 @@
           .join("");
 
         document.getElementById("resultsBox").innerHTML =
-          resultsHTML || "<p>No verified venues found for this search.</p>";
+          resultsHTML || "<p>No results found.</p>";
 
         if (filtered.length > 0) {
           const group = new L.featureGroup(markersLayer.getLayers());
