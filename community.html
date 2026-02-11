@@ -31,6 +31,35 @@
     </header>
 
     <main class="community-container">
+      <div
+        class="search-container"
+        style="max-width: 600px; margin: 0 auto 25px auto"
+      >
+        <div
+          class="search-input-wrapper"
+          style="position: relative; display: flex; align-items: center"
+        >
+          <i
+            class="fa fa-search"
+            style="position: absolute; left: 15px; color: var(--muted)"
+          ></i>
+          <input
+            type="text"
+            placeholder="Search for dogs, breeds, or topics..."
+            style="
+              width: 100%;
+              padding: 12px 15px 12px 40px;
+              border: 1px solid var(--border);
+              border-radius: 8px;
+            "
+          />
+          <i
+            class="fa fa-sliders"
+            style="position: absolute; right: 15px; color: var(--muted)"
+          ></i>
+        </div>
+      </div>
+
       <div class="community-tabs">
         <button
           id="tab-posts"
@@ -53,23 +82,11 @@
 
       <div id="section-posts" class="community-section post-grid">
         <div class="feed-card post-frame">
-          <div
-            class="user-header"
-            style="display: flex; gap: 10px; align-items: center"
-          >
-            <img
-              src="Media/Community/Community image 1.jpeg"
-              alt="Truffle"
-              class="avatar"
-            />
+          <div class="user-header">
+            <img src="Media/Community/Community image 1.jpeg" class="avatar" />
             <div>
-              <div class="username" style="font-weight: bold">Truffle</div>
-              <div
-                class="post-time"
-                style="font-size: 12px; color: var(--muted)"
-              >
-                1 hour ago
-              </div>
+              <div class="username">Truffle</div>
+              <div class="post-time">1 hour ago</div>
             </div>
           </div>
           <div class="image-container">
@@ -78,10 +95,7 @@
               class="post-image"
             />
           </div>
-          <div
-            class="post-actions"
-            style="margin: 10px 0; font-size: 14px; display: flex; gap: 15px"
-          >
+          <div class="post-actions">
             <span><i class="fa-solid fa-paw"></i> 13 Woofs</span>
             <span><i class="fa-regular fa-comment"></i> 3 Comments</span>
           </div>
@@ -93,6 +107,13 @@
       </div>
 
       <div id="section-friends" class="community-section hidden">
+        <div
+          class="toggle-container"
+          style="display: flex; gap: 10px; margin-bottom: 20px"
+        >
+          <button class="pill-toggle active">Nearby</button>
+          <button class="pill-toggle">Same breed</button>
+        </div>
         <div class="friends-grid-container">
           <div class="friend-row-card">
             <img
@@ -105,9 +126,10 @@
                 <button class="follow-btn-small">Follow</button>
               </div>
               <span class="handle">@Truffle.thespringer</span>
-              <p class="stats">15 Followers • &lt; 1 Km away</p>
+              <p class="stats">15 Followers • < 1 Km away</p>
               <div class="row-footer">
                 <span class="breed-tag">Springer Spaniel</span>
+                <span class="age-text">2 Years Old</span>
                 <i class="fa-solid fa-venus gender-female"></i>
               </div>
             </div>
@@ -121,6 +143,19 @@
             <h3>Dog-Friendly Camping in Hertfordshire?</h3>
             <p>Looking for quiet spots near St Albans for the weekend.</p>
             <small>Last comment by Cooper · 2h ago</small>
+          </div>
+          <div class="forum-topic-card">
+            <h3>Best Food to feed your dog</h3>
+            <p>Kibbles, Fresh, and Raw: which option is best?</p>
+            <small>Last comment by Milo · 10h ago</small>
+          </div>
+          <div class="forum-topic-card">
+            <h3>Best walking trails in Hertfordshire</h3>
+            <p>
+              Looking for a quick and easy walk or a longer and challenging one,
+              we got you covered.
+            </p>
+            <small>Last comment by Luna · 12h ago</small>
           </div>
         </div>
       </div>
@@ -136,22 +171,8 @@
       </div>
       <div class="copyright">
         &copy; 2025 TheDogAtlas. The dog-first travel platform.
+        <br />Always check with venues directly for current dog policies.
       </div>
     </footer>
-
-    <script>
-      function showSection(section) {
-        document
-          .querySelectorAll(".community-section")
-          .forEach((s) => s.classList.add("hidden"));
-        document
-          .querySelectorAll(".tab-btn")
-          .forEach((b) => b.classList.remove("active"));
-        document
-          .getElementById("section-" + section)
-          .classList.remove("hidden");
-        document.getElementById("tab-" + section).classList.add("active");
-      }
-    </script>
   </body>
 </html>
