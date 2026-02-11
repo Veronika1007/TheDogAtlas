@@ -11,10 +11,6 @@
 }
 
 /* --- BASE STYLES --- */
-html,
-body {
-  height: 100%;
-}
 body {
   margin: 0;
   font-family: system-ui, -apple-system, sans-serif;
@@ -22,9 +18,10 @@ body {
   color: var(--text);
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
-/* --- UPDATED HEADER (Centered Logo + Tagline + Grey Background) --- */
+/* --- HEADER (Centered Logo + Right Nav) --- */
 header {
   background: #f4f4f4; /* Light grey background */
   border-bottom: 1px solid var(--border);
@@ -35,14 +32,6 @@ header {
   position: sticky;
   top: 0;
   z-index: 1000;
-  flex-shrink: 0;
-}
-
-.brand {
-  display: flex;
-  flex-direction: column; /* Stacks logo and text vertically */
-  align-items: center; /* Centers items horizontally */
-  text-align: center;
 }
 
 .brand a {
@@ -50,18 +39,16 @@ header {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
 }
 
-/* Ensures the tagline is visible and styled correctly */
 .brand div {
   display: block !important;
   font-size: 11px;
   color: var(--muted);
   margin-top: 5px;
-  line-height: 1.2;
 }
 
-/* Positions navigation to the right side of the centered logo */
 nav {
   position: absolute;
   right: 24px;
@@ -74,199 +61,37 @@ nav {
   color: var(--text);
   font-weight: 600;
   font-size: 14px;
-  transition: color 0.2s;
 }
 
-.nav-link:hover,
+/* Orange Highlight for the current site */
 .nav-link.active {
-  color: var(--primary);
+  color: var(--primary) !important;
 }
 
-main,
-.community-container {
-  flex: 1 0 auto;
-}
-
-/* --- INDEX FILTERS --- */
-.filter-options {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px 12px;
-}
-
-/* --- COMMUNITY: TABS & SEARCH --- */
-.community-container {
-  max-width: 1140px;
-  margin: 0 auto;
-  padding: 24px 16px;
-  width: 100%;
-}
-.community-tabs {
-  display: flex;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 24px;
-  gap: 20px;
-}
-.tab-btn {
-  background: none;
-  border: none;
-  padding: 12px 4px;
-  font-weight: 700;
-  color: var(--muted);
-  cursor: pointer;
-}
-.tab-btn.active {
-  color: var(--primary);
-  border-bottom: 3px solid var(--primary);
-}
-.hidden {
-  display: none !important;
-}
-
-/* --- POSTS SECTION --- */
-.post-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 24px;
-}
-.post-frame {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-}
-.image-container {
-  width: 100%;
-  height: 250px;
-  border-radius: 8px;
-  overflow: hidden;
-  margin: 10px 0;
-  background-color: #f0f0f0;
-}
-.post-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-/* --- FRIENDS GRID (Responsive) --- */
-.friends-grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 20px;
-}
-.friend-row-card {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 16px;
-  display: flex;
-  gap: 16px;
-  align-items: center;
-}
-.row-avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-.row-info {
-  flex: 1;
-}
-.row-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.follow-btn-small {
-  background: var(--teal);
-  color: white;
-  border: none;
-  padding: 6px 20px;
-  border-radius: 20px;
-  font-weight: 700;
-  cursor: pointer;
-}
-.breed-tag {
-  color: var(--teal);
-  font-weight: 600;
-  font-size: 13px;
-}
-.gender-female {
-  color: #ff4d94;
-}
-
-/* --- FORUM (Bordered Topics) --- */
-.forum-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.forum-topic-card {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
-  transition: transform 0.2s;
-}
-.forum-topic-card:hover {
-  border-color: var(--primary);
-  transform: translateY(-2px);
-}
-
-/* --- UPDATED FOOTER (Matches Header Background) --- */
+/* --- FOOTER (Matches Header) --- */
 footer {
-  flex-shrink: 0;
-  background: #f4f4f4; /* Matches header grey */
+  background: #f4f4f4;
   border-top: 1px solid var(--border);
   padding: 40px 24px;
-  margin-top: 60px;
+  margin-top: auto;
   text-align: center;
 }
+
 .footer-links {
   display: flex;
   justify-content: center;
   gap: 24px;
   margin-bottom: 20px;
 }
+
 .footer-links a {
   color: var(--muted);
   text-decoration: none;
   font-size: 13px;
   font-weight: 600;
 }
+
 .copyright {
   font-size: 12px;
   color: var(--muted);
-}
-
-/* --- MOBILE ADJUSTMENTS --- */
-@media (max-width: 768px) {
-  nav {
-    position: static;
-    margin-top: 15px;
-    justify-content: center;
-    width: 100%;
-  }
-  header {
-    flex-direction: column;
-    padding-bottom: 20px;
-  }
-}
-
-@media (max-width: 600px) {
-  .friends-grid-container {
-    grid-template-columns: 1fr;
-  }
-  .filter-options {
-    grid-template-columns: 1fr;
-  }
 }
