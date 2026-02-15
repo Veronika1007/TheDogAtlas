@@ -4,21 +4,84 @@
     <meta charset="UTF-8" />
     <title>Forum: Hertfordshire Walks – TheDogAtlas</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="../styles.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
+    <style>
+      .post-detail-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 20px;
+      }
+      .back-link {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .main-post {
+        background: white;
+        padding: 30px;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        margin-bottom: 30px;
+      }
+      .comment-section {
+        background: white;
+        padding: 30px;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+      }
+      .comment-item {
+        border-bottom: 1px solid var(--border);
+        padding: 15px 0;
+        display: flex;
+        gap: 15px;
+      }
+      .comment-form {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .comment-input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+      }
+    </style>
   </head>
   <body>
+    <header>
+      <div class="brand">
+        <a href="../index.html">
+          <img
+            src="../Media/Logo2.jpg"
+            alt="TheDogAtlas Logo"
+            style="height: 55px; width: auto"
+          />
+        </a>
+      </div>
+      <nav>
+        <a href="../index.html" class="nav-link">Map</a>
+        <a href="../planner.html" class="nav-link">Planner</a>
+        <a href="../trails.html" class="nav-link">Trails</a>
+        <a href="../events.html" class="nav-link">Events</a>
+        <a href="../community.html" class="nav-link">Community</a>
+      </nav>
+    </header>
     <main class="post-detail-container">
-      <a href="community.html#section-forum" class="back-link"
+      <a href="../community.html#section-forum" class="back-link"
         ><i class="fa-solid fa-arrow-left"></i> Back to Forum</a
       >
       <article class="main-post">
         <div class="user-header">
           <img
-            src="Media/Community/community image 2.jpg"
+            src="../Media/Community/community image 2.jpg"
             class="avatar"
             alt="User"
           />
@@ -34,6 +97,50 @@
           elevation. Any Ridge Trail fans here?
         </p>
       </article>
+      <section class="comment-section">
+        <h3>Comments</h3>
+
+        <div class="comment-item">
+          <img
+            src="../Media/Community/Community image 4.jpeg"
+            class="avatar"
+            style="width: 30px; height: 30px"
+          />
+          <div>
+            <div class="username" style="font-size: 0.9rem">Milo-Frenchie</div>
+            <p>
+              Verulamium Park is great for a day walk if you're staying nearby!
+            </p>
+          </div>
+        </div>
+
+        <form class="comment-form">
+          <textarea
+            class="comment-input"
+            placeholder="Add a comment..."
+          ></textarea>
+          <button
+            type="submit"
+            class="follow-btn-small"
+            style="align-self: flex-end"
+          >
+            Post Comment
+          </button>
+        </form>
+      </section>
     </main>
+    <footer>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="cookies.html">Cookie Policy</a>
+        <a href="contact.html">Contact</a>
+        <a href="about.html">About Us</a>
+      </div>
+      <div class="copyright">
+        &copy; 2025 TheDogAtlas. The dog-first travel platform.
+        <br />Always check with venues directly for current dog policies.
+      </div>
+    </footer>
   </body>
 </html>
