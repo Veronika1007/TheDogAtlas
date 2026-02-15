@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Forum Post – TheDogAtlas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+      .post-detail-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 20px;
+      }
+      .back-link {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .main-post {
+        background: white;
+        padding: 30px;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        margin-bottom: 30px;
+      }
+      .comment-section {
+        background: white;
+        padding: 30px;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+      }
+      .comment-item {
+        border-bottom: 1px solid var(--border);
+        padding: 15px 0;
+        display: flex;
+        gap: 15px;
+      }
+      .comment-form {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .comment-input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        <a href="index.html"
+          ><img src="Media/Logo2.jpg" alt="Logo" style="height: 55px"
+        /></a>
+      </div>
+      <nav>
+        <a href="index.html" class="nav-link">Map</a>
+        <a href="community.html" class="nav-link active">Community</a>
+      </nav>
+    </header>
+
+    <main class="post-detail-container">
+      <a href="community.html" class="back-link"
+        ><i class="fa-solid fa-arrow-left"></i> Back to Forum</a
+      >
+
+      <article class="main-post">
+        <div class="user-header">
+          <img
+            src="Media/Community/Community image 1.jpeg"
+            class="avatar"
+            alt="User"
+          />
+          <div>
+            <div class="username">Truffle's Parent</div>
+            <div class="post-time">Posted 2 days ago</div>
+          </div>
+        </div>
+        <h1>Dog-Friendly Camping in Hertfordshire?</h1>
+        <p>
+          We are planning a weekend trip near St Albans. Does anyone have
+          recommendations for quiet campsites that allow multiple dogs and have
+          good walking trails nearby?
+        </p>
+        <div class="post-actions" style="margin-top: 20px">
+          <span><i class="fa-solid fa-paw"></i> 24 Woofs</span>
+          <span><i class="fa-regular fa-comment"></i> 2 Comments</span>
+        </div>
+      </article>
+
+      <section class="comment-section">
+        <h3>Comments</h3>
+        <div class="comment-item">
+          <img
+            src="Media/Community/community image 2.jpg"
+            class="avatar"
+            style="width: 30px; height: 30px"
+          />
+          <div>
+            <div class="username" style="font-size: 0.9rem">Luna_BeachGirl</div>
+            <p>
+              Try the hills near the Ridge Trail! We went last summer and it was
+              lovely.
+            </p>
+          </div>
+        </div>
+        <div class="comment-item">
+          <img
+            src="Media/Community/Community image 4.jpeg"
+            class="avatar"
+            style="width: 30px; height: 30px"
+          />
+          <div>
+            <div class="username" style="font-size: 0.9rem">Milo-Frenchie</div>
+            <p>
+              Verulamium Park is great for a day walk if you're staying nearby!
+            </p>
+          </div>
+        </div>
+
+        <form class="comment-form">
+          <textarea
+            class="comment-input"
+            placeholder="Add a comment..."
+          ></textarea>
+          <button
+            type="submit"
+            class="follow-btn-small"
+            style="align-self: flex-end"
+          >
+            Post Comment
+          </button>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <div class="copyright">&copy; 2025 TheDogAtlas.</div>
+    </footer>
+  </body>
+</html>
