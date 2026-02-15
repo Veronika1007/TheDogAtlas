@@ -13,7 +13,7 @@
       /* --- Restored Side-by-Side Friends Grid --- */
       .friends-grid-container {
         display: grid;
-        grid-template-columns: repeat(2, 1fr); /* Restores two-column layout */
+        grid-template-columns: repeat(2, 1fr);
         gap: 20px;
       }
 
@@ -40,7 +40,7 @@
 
       @media (max-width: 900px) {
         .friends-grid-container {
-          grid-template-columns: 1fr; /* Stack on small screens */
+          grid-template-columns: 1fr;
         }
       }
     </style>
@@ -281,7 +281,7 @@
                 <button class="follow-btn-small">Follow</button>
               </div>
               <span class="handle">@Truffle.thespringer</span>
-              <p class="stats">15 Followers • &lt; 1 Km away</p>
+              <p class="stats">15 Followers • < 1 Km away</p>
               <div class="row-footer">
                 <span class="breed-tag">Springer Spaniel</span>
                 <span class="age-text">2 Years Old</span>
@@ -300,7 +300,7 @@
                 <button class="follow-btn-small">Follow</button>
               </div>
               <span class="handle">@Luna_BeachGirl</span>
-              <p class="stats">10 Followers • &lt; 5 Km away</p>
+              <p class="stats">10 Followers • < 5 Km away</p>
               <div class="row-footer">
                 <span class="breed-tag">Retriever Mix</span>
                 <span class="age-text">1 Year Old</span>
@@ -319,7 +319,7 @@
                 <button class="follow-btn-small">Follow</button>
               </div>
               <span class="handle">@Otis_1</span>
-              <p class="stats">22 Followers • &lt; 6 Km away</p>
+              <p class="stats">22 Followers • < 6 Km away</p>
               <div class="row-footer">
                 <span class="breed-tag">Rottweiler</span>
                 <span class="age-text">5 Years Old</span>
@@ -338,7 +338,7 @@
                 <button class="follow-btn-small">Follow</button>
               </div>
               <span class="handle">@Milo-Frenchie</span>
-              <p class="stats">12 Followers • &lt; 10 Km away</p>
+              <p class="stats">12 Followers • < 10 Km away</p>
               <div class="row-footer">
                 <span class="breed-tag">Pug x Frenchie Mix</span>
                 <span class="age-text">2 Years Old</span>
@@ -357,7 +357,7 @@
                 <button class="follow-btn-small">Follow</button>
               </div>
               <span class="handle">@BuckyBoy</span>
-              <p class="stats">24 Followers • &lt; 20 Km away</p>
+              <p class="stats">24 Followers • < 20 Km away</p>
               <div class="row-footer">
                 <span class="breed-tag">German Shepherd</span>
                 <span class="age-text">8 Months Old</span>
@@ -376,7 +376,7 @@
                 <button class="follow-btn-small">Follow</button>
               </div>
               <span class="handle">@BigCharlie</span>
-              <p class="stats">23 Followers • &lt; 70 Km away</p>
+              <p class="stats">23 Followers • < 70 Km away</p>
               <div class="row-footer">
                 <span class="breed-tag">Pointer Mix</span>
                 <span class="age-text">6 Years Old</span>
@@ -388,49 +388,93 @@
       </div>
 
       <div id="section-forum" class="community-section hidden">
-        <div class="forum-list">
-          <a
-            href="Forum Post/forum-detail-camping.html"
-            class="forum-topic-link"
-          >
-            <div class="forum-topic-card">
-              <h3>Dog-Friendly Camping in Hertfordshire?</h3>
-              <p>Looking for quiet spots near St Albans for the weekend.</p>
-              <small>Last comment by Cooper · 2h ago</small>
-              <div class="topic-meta">
-                <span><i class="fa-solid fa-paw"></i> 24 Woofs</span>
-                <span><i class="fa-regular fa-comment"></i> 8 Comments</span>
-              </div>
-            </div>
-          </a>
+        <button
+          id="open-post-form"
+          class="follow-btn-small"
+          style="margin-bottom: 20px"
+        >
+          + New Topic
+        </button>
 
-          <a href="Forum Post/forum-detail-food.html" class="forum-topic-link">
-            <div class="forum-topic-card">
-              <h3>Best Food to feed your dog</h3>
-              <p>Kibbles, Fresh, and Raw: which option is best?</p>
-              <small>Last comment by Milo · 10h ago</small>
-              <div class="topic-meta">
-                <span><i class="fa-solid fa-paw"></i> 45 Woofs</span>
-                <span><i class="fa-regular fa-comment"></i> 12 Comments</span>
-              </div>
-            </div>
-          </a>
-
-          <a href="Forum Post/orum-detail-walks.html" class="forum-topic-link">
-            <div class="forum-topic-card">
-              <h3>Best walking trails in Hertfordshire</h3>
-              <p>
-                Looking for a quick and easy walk or a longer and challenging
-                one, we got you covered.
-              </p>
-              <small>Last comment by Luna · 12h ago</small>
-              <div class="topic-meta">
-                <span><i class="fa-solid fa-paw"></i> 18 Woofs</span>
-                <span><i class="fa-regular fa-comment"></i> 5 Comments</span>
-              </div>
-            </div>
-          </a>
+        <div
+          id="new-post-modal"
+          class="hidden"
+          style="
+            background: #fff;
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 25px;
+          "
+        >
+          <h3 style="margin-top: 0">Create a New Topic</h3>
+          <form id="create-post-form">
+            <input
+              type="text"
+              id="post-title"
+              placeholder="Topic Title"
+              required
+              style="
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 10px;
+                border-radius: 6px;
+                border: 1px solid #ccc;
+              "
+            />
+            <select
+              id="post-category"
+              style="
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 10px;
+                border-radius: 6px;
+                border: 1px solid #ccc;
+              "
+            >
+              <option value="General">General</option>
+              <option value="Camping">Camping</option>
+              <option value="Food">Food</option>
+              <option value="Walks">Walks</option>
+            </select>
+            <textarea
+              id="post-description"
+              placeholder="What's on your mind?"
+              required
+              style="
+                width: 100%;
+                padding: 10px;
+                height: 100px;
+                margin-bottom: 10px;
+                border-radius: 6px;
+                border: 1px solid #ccc;
+              "
+            ></textarea>
+            <button
+              type="submit"
+              class="search-submit-inline"
+              style="width: 100%"
+            >
+              Post to Forum
+            </button>
+            <button
+              type="button"
+              id="cancel-post"
+              style="
+                width: 100%;
+                background: none;
+                border: none;
+                color: var(--muted);
+                margin-top: 10px;
+                cursor: pointer;
+              "
+            >
+              Cancel
+            </button>
+          </form>
         </div>
+
+        <div class="forum-list" id="dynamic-forum-list"></div>
       </div>
     </main>
 
@@ -442,9 +486,7 @@
         <a href="Footer/contact.html">Contact</a>
         <a href="Footer/about.html">About Us</a>
       </div>
-      <div class="copyright">
-        &copy; 2025 TheDogAtlas. The dog-first travel platform.
-      </div>
+      <div class="copyright">&copy; 2025 TheDogAtlas.</div>
     </footer>
 
     <script>
@@ -463,12 +505,10 @@
 
       window.addEventListener("DOMContentLoaded", () => {
         const hash = window.location.hash;
-        if (hash === "#section-forum") {
-          showSection("forum");
-        } else if (hash === "#section-friends") {
-          showSection("friends");
-        }
+        if (hash === "#section-forum") showSection("forum");
+        else if (hash === "#section-friends") showSection("friends");
       });
     </script>
+    <script type="module" src="firebase-config.js"></script>
   </body>
 </html>
