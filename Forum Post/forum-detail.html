@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Post Detail – TheDogAtlas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        <a href="../index.html">
+          <img
+            src="../Media/Logo2.jpg"
+            alt="TheDogAtlas Logo"
+            style="height: 55px; width: auto"
+          />
+        </a>
+      </div>
+    </header>
+
+    <main class="community-container">
+      <a
+        href="../community.html#section-forum"
+        style="text-decoration: none; color: #ff6b35; font-weight: bold"
+        >← Back to Forum</a
+      >
+
+      <div
+        id="post-detail-container"
+        style="
+          margin-top: 30px;
+          background: white;
+          padding: 25px;
+          border-radius: 12px;
+          border: 1px solid #ddd;
+        "
+      >
+        <h1 id="detail-title" style="margin-top: 0">Loading post...</h1>
+        <span
+          id="detail-category"
+          style="
+            background: #eee;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: #666;
+          "
+        ></span>
+        <p
+          id="detail-description"
+          style="
+            margin-top: 20px;
+            line-height: 1.6;
+            color: #333;
+            font-size: 1.1rem;
+          "
+        ></p>
+      </div>
+
+      <hr style="margin: 40px 0; border: 0; border-top: 1px solid #ddd" />
+
+      <div class="comments-section">
+        <h3>Comments</h3>
+        <div id="comments-list" style="margin-bottom: 30px">
+          <p style="color: #888">Fetching barks...</p>
+        </div>
+
+        <form
+          id="add-comment-form"
+          style="
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+          "
+        >
+          <textarea
+            id="comment-text"
+            placeholder="Share your thoughts..."
+            required
+            style="
+              width: 100%;
+              padding: 12px;
+              border-radius: 8px;
+              border: 1px solid #ccc;
+              height: 100px;
+              margin-bottom: 10px;
+              font-family: inherit;
+            "
+          ></textarea>
+          <button
+            type="submit"
+            style="
+              width: 100%;
+              padding: 12px;
+              background: #ff6b35;
+              color: white;
+              border: none;
+              border-radius: 8px;
+              cursor: pointer;
+              font-weight: bold;
+            "
+          >
+            Post Comment
+          </button>
+        </form>
+      </div>
+    </main>
+
+    <script type="module" src="../firebase-config.js"></script>
+  </body>
+</html>
