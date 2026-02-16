@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Login – TheDogAtlas</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        <a
+          href="index.html"
+          style="
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          "
+        >
+          <img
+            src="Media/Logo2.jpg"
+            alt="TheDogAtlas Logo"
+            style="height: 55px; width: auto"
+          />
+        </a>
+      </div>
+      <nav>
+        <a href="index.html" class="nav-link active">Map</a>
+        <a href="planner.html" class="nav-link">Planner</a>
+        <a href="trails.html" class="nav-link">Trails</a>
+        <a href="events.html" class="nav-link">Events</a>
+        <a href="community.html" class="nav-link">Community</a>
+      </nav>
+    </header>
+
+    <main
+      class="community-container"
+      style="max-width: 400px; margin: 50px auto"
+    >
+      <div
+        id="auth-container"
+        style="
+          background: white;
+          padding: 30px;
+          border-radius: 12px;
+          border: 1px solid #ddd;
+        "
+      >
+        <h2 id="auth-title">Welcome Back</h2>
+        <form id="auth-form">
+          <input
+            type="email"
+            id="auth-email"
+            placeholder="Email"
+            required
+            style="
+              width: 100%;
+              padding: 10px;
+              margin-bottom: 10px;
+              border-radius: 6px;
+              border: 1px solid #ccc;
+            "
+          />
+          <input
+            type="text"
+            id="auth-username"
+            placeholder="Display Name / Username"
+            style="
+              display: none;
+              width: 100%;
+              padding: 10px;
+              margin-bottom: 10px;
+              border-radius: 6px;
+              border: 1px solid #ccc;
+            "
+          />
+          <input
+            type="password"
+            id="auth-password"
+            placeholder="Password"
+            required
+            style="
+              width: 100%;
+              padding: 10px;
+              margin-bottom: 15px;
+              border-radius: 6px;
+              border: 1px solid #ccc;
+            "
+          />
+          <button
+            type="submit"
+            id="auth-submit"
+            class="search-submit-inline"
+            style="width: 100%"
+          >
+            Login
+          </button>
+        </form>
+        <p style="margin-top: 20px; text-align: center">
+          <span id="auth-toggle-text">Don't have an account?</span>
+          <a
+            href="#"
+            id="auth-toggle-btn"
+            style="color: #ff6b35; font-weight: bold"
+            >Sign Up</a
+          >
+        </p>
+      </div>
+    </main>
+
+    <script type="module" src="firebase-config.js"></script>
+
+    <footer>
+      <div class="footer-links">
+        <a href="Footer/privacy.html">Privacy Policy</a>
+        <a href="Footer/terms.html">Terms of Service</a>
+        <a href="Footer/cookies.html">Cookie Policy</a>
+        <a href="Footer/contact.html">Contact</a>
+        <a href="Footer/about.html">About Us</a>
+      </div>
+      <div class="copyright">
+        &copy; 2025 TheDogAtlas. The dog-first travel platform.
+      </div>
+    </footer>
+  </body>
+</html>
