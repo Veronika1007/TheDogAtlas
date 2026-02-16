@@ -122,5 +122,14 @@
         &copy; 2025 TheDogAtlas. The dog-first travel platform.
       </div>
     </footer>
+    <script>
+      authToggleBtn.onclick = (e) => {
+        e.preventDefault();
+        isLoginMode = !isLoginMode;
+        document.getElementById("auth-submit").innerText = isLoginMode
+          ? "Login"
+          : "Sign Up";
+      };
+    </script>
   </body>
 </html>

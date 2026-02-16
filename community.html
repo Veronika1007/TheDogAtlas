@@ -10,14 +10,11 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
     <style>
-      /* --- Restored Side-by-Side Friends Grid --- */
       .friends-grid-container {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
       }
-
-      /* --- Interactive Forum Card Styles --- */
       .forum-topic-link {
         text-decoration: none;
         color: inherit;
@@ -30,14 +27,6 @@
         background-color: #fffaf8;
         transform: translateY(-2px);
       }
-      .topic-meta {
-        margin-top: 10px;
-        font-size: 0.8rem;
-        color: var(--muted);
-        display: flex;
-        gap: 15px;
-      }
-
       @media (max-width: 900px) {
         .friends-grid-container {
           grid-template-columns: 1fr;
@@ -48,9 +37,9 @@
   <body>
     <header>
       <div class="brand">
-        <a href="index.html">
-          <img src="Media/Logo2.jpg" alt="Logo" style="height: 55px" />
-        </a>
+        <a href="index.html"
+          ><img src="Media/Logo2.jpg" alt="Logo" style="height: 55px"
+        /></a>
       </div>
       <nav>
         <a href="index.html" class="nav-link">Map</a>
@@ -71,7 +60,6 @@
         >
       </nav>
     </header>
-    <script type="module" src="firebase-config.js"></script>
 
     <main class="community-container">
       <div class="search-container">
@@ -79,320 +67,95 @@
           <i class="fa fa-search"></i>
           <input
             type="text"
+            id="global-search"
             placeholder="Search for dogs, breeds, or topics..."
           />
-          <i class="fa fa-sliders"></i>
         </div>
       </div>
 
       <div class="community-tabs-wrapper">
         <div class="community-tabs">
           <button
-            id="tab-posts"
+            id="tab-posts-btn"
             class="tab-btn active"
             onclick="showSection('posts')"
           >
             Feed
           </button>
           <button
-            id="tab-friends"
+            id="tab-friends-btn"
             class="tab-btn"
             onclick="showSection('friends')"
           >
             Friends
           </button>
-          <button id="tab-forum" class="tab-btn" onclick="showSection('forum')">
+          <button
+            id="tab-forum-btn"
+            class="tab-btn"
+            onclick="showSection('forum')"
+          >
             Forum
           </button>
         </div>
       </div>
 
-      <div id="section-posts" class="community-section post-grid">
-        <div class="feed-card post-frame">
-          <div class="user-header">
-            <img
-              src="Media/Community/Community image 1.jpeg"
-              alt="Truffle"
-              class="avatar"
-            />
-            <div>
-              <div class="username">Truffle</div>
-              <div class="post-time">1 hour ago</div>
-            </div>
-          </div>
-          <div class="image-container">
-            <img
-              src="Media/Community/Community image 1.jpeg"
-              class="post-image"
-            />
-          </div>
-          <div class="post-actions">
-            <span><i class="fa-solid fa-paw"></i> 13 Woofs</span>
-            <span><i class="fa-regular fa-comment"></i> 3 Comments</span>
-          </div>
-          <div class="post-caption">
-            <strong>Truffle</strong> And suddenly she's just standing there like
-            that. 🐶✨
-          </div>
-        </div>
-
-        <div class="feed-card post-frame">
-          <div class="user-header">
-            <img
-              src="Media/Community/community image 2.jpg"
-              alt="Luna"
-              class="avatar"
-            />
-            <div>
-              <div class="username">Luna</div>
-              <div class="post-time">2 hours ago</div>
-            </div>
-          </div>
-          <div class="image-container">
-            <img
-              src="Media/Community/community image 2.jpg"
-              class="post-image"
-            />
-          </div>
-          <div class="post-actions">
-            <span><i class="fa-solid fa-paw"></i> 1 Woof</span>
-            <span><i class="fa-regular fa-comment"></i> 0 Comments</span>
-          </div>
-          <div class="post-caption">
-            <strong>Luna</strong> First time on the beach, loving the water! 🌊🏖
-          </div>
-        </div>
-
-        <div class="feed-card post-frame">
-          <div class="user-header">
-            <img
-              src="Media/Community/community image 3.jpg"
-              alt="Roger"
-              class="avatar"
-            />
-            <div>
-              <div class="username">Roger</div>
-              <div class="post-time">5 hours ago</div>
-            </div>
-          </div>
-          <div class="image-container">
-            <img
-              src="Media/Community/community image 3.jpg"
-              class="post-image"
-            />
-          </div>
-          <div class="post-actions">
-            <span><i class="fa-solid fa-paw"></i> 2 Woofs</span>
-            <span><i class="fa-regular fa-comment"></i> 2 Comments</span>
-          </div>
-          <div class="post-caption">
-            <strong>Roger</strong> Loving a good woodland sniff and walkies.
-          </div>
-        </div>
-
-        <div class="feed-card post-frame">
-          <div class="user-header">
-            <img
-              src="Media/Community/Community image 4.jpeg"
-              alt="Milo"
-              class="avatar"
-            />
-            <div>
-              <div class="username">Milo</div>
-              <div class="post-time">1 day ago</div>
-            </div>
-          </div>
-          <div class="image-container">
-            <img
-              src="Media/Community/Community image 4.jpeg"
-              class="post-image"
-            />
-          </div>
-          <div class="post-actions">
-            <span><i class="fa-solid fa-paw"></i> 12 Woofs</span>
-            <span><i class="fa-regular fa-comment"></i> 5 Comments</span>
-          </div>
-          <div class="post-caption">
-            <strong>Milo</strong> 😴 Does he not look like a peaceful baby Yoda?
-          </div>
-        </div>
-
-        <div class="feed-card post-frame">
-          <div class="user-header">
-            <img
-              src="Media/Community/Community image 8.jpeg"
-              alt="Charlie"
-              class="avatar"
-            />
-            <div>
-              <div class="username">Charlie</div>
-              <div class="post-time">1 day ago</div>
-            </div>
-          </div>
-          <div class="image-container">
-            <img
-              src="Media/Community/Community image 5.jpeg"
-              class="post-image"
-            />
-          </div>
-          <div class="post-actions">
-            <span><i class="fa-solid fa-paw"></i> 17 Woofs</span>
-            <span><i class="fa-regular fa-comment"></i> 10 Comments</span>
-          </div>
-          <div class="post-caption">
-            <strong>Charlie</strong> Look at that happy face!! ❤️😍❤️
-          </div>
-        </div>
-
-        <div class="feed-card post-frame">
-          <div class="user-header">
-            <img
-              src="Media/Community/Community image 1.jpeg"
-              alt="Truffle"
-              class="avatar"
-            />
-            <div>
-              <div class="username">Truffle</div>
-              <div class="post-time">2 days ago</div>
-            </div>
-          </div>
-          <div class="image-container">
-            <img
-              src="Media/Community/Community image 6.jpeg"
-              class="post-image"
-            />
-          </div>
-          <div class="post-actions">
-            <span><i class="fa-solid fa-paw"></i> 23 Woofs</span>
-            <span><i class="fa-regular fa-comment"></i> 10 Comments</span>
-          </div>
-          <div class="post-caption">
-            <strong>Truffle</strong> ♥️ Making new friends ❤️
-          </div>
-        </div>
-      </div>
+      <div id="section-posts" class="community-section post-grid"></div>
 
       <div id="section-friends" class="community-section hidden">
-        <div class="toggle-container">
-          <button class="pill-toggle active">Nearby</button>
-          <button class="pill-toggle">Same breed</button>
-        </div>
-        <div class="friends-grid-container">
-          <div class="friend-row-card">
-            <img
-              src="Media/Community/Community image 1.jpeg"
-              class="row-avatar"
+        <div
+          style="
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 25px;
+          "
+        >
+          <h4 style="margin: 0 0 15px 0; color: var(--primary)">
+            Discover the Pack
+          </h4>
+          <div style="display: flex; gap: 15px; flex-wrap: wrap">
+            <select
+              id="filter-breed"
+              style="
+                padding: 10px;
+                border-radius: 8px;
+                border: 1px solid #ddd;
+                flex: 1;
+              "
+            >
+              <option value="">All Breeds</option>
+              <option value="Springer Spaniel">Springer Spaniel</option>
+              <option value="Retriever">Retriever</option>
+              <option value="German Shepherd">German Shepherd</option>
+            </select>
+            <input
+              type="text"
+              id="member-search"
+              placeholder="Search by dog name..."
+              style="
+                padding: 10px;
+                border-radius: 8px;
+                border: 1px solid #ddd;
+                flex: 2;
+              "
             />
-            <div class="row-info">
-              <div class="row-header">
-                <h3>Truffle</h3>
-                <button class="follow-btn-small">Follow</button>
-              </div>
-              <span class="handle">@Truffle.thespringer</span>
-              <p class="stats">15 Followers • < 1 Km away</p>
-              <div class="row-footer">
-                <span class="breed-tag">Springer Spaniel</span>
-                <span class="age-text">2 Years Old</span>
-                <i class="fa-solid fa-venus gender-female"></i>
-              </div>
-            </div>
-          </div>
-          <div class="friend-row-card">
-            <img
-              src="Media/Community/community image 2.jpg"
-              class="row-avatar"
-            />
-            <div class="row-info">
-              <div class="row-header">
-                <h3>Luna</h3>
-                <button class="follow-btn-small">Follow</button>
-              </div>
-              <span class="handle">@Luna_BeachGirl</span>
-              <p class="stats">10 Followers • < 5 Km away</p>
-              <div class="row-footer">
-                <span class="breed-tag">Retriever Mix</span>
-                <span class="age-text">1 Year Old</span>
-                <i class="fa-solid fa-venus gender-female"></i>
-              </div>
-            </div>
-          </div>
-          <div class="friend-row-card">
-            <img
-              src="Media/Community/Community image 18.jpeg"
-              class="row-avatar"
-            />
-            <div class="row-info">
-              <div class="row-header">
-                <h3>Otis</h3>
-                <button class="follow-btn-small">Follow</button>
-              </div>
-              <span class="handle">@Otis_1</span>
-              <p class="stats">22 Followers • < 6 Km away</p>
-              <div class="row-footer">
-                <span class="breed-tag">Rottweiler</span>
-                <span class="age-text">5 Years Old</span>
-                <i class="fa-solid fa-mars gender-male"></i>
-              </div>
-            </div>
-          </div>
-          <div class="friend-row-card">
-            <img
-              src="Media/Community/Community image 4.jpeg"
-              class="row-avatar"
-            />
-            <div class="row-info">
-              <div class="row-header">
-                <h3>Milo</h3>
-                <button class="follow-btn-small">Follow</button>
-              </div>
-              <span class="handle">@Milo-Frenchie</span>
-              <p class="stats">12 Followers • < 10 Km away</p>
-              <div class="row-footer">
-                <span class="breed-tag">Pug x Frenchie Mix</span>
-                <span class="age-text">2 Years Old</span>
-                <i class="fa-solid fa-mars gender-male"></i>
-              </div>
-            </div>
-          </div>
-          <div class="friend-row-card">
-            <img
-              src="Media/Community/Community image 16.jpeg"
-              class="row-avatar"
-            />
-            <div class="row-info">
-              <div class="row-header">
-                <h3>Bucky</h3>
-                <button class="follow-btn-small">Follow</button>
-              </div>
-              <span class="handle">@BuckyBoy</span>
-              <p class="stats">24 Followers • < 20 Km away</p>
-              <div class="row-footer">
-                <span class="breed-tag">German Shepherd</span>
-                <span class="age-text">8 Months Old</span>
-                <i class="fa-solid fa-mars gender-male"></i>
-              </div>
-            </div>
-          </div>
-          <div class="friend-row-card">
-            <img
-              src="Media/Community/Community image 8.jpeg"
-              class="row-avatar"
-            />
-            <div class="row-info">
-              <div class="row-header">
-                <h3>Charlie</h3>
-                <button class="follow-btn-small">Follow</button>
-              </div>
-              <span class="handle">@BigCharlie</span>
-              <p class="stats">23 Followers • < 70 Km away</p>
-              <div class="row-footer">
-                <span class="breed-tag">Pointer Mix</span>
-                <span class="age-text">6 Years Old</span>
-                <i class="fa-solid fa-mars gender-male"></i>
-              </div>
-            </div>
           </div>
         </div>
+        <h3 style="margin-bottom: 15px">
+          <i class="fa fa-heart" style="color: #ff4d4d"></i> My Pack
+        </h3>
+        <div
+          id="following-grid"
+          class="friends-grid-container"
+          style="margin-bottom: 30px"
+        ></div>
+        <hr />
+        <h3 style="margin-bottom: 15px">
+          <i class="fa fa-plus-circle" style="color: var(--teal)"></i> New
+          Friends
+        </h3>
+        <div id="friends-grid" class="friends-grid-container"></div>
       </div>
 
       <div id="section-forum" class="community-section hidden">
@@ -403,7 +166,6 @@
         >
           + New Topic
         </button>
-
         <div
           id="new-post-modal"
           class="hidden"
@@ -415,34 +177,19 @@
             margin-bottom: 25px;
           "
         >
-          <h3 style="margin-top: 0">Create a New Topic</h3>
           <form id="create-post-form">
             <input
               type="text"
               id="post-title"
               placeholder="Topic Title"
               required
-              style="
-                width: 100%;
-                padding: 10px;
-                margin-bottom: 10px;
-                border-radius: 6px;
-                border: 1px solid #ccc;
-              "
+              style="width: 100%; padding: 10px; margin-bottom: 10px"
             />
             <select
               id="post-category"
-              style="
-                width: 100%;
-                padding: 10px;
-                margin-bottom: 10px;
-                border-radius: 6px;
-                border: 1px solid #ccc;
-              "
+              style="width: 100%; padding: 10px; margin-bottom: 10px"
             >
               <option value="General">General</option>
-              <option value="Camping">Camping</option>
-              <option value="Food">Food</option>
               <option value="Walks">Walks</option>
             </select>
             <textarea
@@ -454,25 +201,16 @@
                 padding: 10px;
                 height: 100px;
                 margin-bottom: 10px;
-                border-radius: 6px;
-                border: 1px solid #ccc;
               "
             ></textarea>
-            <button
-              type="submit"
-              class="search-submit-inline"
-              style="width: 100%"
-            >
-              Post to Forum
-            </button>
+            <button type="submit" class="save-btn">Post to Forum</button>
             <button
               type="button"
               id="cancel-post"
               style="
-                width: 100%;
                 background: none;
                 border: none;
-                color: var(--muted);
+                width: 100%;
                 margin-top: 10px;
                 cursor: pointer;
               "
@@ -481,21 +219,9 @@
             </button>
           </form>
         </div>
-
-        <div class="forum-list" id="dynamic-forum-list"></div>
+        <div id="dynamic-forum-list"></div>
       </div>
     </main>
-
-    <footer>
-      <div class="footer-links">
-        <a href="Footer/privacy.html">Privacy Policy</a>
-        <a href="Footer/terms.html">Terms of Service</a>
-        <a href="Footer/cookies.html">Cookie Policy</a>
-        <a href="Footer/contact.html">Contact</a>
-        <a href="Footer/about.html">About Us</a>
-      </div>
-      <div class="copyright">&copy; 2025 TheDogAtlas.</div>
-    </footer>
 
     <script>
       function showSection(section) {
@@ -508,14 +234,10 @@
         document
           .getElementById("section-" + section)
           .classList.remove("hidden");
-        document.getElementById("tab-" + section).classList.add("active");
+        document
+          .getElementById("tab-" + section + "-btn")
+          .classList.add("active");
       }
-
-      window.addEventListener("DOMContentLoaded", () => {
-        const hash = window.location.hash;
-        if (hash === "#section-forum") showSection("forum");
-        else if (hash === "#section-friends") showSection("friends");
-      });
     </script>
     <script type="module" src="firebase-config.js"></script>
   </body>

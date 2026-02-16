@@ -8,13 +8,89 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
+    <style>
+      .profile-header {
+        background: white;
+        padding: 40px;
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        margin-bottom: 30px;
+        text-align: center;
+      }
+      .avatar-container {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 15px;
+      }
+      .avatar-main {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        background: #eee;
+        border: 3px solid var(--primary);
+      }
+      .upload-badge {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background: var(--primary);
+        color: white;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border: 3px solid white;
+      }
+      .info-card {
+        background: white;
+        padding: 25px;
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        margin-bottom: 20px;
+      }
+      .form-group {
+        margin-bottom: 15px;
+        text-align: left;
+      }
+      .form-group label {
+        display: block;
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 5px;
+        color: var(--muted);
+      }
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-family: inherit;
+      }
+      .save-btn {
+        background: var(--teal);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 25px;
+        font-weight: 700;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 10px;
+      }
+    </style>
   </head>
   <body>
     <header>
       <div class="brand">
-        <a href="index.html">
-          <img src="Media/Logo2.jpg" alt="Logo" style="height: 55px" />
-        </a>
+        <a href="index.html"
+          ><img src="Media/Logo2.jpg" alt="Logo" style="height: 55px"
+        /></a>
       </div>
       <nav>
         <a href="index.html" class="nav-link">Map</a>
@@ -37,181 +113,63 @@
     </header>
 
     <main class="community-container">
-      <div
-        style="
-          background: white;
-          padding: 40px;
-          border-radius: 16px;
-          border: 1px solid var(--border);
-          margin-bottom: 30px;
-          text-align: center;
-        "
-      >
-        <div
-          style="
-            position: relative;
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 15px;
-          "
-        >
+      <div class="profile-header">
+        <div class="avatar-container">
           <img
             src="https://via.placeholder.com/150"
             id="display-avatar"
-            style="
-              width: 100%;
-              height: 100%;
-              border-radius: 50%;
-              object-fit: cover;
-              background: #eee;
-              border: 3px solid var(--primary);
-            "
+            class="avatar-main"
           />
-          <label
-            for="avatar-input"
-            style="
-              position: absolute;
-              bottom: 0;
-              right: 0;
-              background: var(--primary);
-              color: white;
-              width: 35px;
-              height: 35px;
-              border-radius: 50%;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              cursor: pointer;
-              border: 3px solid white;
-            "
-          >
-            <i class="fa fa-camera"></i>
-          </label>
+          <label for="avatar-input" class="upload-badge"
+            ><i class="fa fa-camera"></i
+          ></label>
           <input type="file" id="avatar-input" hidden accept="image/*" />
         </div>
 
-        <h2 id="profile-name" style="margin-bottom: 5px">Loading...</h2>
+        <h2 id="profile-name" style="margin-bottom: 5px">Member Name</h2>
         <p
           id="profile-email"
           style="color: var(--muted); margin-bottom: 20px"
         ></p>
 
-        <form
-          id="profile-edit-form"
-          style="max-width: 500px; margin: 0 auto; text-align: left"
-        >
-          <div style="margin-bottom: 15px">
-            <label
-              style="
-                display: block;
-                font-size: 13px;
-                font-weight: 700;
-                margin-bottom: 5px;
-              "
-              >ID Name</label
-            >
-            <input
-              type="text"
-              id="edit-username"
-              style="
-                width: 100%;
-                padding: 10px;
-                border: 1px solid var(--border);
-                border-radius: 8px;
-              "
-            />
-          </div>
-          <div style="margin-bottom: 15px">
-            <label
-              style="
-                display: block;
-                font-size: 13px;
-                font-weight: 700;
-                margin-bottom: 5px;
-              "
-              >About You & Your Dog</label
-            >
-            <textarea
-              id="edit-bio"
-              rows="3"
-              style="
-                width: 100%;
-                padding: 10px;
-                border: 1px solid var(--border);
-                border-radius: 8px;
-              "
-              placeholder="Tell the pack about yourselves..."
-            ></textarea>
-          </div>
-          <div style="display: flex; gap: 15px; margin-bottom: 15px">
-            <div style="flex: 1">
-              <label
-                style="
-                  display: block;
-                  font-size: 13px;
-                  font-weight: 700;
-                  margin-bottom: 5px;
-                "
-                >Dog's Name</label
-              >
+        <div class="info-card" style="max-width: 500px; margin: 0 auto">
+          <form id="profile-edit-form">
+            <div class="form-group">
+              <label>ID Name</label>
               <input
                 type="text"
-                id="edit-dog-name"
-                style="
-                  width: 100%;
-                  padding: 10px;
-                  border: 1px solid var(--border);
-                  border-radius: 8px;
-                "
+                id="edit-username"
+                placeholder="Your username"
               />
             </div>
-            <div style="flex: 1">
-              <label
-                style="
-                  display: block;
-                  font-size: 13px;
-                  font-weight: 700;
-                  margin-bottom: 5px;
-                "
-                >Breed</label
-              >
-              <input
-                type="text"
-                id="edit-dog-breed"
-                style="
-                  width: 100%;
-                  padding: 10px;
-                  border: 1px solid var(--border);
-                  border-radius: 8px;
-                "
-              />
+            <div class="form-group">
+              <label>About You (Bio)</label>
+              <textarea
+                id="edit-bio"
+                rows="3"
+                placeholder="Tell the pack about yourselves..."
+              ></textarea>
             </div>
-          </div>
-          <button
-            type="submit"
-            style="
-              background: var(--teal);
-              color: white;
-              border: none;
-              padding: 12px 25px;
-              border-radius: 25px;
-              font-weight: 700;
-              cursor: pointer;
-              width: 100%;
-            "
-          >
-            Save Changes
-          </button>
-        </form>
+            <div style="display: flex; gap: 15px">
+              <div class="form-group" style="flex: 1">
+                <label>Dog's Name</label>
+                <input type="text" id="edit-dog-name" />
+              </div>
+              <div class="form-group" style="flex: 1">
+                <label>Dog's Breed</label>
+                <input type="text" id="edit-dog-breed" />
+              </div>
+            </div>
+            <button type="submit" class="save-btn">Save Changes</button>
+          </form>
+        </div>
       </div>
 
-      <h3>My Forum Topics</h3>
+      <h3>My Forum Barks</h3>
       <div id="my-posts-list" class="forum-list">
-        <p style="color: var(--muted)">Searching for your posts...</p>
+        <p style="color: var(--muted)">Loading your posts...</p>
       </div>
     </main>
-
-    <script type="module" src="firebase-config.js"></script>
 
     <footer>
       <div class="footer-links">
@@ -221,10 +179,9 @@
         <a href="Footer/contact.html">Contact</a>
         <a href="Footer/about.html">About Us</a>
       </div>
-      <div class="copyright">
-        &copy; 2025 TheDogAtlas. The dog-first travel platform.
-        <br />Always check with venues directly for current dog policies.
-      </div>
+      <div class="copyright">&copy; 2025 TheDogAtlas.</div>
     </footer>
+
+    <script type="module" src="firebase-config.js"></script>
   </body>
 </html>
