@@ -137,23 +137,8 @@
   <body>
     <header>
       <div class="brand">
-        <a
-          href="index.html"
-          style="
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-          "
-        >
-          <img
-            src="Media/Logo2.jpg"
-            alt="TheDogAtlas Logo"
-            style="height: 55px; width: auto"
-          />
-          <div style="font-size: 11px; color: var(--muted); margin-top: 5px">
-            The dog-first travel platform
-          </div>
+        <a href="index.html">
+          <img src="Media/Logo2.jpg" alt="Logo" style="height: 55px" />
         </a>
       </div>
       <nav>
@@ -162,10 +147,20 @@
         <a href="trails.html" class="nav-link">Trails</a>
         <a href="events.html" class="nav-link">Events</a>
         <a href="community.html" class="nav-link">Community</a>
+        <a href="profile.html" id="profile-link" class="nav-link hidden"
+          >My Profile</a
+        >
         <a href="login.html" id="login-link" class="nav-link">Login</a>
-        <a href="#" id="logout-link" class="nav-link hidden">Log Out</a>
+        <a
+          href="#"
+          id="logout-link"
+          onclick="logoutUser()"
+          class="nav-link hidden"
+          >Log Out</a
+        >
       </nav>
     </header>
+    <script type="module" src="firebase-config.js"></script>
 
     <main>
       <section class="hero-simple">

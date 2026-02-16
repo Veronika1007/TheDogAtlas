@@ -27,6 +27,9 @@
             alt="TheDogAtlas Logo"
             style="height: 55px; width: auto"
           />
+          <div style="font-size: 11px; color: var(--muted); margin-top: 5px">
+            The dog-first travel platform
+          </div>
         </a>
       </div>
       <nav>
@@ -35,7 +38,10 @@
         <a href="../trails.html" class="nav-link">Trails</a>
         <a href="../events.html" class="nav-link">Events</a>
         <a href="../community.html" class="nav-link active">Community</a>
-        <a href="login.html" id="login-link" class="nav-link">Login</a>
+        <a href="../profile.html" id="profile-link" class="nav-link hidden"
+          >My Profile</a
+        >
+        <a href="../login.html" id="login-link" class="nav-link">Login</a>
         <a href="#" id="logout-link" class="nav-link hidden">Log Out</a>
       </nav>
     </header>
@@ -58,24 +64,13 @@
         "
       >
         <h1 id="detail-title" style="margin-top: 0">Loading post...</h1>
-        <span
-          id="detail-category"
-          style="
-            background: #eee;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            color: #666;
-          "
-        ></span>
+        <p
+          id="detail-author"
+          style="color: #888; font-size: 0.9rem; margin-bottom: 10px"
+        ></p>
         <p
           id="detail-description"
-          style="
-            margin-top: 20px;
-            line-height: 1.6;
-            color: #333;
-            font-size: 1.1rem;
-          "
+          style="line-height: 1.6; color: #333; font-size: 1.1rem"
         ></p>
       </div>
 
@@ -129,7 +124,6 @@
       </div>
     </main>
 
-    <script type="module" src="../firebase-config.js"></script>
     <footer>
       <div class="footer-links">
         <a href="../Footer/privacy.html">Privacy Policy</a>
@@ -142,5 +136,7 @@
         &copy; 2025 TheDogAtlas. The dog-first travel platform.
       </div>
     </footer>
+
+    <script type="module" src="../firebase-config.js"></script>
   </body>
 </html>

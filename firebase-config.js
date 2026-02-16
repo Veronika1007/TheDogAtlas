@@ -11,6 +11,9 @@ import {
   query,
   orderBy,
   serverTimestamp,
+  where,
+  deleteDoc,
+  setDoc,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 import {
@@ -21,6 +24,13 @@ import {
   signOut,
   updateProfile,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
 // --- 1. Firebase Configuration ---
 const firebaseConfig = {
@@ -36,262 +46,189 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
+const storage = getStorage(app);
 
-// --- HELPER: Format Timestamps ---
-function formatTimestamp(timestamp) {
-  if (!timestamp) return "Just now";
-  const date = timestamp.toDate();
-  return date.toLocaleString("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+// --- HELPER: Toast Notification ---
+function showToast(msg) {
+  const toast = document.createElement("div");
+  toast.style =
+    "position: fixed; bottom: 20px; right: 20px; background: #2a9d8f; color: white; padding: 12px 25px; border-radius: 30px; font-weight: bold; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.1);";
+  toast.innerText = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
 }
 
-// --- 2. Logic for community.html (Main Forum List) ---
-async function loadForumPosts() {
+function formatTimestamp(timestamp) {
+  if (!timestamp) return "Just now";
+  try {
+    return timestamp
+      .toDate()
+      .toLocaleString("en-GB", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+  } catch (e) {
+    return "Just now";
+  }
+}
+
+// --- 2. GLOBAL AUTH & NAV TOGGLES ---
+onAuthStateChanged(auth, async (user) => {
+  const loginLink = document.getElementById("login-link");
+  const logoutLink = document.getElementById("logout-link");
+  const profileLink = document.getElementById("profile-link");
+
+  if (user) {
+    if (loginLink) loginLink.classList.add("hidden");
+    if (logoutLink) logoutLink.classList.remove("hidden");
+    if (profileLink) profileLink.classList.remove("hidden");
+
+    if (document.getElementById("profile-edit-form")) setupProfilePage(user);
+    if (document.getElementById("friends-grid")) loadMemberDirectory();
+  } else {
+    if (loginLink) loginLink.classList.remove("hidden");
+    if (logoutLink) logoutLink.classList.add("hidden");
+    if (profileLink) profileLink.classList.add("hidden");
+    if (window.location.pathname.includes("profile.html"))
+      window.location.href = "login.html";
+  }
+});
+
+// --- 3. FORUM LOGIC with SEARCH ---
+async function loadForumPosts(searchTerm = "") {
   const forumContainer = document.getElementById("dynamic-forum-list");
   if (!forumContainer) return;
 
   try {
-    // Sort by newest first
     const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
-    const querySnapshot = await getDocs(q);
+    const snap = await getDocs(q);
     forumContainer.innerHTML = "";
 
-    querySnapshot.forEach((doc) => {
+    snap.forEach((doc) => {
       const post = doc.data();
-      const readableDate = formatTimestamp(post.createdAt);
+      const title = post.title || "Untitled";
+      const desc = post.description || "";
+
+      // Filter logic
+      if (
+        searchTerm &&
+        !title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        !desc.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+        return;
 
       forumContainer.innerHTML += `
-            <a href="Forum Post/forum-detail.html?id=${
-              doc.id
-            }" class="forum-topic-link">
-                <div class="forum-topic-card" style="border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
-                    <h3 style="margin: 0; color: #ff6b35;">${post.title}</h3>
-                    <p style="color: #444;">${post.description}</p>
-                    <div class="topic-meta">
-                        <small style="color: #888;">Topic: ${
-                          post.category || "General"
-                        }</small>
-                        <small style="color: #888;"> | Posted by: ${
-                          post.authorName || "Guest"
-                        }</small>
-                        <small style="color: #888;"> | ${readableDate}</small>
+        <div class="forum-topic-card" style="border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-bottom: 10px; background: white;">
+          <a href="Forum Post/forum-detail.html?id=${
+            doc.id
+          }" style="text-decoration: none;">
+            <h3 style="margin: 0; color: #ff6b35;">${title}</h3>
+            <p style="color: #444;">${desc}</p>
+            <small style="color: #888;">By ${
+              post.authorName || "Guest"
+            } | ${formatTimestamp(post.createdAt)}</small>
+          </a>
+        </div>`;
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+// Forum Search Listener
+const forumSearch = document.getElementById("forum-search");
+if (forumSearch) forumSearch.oninput = (e) => loadForumPosts(e.target.value);
+
+// --- 4. FRIENDS / MEMBER DIRECTORY ---
+async function loadMemberDirectory() {
+  const grid = document.getElementById("friends-grid");
+  if (!grid) return;
+
+  try {
+    const snap = await getDocs(collection(db, "users"));
+    grid.innerHTML = "";
+    snap.forEach((d) => {
+      const user = d.data();
+      grid.innerHTML += `
+                <div class="friend-row-card" style="display:flex; gap:15px; align-items:center; background:white; padding:15px; border-radius:12px; border:1px solid #ddd;">
+                    <img src="${
+                      user.photoURL || "https://via.placeholder.com/60"
+                    }" style="width:60px; height:60px; border-radius:50%; object-fit:cover;">
+                    <div>
+                        <h4 style="margin:0;">${
+                          user.dogName || "Dog Parent"
+                        }</h4>
+                        <p style="margin:0; font-size:13px; color:#888;">${
+                          user.dogBreed || "Community Member"
+                        }</p>
+                        <span style="font-size:11px; color:#aaa;">@${
+                          user.displayName || "Anonymous"
+                        }</span>
                     </div>
-                </div>
-            </a>
-        `;
+                </div>`;
     });
-  } catch (error) {
-    console.error("Error loading posts: ", error);
+  } catch (e) {
+    console.error(e);
   }
 }
 
-// Forum Post Creation Logic
-const openBtn = document.getElementById("open-post-form");
-const cancelBtn = document.getElementById("cancel-post");
-const modal = document.getElementById("new-post-modal");
+// --- 5. PROFILE PAGE LOGIC ---
+async function setupProfilePage(user) {
+  document.getElementById("profile-name").innerText =
+    user.displayName || "Member";
+  document.getElementById("profile-email").innerText = user.email || "";
+  document.getElementById("edit-username").value = user.displayName || "";
+  if (user.photoURL)
+    document.getElementById("display-avatar").src = user.photoURL;
 
-if (openBtn) openBtn.onclick = () => modal.classList.remove("hidden");
-if (cancelBtn) cancelBtn.onclick = () => modal.classList.add("hidden");
+  const userDoc = await getDoc(doc(db, "users", user.uid));
+  if (userDoc.exists()) {
+    const data = userDoc.data();
+    document.getElementById("edit-bio").value = data.bio || "";
+    document.getElementById("edit-dog-name").value = data.dogName || "";
+    document.getElementById("edit-dog-breed").value = data.dogBreed || "";
+  }
 
-const postForm = document.getElementById("create-post-form");
-if (postForm) {
-  postForm.addEventListener("submit", async (e) => {
+  document.getElementById("profile-edit-form").onsubmit = async (e) => {
     e.preventDefault();
-    const user = auth.currentUser;
-    if (!user) {
-      alert("Please log in to post!");
-      window.location.href = "login.html";
-      return;
-    }
-
-    const title = document.getElementById("post-title").value;
-    const category = document.getElementById("post-category").value;
-    const description = document.getElementById("post-description").value;
-
-    try {
-      await addDoc(collection(db, "posts"), {
-        title: title,
-        category: category,
-        description: description,
-        authorName: user.displayName || "Anonymous Dog",
-        authorId: user.uid,
-        createdAt: serverTimestamp(),
-      });
-      postForm.reset();
-      modal.classList.add("hidden");
-      loadForumPosts();
-    } catch (error) {
-      console.error("Error adding post: ", error);
-    }
-  });
-}
-
-// --- 3. Logic for forum-detail.html ---
-const urlParams = new URLSearchParams(window.location.search);
-const postId = urlParams.get("id");
-
-if (postId && document.getElementById("post-detail-container")) {
-  renderPostDetail(postId);
-  renderComments(postId);
-  handleCommentSubmit(postId);
-}
-
-async function renderPostDetail(id) {
-  const docRef = doc(db, "posts", id);
-  const docSnap = await getDoc(docRef);
-  if (docSnap.exists()) {
-    const post = docSnap.data();
-    document.getElementById("detail-title").innerText = post.title;
-    document.getElementById("detail-description").innerText = post.description;
-    document.getElementById("detail-category").innerText =
-      post.category || "General";
-  }
-}
-
-function renderComments(id) {
-  const commentsList = document.getElementById("comments-list");
-  const q = query(
-    collection(db, "posts", id, "comments"),
-    orderBy("createdAt", "desc")
-  );
-
-  onSnapshot(q, (snapshot) => {
-    commentsList.innerHTML = "";
-    if (snapshot.empty) {
-      commentsList.innerHTML = '<p style="color: #888;">No comments yet.</p>';
-      return;
-    }
-    snapshot.forEach((doc) => {
-      const comment = doc.data();
-      const readableDate = formatTimestamp(comment.createdAt);
-
-      commentsList.innerHTML += `
-                <div style="border-bottom: 1px solid #eee; padding: 15px 0;">
-                    <p style="margin: 0; color: #333;">${comment.text}</p>
-                    <div style="display: flex; gap: 10px; margin-top: 5px;">
-                        <small style="color: #888;">Posted by: ${
-                          comment.authorName || "Anonymous Member"
-                        }</small>
-                        <small style="color: #bbb;">• ${readableDate}</small>
-                    </div>
-                </div>
-            `;
+    await updateProfile(user, {
+      displayName: document.getElementById("edit-username").value,
     });
-  });
-}
+    await setDoc(
+      doc(db, "users", user.uid),
+      {
+        bio: document.getElementById("edit-bio").value,
+        dogName: document.getElementById("edit-dog-name").value,
+        dogBreed: document.getElementById("edit-dog-breed").value,
+        photoURL: user.photoURL || "",
+      },
+      { merge: true }
+    );
+    showToast("Profile Saved!");
+  };
 
-function handleCommentSubmit(id) {
-  const commentForm = document.getElementById("add-comment-form");
-  if (commentForm) {
-    commentForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const user = auth.currentUser;
-      if (!user) {
-        alert("Login required to comment.");
-        return;
-      }
-      const textValue = document.getElementById("comment-text").value;
-      try {
-        await addDoc(collection(db, "posts", id, "comments"), {
-          text: textValue,
-          authorName: user.displayName || "Anonymous Dog",
-          authorId: user.uid,
-          createdAt: serverTimestamp(),
-        });
-        commentForm.reset();
-      } catch (error) {
-        console.error("Error adding comment:", error);
-      }
-    });
-  }
-}
-
-// --- 4. Auth & Navigation Logic ---
-const authForm = document.getElementById("auth-form");
-const authToggleBtn = document.getElementById("auth-toggle-btn");
-const logoutLink = document.getElementById("logout-link");
-const loginLink = document.getElementById("login-link");
-let isLoginMode = true;
-
-// Toggle Login/Signup Mode
-if (authToggleBtn) {
-  authToggleBtn.onclick = (e) => {
-    e.preventDefault();
-    isLoginMode = !isLoginMode;
-    document.getElementById("auth-title").innerText = isLoginMode
-      ? "Welcome Back"
-      : "Join TheDogAtlas";
-    document.getElementById("auth-submit").innerText = isLoginMode
-      ? "Login"
-      : "Sign Up";
-    document.getElementById("auth-toggle-text").innerText = isLoginMode
-      ? "Don't have an account?"
-      : "Already a member?";
-    authToggleBtn.innerText = isLoginMode ? "Sign Up" : "Login";
-
-    // Toggle username field visibility
-    const usernameField = document.getElementById("auth-username");
-    if (usernameField)
-      usernameField.style.display = isLoginMode ? "none" : "block";
+  const avatarInput = document.getElementById("avatar-input");
+  avatarInput.onchange = async (e) => {
+    const file = e.target.files[0];
+    const storageRef = ref(storage, `profiles/${user.uid}`);
+    await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(storageRef);
+    await updateProfile(user, { photoURL: url });
+    await setDoc(
+      doc(db, "users", user.uid),
+      { photoURL: url },
+      { merge: true }
+    );
+    document.getElementById("display-avatar").src = url;
+    showToast("Avatar Updated!");
   };
 }
 
-// Auth Form Submission
-if (authForm) {
-  authForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const email = document.getElementById("auth-email").value;
-    const password = document.getElementById("auth-password").value;
-    const username = document.getElementById("auth-username")?.value;
+// Logout Global
+window.logoutUser = () =>
+  signOut(auth).then(() => (window.location.href = "index.html"));
 
-    try {
-      if (isLoginMode) {
-        await signInWithEmailAndPassword(auth, email, password);
-      } else {
-        const userCredential = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-        // Save the chosen ID name to the profile
-        await updateProfile(userCredential.user, { displayName: username });
-      }
-      window.location.href = "community.html";
-    } catch (error) {
-      alert(error.message);
-    }
-  });
-}
-
-// Handle Logout
-if (logoutLink) {
-  logoutLink.addEventListener("click", (e) => {
-    e.preventDefault();
-    signOut(auth).then(() => {
-      alert("Logged out!");
-      window.location.href = "index.html";
-    });
-  });
-}
-
-// Monitor User Login Status
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    console.log("Logged in as:", user.displayName || user.email);
-    if (loginLink) loginLink.classList.add("hidden");
-    if (logoutLink) logoutLink.classList.remove("hidden");
-  } else {
-    console.log("Guest user");
-    if (loginLink) loginLink.classList.remove("hidden");
-    if (logoutLink) logoutLink.classList.add("hidden");
-  }
-});
-
-if (document.getElementById("dynamic-forum-list")) {
-  loadForumPosts();
-}
+if (document.getElementById("dynamic-forum-list")) loadForumPosts();
