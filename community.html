@@ -10,10 +10,25 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
     <style>
+      /* Centralizing and Syncing Layout */
+      .community-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .search-container,
+      .community-tabs-wrapper,
+      .community-section {
+        width: 100%;
+      }
       .friends-grid-container {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
+        width: 100%;
       }
       .forum-topic-link {
         text-decoration: none;
@@ -62,8 +77,11 @@
     </header>
 
     <main class="community-container">
-      <div class="search-container">
-        <div class="search-input-wrapper">
+      <div
+        class="search-container"
+        style="display: flex; justify-content: center; margin-bottom: 30px"
+      >
+        <div class="search-input-wrapper" style="width: 100%; max-width: 600px">
           <i class="fa fa-search"></i>
           <input
             type="text"
@@ -73,7 +91,10 @@
         </div>
       </div>
 
-      <div class="community-tabs-wrapper">
+      <div
+        class="community-tabs-wrapper"
+        style="display: flex; justify-content: center; margin-bottom: 30px"
+      >
         <div class="community-tabs">
           <button
             id="tab-posts-btn"
@@ -111,17 +132,31 @@
             margin-bottom: 25px;
           "
         >
-          <h4 style="margin: 0 0 15px 0; color: var(--primary)">
+          <h4
+            style="
+              text-align: center;
+              margin: 0 0 15px 0;
+              color: var(--primary);
+            "
+          >
             Discover the Pack
           </h4>
-          <div style="display: flex; gap: 15px; flex-wrap: wrap">
+          <div
+            class="filter-group"
+            style="
+              display: flex;
+              gap: 15px;
+              flex-wrap: wrap;
+              justify-content: center;
+            "
+          >
             <select
               id="filter-breed"
               style="
                 padding: 10px;
                 border-radius: 8px;
-                border: 1px solid #ddd;
                 flex: 1;
+                min-width: 150px;
               "
             >
               <option value="">All Breeds</option>
@@ -129,17 +164,42 @@
               <option value="Retriever">Retriever</option>
               <option value="German Shepherd">German Shepherd</option>
             </select>
-            <input
-              type="text"
-              id="member-search"
-              placeholder="Search by dog name..."
+
+            <select
+              id="filter-distance"
               style="
                 padding: 10px;
                 border-radius: 8px;
-                border: 1px solid #ddd;
+                flex: 1;
+                min-width: 150px;
+              "
+            >
+              <option value="">Any Distance</option>
+              <option value="5">Within 5 miles</option>
+              <option value="10">Within 10 miles</option>
+              <option value="25">Within 25 miles</option>
+            </select>
+
+            <input
+              type="text"
+              id="member-search"
+              placeholder="Search dog name..."
+              style="
+                padding: 10px;
+                border-radius: 8px;
                 flex: 2;
+                min-width: 200px;
+                border: 1px solid #ddd;
               "
             />
+
+            <button
+              id="friends-search-btn"
+              class="follow-btn-small"
+              style="height: 40px; padding: 0 25px"
+            >
+              Search
+            </button>
           </div>
         </div>
         <h3 style="margin-bottom: 15px">
@@ -150,7 +210,7 @@
           class="friends-grid-container"
           style="margin-bottom: 30px"
         ></div>
-        <hr />
+        <hr style="width: 100%" />
         <h3 style="margin-bottom: 15px">
           <i class="fa fa-plus-circle" style="color: var(--teal)"></i> New
           Friends
@@ -159,13 +219,15 @@
       </div>
 
       <div id="section-forum" class="community-section hidden">
-        <button
-          id="open-post-form"
-          class="follow-btn-small"
-          style="margin-bottom: 20px"
-        >
-          + New Topic
-        </button>
+        <div style="display: flex; justify-content: center">
+          <button
+            id="open-post-form"
+            class="follow-btn-small"
+            style="margin-bottom: 20px; padding: 10px 30px"
+          >
+            + New Topic
+          </button>
+        </div>
         <div
           id="new-post-modal"
           class="hidden"
@@ -175,19 +237,33 @@
             border: 1px solid var(--border);
             border-radius: 12px;
             margin-bottom: 25px;
+            width: 100%;
           "
         >
-          <form id="create-post-form">
+          <form
+            id="create-post-form"
+            style="display: flex; flex-direction: column; align-items: center"
+          >
             <input
               type="text"
               id="post-title"
               placeholder="Topic Title"
               required
-              style="width: 100%; padding: 10px; margin-bottom: 10px"
+              style="
+                width: 100%;
+                max-width: 500px;
+                padding: 10px;
+                margin-bottom: 10px;
+              "
             />
             <select
               id="post-category"
-              style="width: 100%; padding: 10px; margin-bottom: 10px"
+              style="
+                width: 100%;
+                max-width: 500px;
+                padding: 10px;
+                margin-bottom: 10px;
+              "
             >
               <option value="General">General</option>
               <option value="Walks">Walks</option>
@@ -198,28 +274,31 @@
               required
               style="
                 width: 100%;
+                max-width: 500px;
                 padding: 10px;
                 height: 100px;
                 margin-bottom: 10px;
               "
             ></textarea>
-            <button type="submit" class="save-btn">Post to Forum</button>
+            <button type="submit" class="save-btn" style="width: 200px">
+              Post to Forum
+            </button>
             <button
               type="button"
               id="cancel-post"
               style="
                 background: none;
                 border: none;
-                width: 100%;
                 margin-top: 10px;
                 cursor: pointer;
+                color: #888;
               "
             >
               Cancel
             </button>
           </form>
         </div>
-        <div id="dynamic-forum-list"></div>
+        <div id="dynamic-forum-list" style="width: 100%"></div>
       </div>
     </main>
 
@@ -238,6 +317,23 @@
           .getElementById("tab-" + section + "-btn")
           .classList.add("active");
       }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const openPostBtn = document.getElementById("open-post-form");
+        const postModal = document.getElementById("new-post-modal");
+        const cancelPostBtn = document.getElementById("cancel-post");
+
+        if (openPostBtn) {
+          openPostBtn.onclick = () => postModal.classList.remove("hidden");
+        }
+        if (cancelPostBtn) {
+          cancelPostBtn.onclick = () => postModal.classList.add("hidden");
+        }
+
+        if (window.location.hash === "#section-forum") {
+          showSection("forum");
+        }
+      });
     </script>
     <script type="module" src="firebase-config.js"></script>
   </body>
