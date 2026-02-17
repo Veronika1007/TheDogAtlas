@@ -114,32 +114,49 @@
           <h4 style="margin: 0 0 15px 0; color: var(--primary)">
             Discover the Pack
           </h4>
-          <div style="display: flex; gap: 15px; flex-wrap: wrap">
+          <div
+            class="filter-group"
+            style="padding: 20px; display: flex; gap: 15px; flex-wrap: wrap"
+          >
             <select
               id="filter-breed"
-              style="
-                padding: 10px;
-                border-radius: 8px;
-                border: 1px solid #ddd;
-                flex: 1;
-              "
+              style="padding: 10px; border-radius: 8px; flex: 1"
             >
               <option value="">All Breeds</option>
               <option value="Springer Spaniel">Springer Spaniel</option>
               <option value="Retriever">Retriever</option>
               <option value="German Shepherd">German Shepherd</option>
             </select>
+
+            <select
+              id="filter-distance"
+              style="padding: 10px; border-radius: 8px; flex: 1"
+            >
+              <option value="">Any Distance</option>
+              <option value="5">Within 5 miles</option>
+              <option value="10">Within 10 miles</option>
+              <option value="25">Within 25 miles</option>
+            </select>
+
             <input
               type="text"
               id="member-search"
-              placeholder="Search by dog name..."
+              placeholder="Search dog name..."
               style="
                 padding: 10px;
                 border-radius: 8px;
-                border: 1px solid #ddd;
                 flex: 2;
+                border: 1px solid #ddd;
               "
             />
+
+            <button
+              id="friends-search-btn"
+              class="follow-btn-small"
+              style="height: 40px"
+            >
+              Search
+            </button>
           </div>
         </div>
         <h3 style="margin-bottom: 15px">
@@ -238,6 +255,25 @@
           .getElementById("tab-" + section + "-btn")
           .classList.add("active");
       }
+
+      // New script block for UI handling
+      document.addEventListener("DOMContentLoaded", () => {
+        const openPostBtn = document.getElementById("open-post-form");
+        const postModal = document.getElementById("new-post-modal");
+        const cancelPostBtn = document.getElementById("cancel-post");
+
+        if (openPostBtn) {
+          openPostBtn.onclick = () => postModal.classList.remove("hidden");
+        }
+        if (cancelPostBtn) {
+          cancelPostBtn.onclick = () => postModal.classList.add("hidden");
+        }
+
+        // Handle URL hash to open correct tab (e.g., coming back from detail page)
+        if (window.location.hash === "#section-forum") {
+          showSection("forum");
+        }
+      });
     </script>
     <script type="module" src="firebase-config.js"></script>
   </body>
