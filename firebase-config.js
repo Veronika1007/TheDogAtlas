@@ -50,14 +50,12 @@ const storage = getStorage(app);
 function formatTimestamp(ts) {
   if (!ts) return "Just now";
   try {
-    return ts
-      .toDate()
-      .toLocaleString("en-GB", {
-        day: "numeric",
-        month: "short",
-        hour: "2-digit",
-        minute: "2-digit",
-      });
+    return ts.toDate().toLocaleString("en-GB", {
+      day: "numeric",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   } catch (e) {
     return "Just now";
   }
@@ -280,73 +278,155 @@ window.followUser = async (tid) => {
   loadMemberDirectory();
 };
 
-// --- 7. PROFILE LOGIC ---
+// --- 7. PROFILE LOGIC (Enhanced with Location & Toggle) ---
 async function setupProfilePage(user) {
-  document.getElementById("profile-name").innerText =
-    user.displayName || "Member";
-  document.getElementById("profile-email").innerText = user.email;
-  if (user.photoURL)
-    document.getElementById("display-avatar").src = user.photoURL;
+  const profileName = document.getElementById("profile-name");
+  const publicCity = document.getElementById("public-city");
+  const publicBio = document.getElementById("public-bio");
+  const publicDogBadge = document.getElementById("public-dog-badge");
+  const publicDogName = document.getElementById("public-dog-name");
+  const publicDogBreed = document.getElementById("public-dog-breed");
+  const publicDogAge = document.getElementById("public-dog-age");
+  const countPosts = document.getElementById("count-posts");
+  const avatarImg = document.getElementById("display-avatar");
+
+  if (!profileName) return;
 
   const userDoc = await getDoc(doc(db, "users", user.uid));
-  if (userDoc.exists()) {
-    const data = userDoc.data();
-    if (document.getElementById("edit-username"))
-      document.getElementById("edit-username").value =
-        data.displayName || user.displayName || "";
-    if (document.getElementById("edit-bio"))
-      document.getElementById("edit-bio").value = data.bio || "";
-    if (document.getElementById("edit-dog-name"))
-      document.getElementById("edit-dog-name").value = data.dogName || "";
-    if (document.getElementById("edit-dog-breed"))
-      document.getElementById("edit-dog-breed").value = data.dogBreed || "";
+  const data = userDoc.exists() ? userDoc.data() : {};
+
+  // Display public info
+  profileName.innerText = data.displayName || user.displayName || "Member";
+  publicCity.innerText = data.city || "Not set";
+  publicBio.innerText = data.bio || "No bio yet.";
+
+  // Populate dog details
+  if (data.dogName || data.dogBreed) {
+    if (publicDogBadge) publicDogBadge.style.display = "inline-flex";
+    if (publicDogName) publicDogName.innerText = data.dogName || "";
+    if (publicDogBreed) publicDogBreed.innerText = data.dogBreed || "";
+    if (publicDogAge)
+      publicDogAge.innerText = data.dogAge
+        ? `${data.dogAge} years old`
+        : "Age unknown";
   }
-  renderUserPosts(user.uid);
+
+  if (user.photoURL) avatarImg.src = user.photoURL;
+
+  // Form Population
+  const fields = {
+    "edit-username": data.displayName || user.displayName || "",
+    "edit-email": user.email || "",
+    "edit-bio": data.bio || "",
+    "edit-city": data.city || "",
+    "edit-postcode": data.postcode || "",
+    "edit-dog-name": data.dogName || "",
+    "edit-dog-breed": data.dogBreed || "",
+    "edit-dog-age": data.dogAge || "",
+  };
+  Object.keys(fields).forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.value = fields[id];
+  });
+
+  // Toggle & Save Logic (matches UI IDs)
+  const btnEditToggle = document.getElementById("btn-edit-toggle");
+  const btnLoginToggle = document.getElementById("btn-login-details-toggle");
+  const btnCancelEdit = document.getElementById("btn-cancel-edit");
+  const viewPublic = document.getElementById("view-public");
+  const viewEdit = document.getElementById("view-edit");
+  const loginSection = document.getElementById("login-credentials-section");
+  const generalSection = document.getElementById("general-info-section");
+
+  btnEditToggle.onclick = () => {
+    viewPublic.classList.add("hidden");
+    viewEdit.classList.remove("hidden");
+    loginSection.classList.add("hidden");
+    generalSection.classList.remove("hidden");
+  };
+
+  btnLoginToggle.onclick = () => {
+    viewPublic.classList.add("hidden");
+    viewEdit.classList.remove("hidden");
+    loginSection.classList.remove("hidden");
+    generalSection.classList.add("hidden");
+  };
+
+  btnCancelEdit.onclick = () => {
+    viewPublic.classList.remove("hidden");
+    viewEdit.classList.add("hidden");
+  };
 
   const editForm = document.getElementById("profile-edit-form");
   if (editForm) {
     editForm.onsubmit = async (e) => {
       e.preventDefault();
-      const newName = document.getElementById("edit-username").value;
-      await updateProfile(user, { displayName: newName });
-      await setDoc(
-        doc(db, "users", user.uid),
-        {
-          displayName: newName,
-          bio: document.getElementById("edit-bio").value,
-          dogName: document.getElementById("edit-dog-name").value,
-          dogBreed: document.getElementById("edit-dog-breed").value,
-        },
-        { merge: true }
-      );
-      showToast("Profile Saved!");
-      setTimeout(() => location.reload(), 1000);
+      try {
+        if (!generalSection.classList.contains("hidden")) {
+          await setDoc(
+            doc(db, "users", user.uid),
+            {
+              displayName: document.getElementById("edit-username").value,
+              bio: document.getElementById("edit-bio").value,
+              city: document.getElementById("edit-city").value,
+              postcode: document.getElementById("edit-postcode").value,
+              dogName: document.getElementById("edit-dog-name").value,
+              dogBreed: document.getElementById("edit-dog-breed").value,
+              dogAge: document.getElementById("edit-dog-age").value,
+            },
+            { merge: true }
+          );
+        }
+        // Auth Logic...
+        showToast("Profile Updated!");
+        setTimeout(() => location.reload(), 800);
+      } catch (err) {
+        alert(err.message);
+      }
     };
   }
+
+  // Call post rendering
+  renderUserPosts(user.uid);
 }
 
 async function renderUserPosts(uid) {
   const container = document.getElementById("my-posts-list");
+  const countDisplay = document.getElementById("count-posts");
   if (!container) return;
-  try {
-    const q = query(
-      collection(db, "posts"),
-      where("authorId", "==", uid),
-      orderBy("createdAt", "desc")
-    );
-    const snap = await getDocs(q);
-    container.innerHTML = snap.empty ? "<p>No barks yet.</p>" : "";
-    snap.forEach((d) => {
-      container.innerHTML += `<div class="forum-topic-card" style="border:1px solid #ddd; padding:15px; border-radius:8px; background:white; margin-bottom:10px;">
-        <h3 style="margin:0;">${d.data().title}</h3>
-        <button onclick="deletePost('${
-          d.id
-        }')" style="color:red; background:none; border:none; cursor:pointer; font-size:12px;">Delete</button>
-      </div>`;
-    });
-  } catch (err) {
-    console.error(err);
-  }
+
+  const q = query(
+    collection(db, "posts"),
+    where("authorId", "==", uid),
+    orderBy("createdAt", "desc")
+  );
+  const snap = await getDocs(q);
+
+  if (countDisplay) countDisplay.innerText = snap.size;
+  container.innerHTML = snap.empty
+    ? "<p style='color:var(--muted)'>No barks yet.</p>"
+    : "";
+
+  snap.forEach((d) => {
+    const post = d.data();
+    container.innerHTML += `
+          <div class="forum-topic-card" style="border:1px solid #ddd; padding:15px; border-radius:8px; background:white; margin-bottom:10px;">
+            <a href="Forum Post/forum-detail.html?id=${
+              d.id
+            }" style="text-decoration:none;">
+              <h3 style="margin:0; color:#ff6b35;">${post.title}</h3>
+              <p style="color:#444; margin: 8px 0;">${post.description}</p>
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <small style="color:#888;">${formatTimestamp(
+                    post.createdAt
+                  )}</small>
+                  <button onclick="deletePost('${
+                    d.id
+                  }')" style="color:red; background:none; border:none; cursor:pointer; font-size:12px;">Delete Bark</button>
+              </div>
+            </a>
+          </div>`;
+  });
 }
 
 window.deletePost = async (id) => {
