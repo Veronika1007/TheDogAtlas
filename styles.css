@@ -24,14 +24,14 @@ body {
   flex-direction: column;
 }
 
-/* --- HEADER (Centered Logo + Right Nav) --- */
+/* --- HEADER --- */
 header {
-  background: #f4f4f4; /* Light grey background */
+  background: #f4f4f4;
   border-bottom: 1px solid var(--border);
   padding: 15px 24px;
   display: flex;
   align-items: center;
-  justify-content: center; /* Centers the brand container */
+  justify-content: center;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -44,15 +44,12 @@ header {
   align-items: center;
   text-align: center;
 }
-
 .brand a {
   text-decoration: none;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
-/* Ensures tagline is styled and visible below logo */
 .brand div {
   display: block !important;
   font-size: 11px;
@@ -67,7 +64,6 @@ nav {
   display: flex;
   gap: 20px;
 }
-
 .nav-link {
   text-decoration: none;
   color: var(--text);
@@ -75,10 +71,9 @@ nav {
   font-size: 14px;
   transition: color 0.2s;
 }
-
 .nav-link:hover,
 .nav-link.active {
-  color: var(--primary) !important; /* Orange highlight for active site */
+  color: var(--primary) !important;
 }
 
 main,
@@ -93,31 +88,20 @@ main,
   padding: 24px 16px;
   width: 100%;
 }
-
-/* Search Bar with Icons */
 .search-container {
   max-width: 600px;
   margin: 0 auto 25px auto;
 }
-
 .search-input-wrapper {
   position: relative;
   display: flex;
   align-items: center;
 }
-
 .search-input-wrapper i.fa-search {
   position: absolute;
   left: 15px;
   color: var(--muted);
 }
-
-.search-input-wrapper i.fa-sliders {
-  position: absolute;
-  right: 15px;
-  color: var(--muted);
-}
-
 .search-input-wrapper input {
   width: 100%;
   padding: 12px 15px 12px 40px;
@@ -126,19 +110,16 @@ main,
   font-size: 1rem;
 }
 
-/* CENTRALIZED TABS */
 .community-tabs-wrapper {
   display: flex;
   justify-content: center;
   border-bottom: 1px solid var(--border);
   margin-bottom: 24px;
 }
-
 .community-tabs {
   display: flex;
   gap: 30px;
 }
-
 .tab-btn {
   background: none;
   border: none;
@@ -148,19 +129,16 @@ main,
   cursor: pointer;
   font-size: 1rem;
 }
-
 .tab-btn.active {
   color: var(--primary);
   border-bottom: 3px solid var(--primary);
 }
 
-/* REACTIVE POST GRID */
 .post-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 24px;
 }
-
 .post-frame {
   background: white;
   border: 1px solid var(--border);
@@ -171,83 +149,12 @@ main,
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
-.user-header {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.username {
-  font-weight: 700;
-}
-
-.post-time {
-  font-size: 0.75rem;
-  color: var(--muted);
-}
-
-.image-container {
-  width: 100%;
-  height: 300px;
-  border-radius: 8px;
-  overflow: hidden;
-  margin: 12px 0;
-  background-color: #f0f0f0;
-}
-
-.post-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.post-actions {
-  display: flex;
-  gap: 15px;
-  font-size: 0.85rem;
-  color: var(--text);
-  margin-bottom: 8px;
-}
-
-/* FRIENDS SECTION */
-.toggle-container {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.pill-toggle {
-  background: white;
-  border: 1px solid var(--border);
-  padding: 6px 16px;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--muted);
-  cursor: pointer;
-}
-
-.pill-toggle.active {
-  background: var(--primary);
-  color: white;
-  border-color: var(--primary);
-}
-
+/* --- FRIENDS SECTION --- */
 .friends-grid-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 20px;
 }
-
 .friend-row-card {
   background: white;
   border: 1px solid var(--border);
@@ -256,21 +163,20 @@ main,
   display: flex;
   gap: 16px;
   align-items: center;
+  flex-wrap: wrap;
 }
-
 .row-avatar {
   width: 80px;
   height: 80px;
   border-radius: 50%;
   object-fit: cover;
 }
-
 .row-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
 }
-
 .follow-btn-small {
   background: var(--teal);
   color: white;
@@ -280,31 +186,29 @@ main,
   font-weight: 700;
   cursor: pointer;
 }
-
 .breed-tag {
   color: var(--teal);
   font-weight: 600;
   font-size: 13px;
 }
 
-.gender-female {
-  color: #ff4d94;
+/* --- PROFILE EDIT BOXES & FORUM MARGINS --- */
+.dog-info-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+.flex-1 {
+  flex: 1;
+  min-width: 150px;
+}
+#my-posts-list {
+  padding: 0 15px;
+  margin-top: 20px;
 }
 
-.gender-male {
-  color: #2a9d8f;
-}
-
-/* FORUM topics */
-.forum-topic-card {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
-  margin-bottom: 16px;
-}
-
-/* --- FOOTER (Matches Header Background) --- */
+/* --- FOOTER --- */
 footer {
   background: #f4f4f4;
   border-top: 1px solid var(--border);
@@ -313,21 +217,18 @@ footer {
   text-align: center;
   flex-shrink: 0;
 }
-
 .footer-links {
   display: flex;
   justify-content: center;
   gap: 24px;
   margin-bottom: 20px;
 }
-
 .footer-links a {
   color: var(--muted);
   text-decoration: none;
   font-size: 13px;
   font-weight: 600;
 }
-
 .copyright {
   font-size: 12px;
   color: var(--muted);
@@ -351,5 +252,9 @@ footer {
   }
   .friends-grid-container {
     grid-template-columns: 1fr;
+  }
+  .dog-info-row {
+    flex-direction: column;
+    gap: 10px;
   }
 }
