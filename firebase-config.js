@@ -50,12 +50,14 @@ const storage = getStorage(app);
 function formatTimestamp(ts) {
   if (!ts) return "Just now";
   try {
-    return ts.toDate().toLocaleString("en-GB", {
-      day: "numeric",
-      month: "short",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    return ts
+      .toDate()
+      .toLocaleString("en-GB", {
+        day: "numeric",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
   } catch (e) {
     return "Just now";
   }
@@ -230,84 +232,44 @@ function handleCommentSubmit(id) {
 }
 
 // --- 6. FRIENDS & DISCOVERY ---
-// --- 6. FRIENDS & DISCOVERY (Updated with Search) ---
 async function loadMemberDirectory() {
   const grid = document.getElementById("friends-grid");
   const followingGrid = document.getElementById("following-grid");
-  const searchBtn = document.getElementById("friends-search-btn");
-  const searchInput = document.getElementById("member-search");
-  const breedFilter = document.getElementById("filter-breed");
-
   if (!grid || !auth.currentUser) return;
-
-  // This inner function runs on initial load AND every time 'Search' is clicked
-  const runFilter = async () => {
-    try {
-      const searchTerm = searchInput ? searchInput.value.toLowerCase() : "";
-      const selectedBreed = breedFilter ? breedFilter.value : "";
-
-      const followingSnap = await getDocs(
-        collection(db, "users", auth.currentUser.uid, "following")
-      );
-      const followingIds = followingSnap.docs.map((d) => d.id);
-
-      const allUsersSnap = await getDocs(collection(db, "users"));
-
-      grid.innerHTML = "";
-      if (followingGrid) followingGrid.innerHTML = "";
-
-      allUsersSnap.forEach((d) => {
-        if (d.id === auth.currentUser.uid) return;
-        const user = d.data();
-
-        // Search & Filter Logic
-        const dogName = (user.dogName || "").toLowerCase();
-        const displayName = (user.displayName || "").toLowerCase();
-        const matchesSearch =
-          dogName.includes(searchTerm) || displayName.includes(searchTerm);
-        const matchesBreed = !selectedBreed || user.dogBreed === selectedBreed;
-
-        if (matchesSearch && matchesBreed) {
-          const card = `
-              <div class="friend-row-card" style="display:flex; gap:15px; align-items:center; background:white; padding:15px; border-radius:12px; border:1px solid #ddd; margin-bottom:10px;">
-                  <img src="${
-                    user.photoURL || "https://via.placeholder.com/60"
-                  }" style="width:60px; height:60px; border-radius:50%; object-fit:cover;">
-                  <div style="flex-grow:1;">
-                      <h4>${user.dogName || user.displayName || "Member"}</h4>
-                      <p style="margin:0; font-size:12px; color:#888;">${
-                        user.dogBreed || "Dog Parent"
-                      }</p>
-                  </div>
-                  ${
-                    followingIds.includes(d.id)
-                      ? "<span>My Pack</span>"
-                      : `<button onclick="followUser('${d.id}')" class="follow-btn-small">Follow</button>`
-                  }
-              </div>`;
-
-          if (followingIds.includes(d.id) && followingGrid) {
-            followingGrid.innerHTML += card;
-          } else {
-            grid.innerHTML += card;
-          }
-        }
-      });
-    } catch (e) {
-      console.error("Filter error:", e);
-    }
-  };
-
-  // Attach event to the search button
-  if (searchBtn) {
-    searchBtn.onclick = (e) => {
-      e.preventDefault();
-      runFilter();
-    };
+  try {
+    const followingSnap = await getDocs(
+      collection(db, "users", auth.currentUser.uid, "following")
+    );
+    const followingIds = followingSnap.docs.map((d) => d.id);
+    const allUsersSnap = await getDocs(collection(db, "users"));
+    grid.innerHTML = "";
+    if (followingGrid) followingGrid.innerHTML = "";
+    allUsersSnap.forEach((d) => {
+      if (d.id === auth.currentUser.uid) return;
+      const user = d.data();
+      const card = `<div class="friend-row-card" style="display:flex; gap:15px; align-items:center; background:white; padding:15px; border-radius:12px; border:1px solid #ddd; margin-bottom:10px;">
+                <img src="${
+                  user.photoURL || "https://via.placeholder.com/60"
+                }" style="width:60px; height:60px; border-radius:50%; object-fit:cover;">
+                <div style="flex-grow:1;">
+                    <h4>${user.dogName || user.displayName || "Member"}</h4>
+                    <p style="margin:0; font-size:12px; color:#888;">${
+                      user.dogBreed || "Dog Parent"
+                    }</p>
+                </div>
+                ${
+                  followingIds.includes(d.id)
+                    ? "<span>My Pack</span>"
+                    : `<button onclick="followUser('${d.id}')" class="follow-btn-small">Follow</button>`
+                }
+            </div>`;
+      if (followingIds.includes(d.id) && followingGrid)
+        followingGrid.innerHTML += card;
+      else grid.innerHTML += card;
+    });
+  } catch (e) {
+    console.error("Discovery error:", e);
   }
-
-  // Initial load
-  runFilter();
 }
 
 window.followUser = async (tid) => {

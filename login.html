@@ -25,7 +25,7 @@
         </a>
       </div>
       <nav>
-        <a href="index.html" class="nav-link">Map</a>
+        <a href="index.html" class="nav-link active">Map</a>
         <a href="planner.html" class="nav-link">Planner</a>
         <a href="trails.html" class="nav-link">Trails</a>
         <a href="events.html" class="nav-link">Events</a>
@@ -35,33 +35,19 @@
 
     <main
       class="community-container"
-      style="max-width: 450px; margin: 80px auto; padding: 0 20px"
+      style="max-width: 400px; margin: 50px auto"
     >
       <div
         id="auth-container"
         style="
           background: white;
-          padding: 40px;
+          padding: 30px;
           border-radius: 12px;
           border: 1px solid #ddd;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
         "
       >
-        <h2 id="auth-title" style="margin-bottom: 25px; color: var(--primary)">
-          Welcome Back
-        </h2>
-
-        <form
-          id="auth-form"
-          style="
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-          "
-        >
+        <h2 id="auth-title">Welcome Back</h2>
+        <form id="auth-form">
           <input
             type="email"
             id="auth-email"
@@ -69,13 +55,12 @@
             required
             style="
               width: 100%;
-              padding: 12px;
-              margin-bottom: 15px;
-              border-radius: 8px;
+              padding: 10px;
+              margin-bottom: 10px;
+              border-radius: 6px;
               border: 1px solid #ccc;
             "
           />
-
           <input
             type="text"
             id="auth-username"
@@ -83,13 +68,12 @@
             style="
               display: none;
               width: 100%;
-              padding: 12px;
-              margin-bottom: 15px;
-              border-radius: 8px;
+              padding: 10px;
+              margin-bottom: 10px;
+              border-radius: 6px;
               border: 1px solid #ccc;
             "
           />
-
           <input
             type="password"
             id="auth-password"
@@ -97,76 +81,36 @@
             required
             style="
               width: 100%;
-              padding: 12px;
-              margin-bottom: 25px;
-              border-radius: 8px;
+              padding: 10px;
+              margin-bottom: 15px;
+              border-radius: 6px;
               border: 1px solid #ccc;
             "
           />
-
           <button
             type="submit"
             id="auth-submit"
             class="search-submit-inline"
-            style="width: 200px; padding: 12px; font-weight: bold"
+            style="width: 100%"
           >
             Login
           </button>
         </form>
-
-        <p style="margin-top: 25px; text-align: center; font-size: 0.95rem">
-          <span id="auth-toggle-text" style="color: #666"
-            >Don't have an account?</span
-          >
+        <p style="margin-top: 20px; text-align: center">
+          <span id="auth-toggle-text">Don't have an account?</span>
           <a
             href="#"
             id="auth-toggle-btn"
-            style="
-              color: #ff6b35;
-              font-weight: bold;
-              text-decoration: none;
-              margin-left: 5px;
-            "
+            style="color: #ff6b35; font-weight: bold"
             >Sign Up</a
           >
         </p>
       </div>
     </main>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        let isLoginMode = true;
-        const authToggleBtn = document.getElementById("auth-toggle-btn");
-        const authSubmitBtn = document.getElementById("auth-submit");
-        const authTitle = document.getElementById("auth-title");
-        const usernameInput = document.getElementById("auth-username");
-        const toggleText = document.getElementById("auth-toggle-text");
-
-        if (authToggleBtn) {
-          authToggleBtn.onclick = (e) => {
-            e.preventDefault();
-            isLoginMode = !isLoginMode;
-
-            authTitle.innerText = isLoginMode
-              ? "Welcome Back"
-              : "Join the Pack";
-            authSubmitBtn.innerText = isLoginMode ? "Login" : "Sign Up";
-            toggleText.innerText = isLoginMode
-              ? "Don't have an account?"
-              : "Already have an account?";
-            authToggleBtn.innerText = isLoginMode ? "Sign Up" : "Login";
-
-            if (usernameInput) {
-              usernameInput.style.display = isLoginMode ? "none" : "block";
-              usernameInput.required = !isLoginMode;
-            }
-          };
-        }
-      });
-    </script>
     <script type="module" src="firebase-config.js"></script>
 
-    <footer style="margin-top: 50px">
+    <footer>
       <div class="footer-links">
         <a href="Footer/privacy.html">Privacy Policy</a>
         <a href="Footer/terms.html">Terms of Service</a>
@@ -178,5 +122,14 @@
         &copy; 2025 TheDogAtlas. The dog-first travel platform.
       </div>
     </footer>
+    <script>
+      authToggleBtn.onclick = (e) => {
+        e.preventDefault();
+        isLoginMode = !isLoginMode;
+        document.getElementById("auth-submit").innerText = isLoginMode
+          ? "Login"
+          : "Sign Up";
+      };
+    </script>
   </body>
 </html>
