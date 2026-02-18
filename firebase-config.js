@@ -22,13 +22,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-// FIX: Added Storage imports for image uploading
-import {
-  getStorage,
-  ref,
-  uploadBytes,
-  getDownloadURL,
-} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+import { getStorage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAUzPfsLsh5bCsso7DMLDlmuyb-PR0JeeY",
@@ -45,7 +39,7 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
 
-// Helpers
+// --- HELPERS ---
 function formatTimestamp(ts) {
   if (!ts) return "Just now";
   try {
@@ -81,8 +75,18 @@ onAuthStateChanged(auth, async (user) => {
     if (profileLink) profileLink.classList.remove("hidden");
 
     if (document.getElementById("profile-name")) setupProfilePage(user);
-    if (document.getElementById("friends-grid")) loadMemberDirectory();
-    if (document.getElementById("dynamic-forum-list")) loadForumPosts();
+
+    // Community Page Loaders
+    if (document.getElementById("friends-grid")) {
+      loadMyPack(); // Load the Pack section
+      loadMemberDirectory(); // Load the New Friends section
+    }
+    if (
+      document.getElementById("dynamic-forum-list") ||
+      document.getElementById("section-posts")
+    ) {
+      loadForumPosts(); // Load posts into both Feed and Forum
+    }
     updateCounter(user.uid);
   } else {
     if (loginLink) loginLink.classList.remove("hidden");
@@ -110,7 +114,6 @@ if (authForm) {
     try {
       if (isLoginMode) {
         await signInWithEmailAndPassword(auth, email, password);
-        showToast("Welcome back!");
       } else {
         const username = document.getElementById("auth-username").value;
         const userCredential = await createUserWithEmailAndPassword(
@@ -123,7 +126,6 @@ if (authForm) {
           email: email,
           createdAt: serverTimestamp(),
         });
-        showToast("Welcome to the Pack!");
       }
       window.location.href = "profile.html";
     } catch (error) {
@@ -132,17 +134,28 @@ if (authForm) {
   };
 }
 
-// --- MEMBER DIRECTORY ---
+// --- MEMBER DIRECTORY (NEW FRIENDS) ---
 async function loadMemberDirectory() {
   const container = document.getElementById("friends-grid");
   if (!container) return;
   try {
+    const myUid = auth.currentUser?.uid;
+    // Get following IDs to filter them out of "New Friends"
+    let followingIds = [];
+    if (myUid) {
+      const followSnap = await getDocs(
+        collection(db, "users", myUid, "following")
+      );
+      followingIds = followSnap.docs.map((d) => d.id);
+    }
+
     const q = query(collection(db, "users"));
     const snap = await getDocs(q);
     container.innerHTML = "";
     snap.forEach((d) => {
       const member = d.data();
-      if (d.id === auth.currentUser?.uid) return;
+      if (d.id === myUid || followingIds.includes(d.id)) return;
+
       container.innerHTML += `
         <div class="friend-row-card">
           <img src="${
@@ -161,6 +174,43 @@ async function loadMemberDirectory() {
     });
   } catch (e) {
     console.error("Directory error:", e);
+  }
+}
+
+// --- MY PACK LOGIC ---
+async function loadMyPack() {
+  const container = document.getElementById("following-grid");
+  if (!container) return;
+  const myUid = auth.currentUser?.uid;
+  if (!myUid) return;
+
+  try {
+    const snap = await getDocs(collection(db, "users", myUid, "following"));
+    container.innerHTML = snap.empty ? "<p>No pack members yet.</p>" : "";
+
+    for (const followDoc of snap.docs) {
+      const userDoc = await getDoc(doc(db, "users", followDoc.id));
+      if (userDoc.exists()) {
+        const member = userDoc.data();
+        container.innerHTML += `
+          <div class="friend-row-card">
+            <img src="${
+              member.photoURL || "https://via.placeholder.com/80"
+            }" class="row-avatar">
+            <div style="flex:1">
+              <div class="row-header">
+                <span class="username">${
+                  member.displayName || "Anonymous"
+                }</span>
+                <span class="breed-tag" style="background:#fff4f0; color:var(--primary); padding:2px 10px; border-radius:10px">Following</span>
+              </div>
+              <div class="breed-tag">${member.dogBreed || "Dog Lover"}</div>
+            </div>
+          </div>`;
+      }
+    }
+  } catch (e) {
+    console.error("Pack loading error:", e);
   }
 }
 
@@ -184,8 +234,11 @@ window.followUser = async (targetUserId, targetName) => {
       },
       { merge: true }
     );
+
     showToast(`Following ${targetName}!`);
     updateCounter(myUid);
+    loadMyPack(); // Move the friend up to My Pack immediately
+    loadMemberDirectory(); // Remove them from New Friends
   } catch (e) {
     console.error("Follow error:", e);
   }
@@ -205,17 +258,22 @@ async function updateCounter(uid) {
   }
 }
 
-// --- FORUM LOGIC ---
+// --- FORUM & FEED LOGIC ---
 async function loadForumPosts() {
-  const container = document.getElementById("dynamic-forum-list");
-  if (!container) return;
+  const forumContainer = document.getElementById("dynamic-forum-list");
+  const feedContainer = document.getElementById("section-posts");
+  if (!forumContainer && !feedContainer) return;
+
   try {
     const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
     const snap = await getDocs(q);
-    container.innerHTML = "";
+
+    if (forumContainer) forumContainer.innerHTML = "";
+    if (feedContainer) feedContainer.innerHTML = "";
+
     snap.forEach((d) => {
       const post = d.data();
-      container.innerHTML += `<div class="forum-topic-card" style="border:1px solid #ddd; padding:15px; border-radius:8px; margin-bottom:15px; background:white;">
+      const postHtml = `<div class="forum-topic-card" style="border:1px solid #ddd; padding:15px; border-radius:8px; margin-bottom:15px; background:white;">
           <a href="Forum Post/forum-detail.html?id=${
             d.id
           }" style="text-decoration:none;">
@@ -226,6 +284,9 @@ async function loadForumPosts() {
             } | ${formatTimestamp(post.createdAt)}</small>
           </a>
         </div>`;
+
+      if (forumContainer) forumContainer.innerHTML += postHtml;
+      if (feedContainer) feedContainer.innerHTML += postHtml;
     });
   } catch (e) {
     console.error("Forum error:", e);
@@ -261,14 +322,10 @@ if (postForm) {
 // --- PROFILE LOGIC ---
 async function setupProfilePage(user) {
   const profileName = document.getElementById("profile-name");
-  const avatarImg = document.getElementById("display-avatar");
   if (!profileName) return;
 
   const userDoc = await getDoc(doc(db, "users", user.uid));
   const data = userDoc.exists() ? userDoc.data() : {};
-
-  // FIX: Restore Avatar Visibility
-  if (data.photoURL) avatarImg.src = data.photoURL;
 
   profileName.innerText = data.displayName || user.displayName || "Member";
   document.getElementById("public-city").innerText = data.city || "Not set";
@@ -284,45 +341,37 @@ async function setupProfilePage(user) {
   document.getElementById("edit-dog-age").value = data.dogAge || "";
   document.getElementById("edit-dog-breed").value = data.dogBreed || "";
 
-  const badge = document.getElementById("public-dog-badge");
-  if (data.dogName || data.dogBreed) {
-    badge.style.display = "inline-flex";
-    document.getElementById("public-dog-name").innerText = data.dogName || "";
-    document.getElementById("public-dog-breed").innerText = data.dogBreed || "";
-    document.getElementById("public-dog-age").innerText = data.dogAge
-      ? `${data.dogAge} yrs`
-      : "";
+  // Toggles
+  const btnEdit = document.getElementById("btn-edit-toggle");
+  const btnLogin = document.getElementById("btn-login-details-toggle");
+  const btnCancel = document.getElementById("btn-cancel-edit");
+
+  if (btnEdit) {
+    btnEdit.onclick = () => {
+      document.getElementById("view-public").classList.add("hidden");
+      document.getElementById("view-edit").classList.remove("hidden");
+      document
+        .getElementById("login-credentials-section")
+        .classList.add("hidden");
+      document
+        .getElementById("general-info-section")
+        .classList.remove("hidden");
+    };
   }
-
-  // FIX: RE-ATTACH BUTTON LISTENERS FOR REACTIVITY
-  const viewPublic = document.getElementById("view-public");
-  const viewEdit = document.getElementById("view-edit");
-  const loginSec = document.getElementById("login-credentials-section");
-  const generalSec = document.getElementById("general-info-section");
-
-  document.getElementById("btn-edit-toggle").onclick = () => {
-    viewPublic.classList.add("hidden");
-    viewEdit.classList.remove("hidden");
-    loginSec.classList.add("hidden");
-    generalSec.classList.remove("hidden");
-  };
-  document.getElementById("btn-login-details-toggle").onclick = () => {
-    viewPublic.classList.add("hidden");
-    viewEdit.classList.remove("hidden");
-    loginSec.classList.remove("hidden");
-    generalSec.classList.add("hidden");
-  };
-  document.getElementById("btn-cancel-edit").onclick = () => {
-    viewPublic.classList.remove("hidden");
-    viewEdit.classList.add("hidden");
-  };
-
-  // FIX: Added image upload handler
-  const avatarInput = document.getElementById("avatar-upload");
-  if (avatarInput) {
-    avatarInput.onchange = (e) => {
-      const file = e.target.files[0];
-      if (file) uploadProfileImage(user, file);
+  if (btnLogin) {
+    btnLogin.onclick = () => {
+      document.getElementById("view-public").classList.add("hidden");
+      document.getElementById("view-edit").classList.remove("hidden");
+      document
+        .getElementById("login-credentials-section")
+        .classList.remove("hidden");
+      document.getElementById("general-info-section").classList.add("hidden");
+    };
+  }
+  if (btnCancel) {
+    btnCancel.onclick = () => {
+      document.getElementById("view-public").classList.remove("hidden");
+      document.getElementById("view-edit").classList.add("hidden");
     };
   }
 
@@ -348,44 +397,30 @@ async function setupProfilePage(user) {
       alert(err.message);
     }
   };
-  renderUserPosts(user.uid);
-}
 
-// FIX: New Image Upload Logic using Firebase Storage
-async function uploadProfileImage(user, file) {
-  try {
-    const storageRef = ref(storage, `profile_pictures/${user.uid}`);
-    const snapshot = await uploadBytes(storageRef, file);
-    const downloadURL = await getDownloadURL(snapshot.ref);
-    await setDoc(
-      doc(db, "users", user.uid),
-      { photoURL: downloadURL },
-      { merge: true }
-    );
-    document.getElementById("display-avatar").src = downloadURL;
-    showToast("Profile picture updated!");
-  } catch (error) {
-    alert("Failed to upload image.");
-  }
+  renderUserPosts(user.uid);
 }
 
 async function renderUserPosts(uid) {
   const container = document.getElementById("my-posts-list");
   if (!container) return;
+
   const q = query(
     collection(db, "posts"),
     where("authorId", "==", uid),
     orderBy("createdAt", "desc")
   );
   const snap = await getDocs(q);
+
   const countPosts = document.getElementById("count-posts");
   if (countPosts) countPosts.innerText = snap.size;
 
   container.innerHTML = snap.empty ? "<p>No barks yet.</p>" : "";
+
   snap.forEach((d) => {
     const post = d.data();
-    // FIX: Added formatTimestamp(post.createdAt) to template
-    container.innerHTML += `<div class="forum-topic-card" style="border:1px solid #ddd; padding:15px; border-radius:8px; margin-bottom:15px; background:white; text-align: left;">
+    container.innerHTML += `
+      <div class="forum-topic-card" style="border:1px solid #ddd; padding:15px; border-radius:8px; margin-bottom:15px; background:white; text-align: left;">
         <h3 style="margin:0; color:#ff6b35;">${post.title}</h3>
         <p style="color:#444; margin: 8px 0;">${post.description}</p>
         <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -399,9 +434,8 @@ async function renderUserPosts(uid) {
 }
 
 window.deletePost = async (id) => {
-  if (confirm("Delete bark forever?")) {
+  if (confirm("Delete bark?")) {
     await deleteDoc(doc(db, "posts", id));
-    showToast("Bark deleted.");
     location.reload();
   }
 };
