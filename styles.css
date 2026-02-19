@@ -304,3 +304,71 @@ footer {
 #login-credentials-section .form-group {
   margin-bottom: 20px; /* Increased spacing between email and password */
 }
+
+.feed-grid {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.feed-card img {
+  max-height: 500px;
+  object-fit: cover;
+}
+.btn-outline {
+  border: 1px solid var(--border);
+  background: transparent;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+/* 2-Column Pack Feed Grid */
+#pack-feed {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.feed-card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.feed-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+}
+
+.woof-btn,
+.comment-btn {
+  cursor: pointer;
+  font-size: 18px;
+  transition: transform 0.1s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.woof-btn:active {
+  transform: scale(1.2);
+}
+.woof-btn i {
+  color: #666;
+}
+.woof-btn.active i {
+  color: #ff6b35;
+} /* Color when user woofs */
+
+@media (max-width: 600px) {
+  #pack-feed {
+    grid-template-columns: 1fr;
+  }
+}
