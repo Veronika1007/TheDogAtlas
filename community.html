@@ -62,17 +62,6 @@
     </header>
 
     <main class="community-container">
-      <div class="search-container">
-        <div class="search-input-wrapper">
-          <i class="fa fa-search"></i>
-          <input
-            type="text"
-            id="global-search"
-            placeholder="Search for dogs, breeds, or topics..."
-          />
-        </div>
-      </div>
-
       <div class="community-tabs-wrapper">
         <div class="community-tabs">
           <button
@@ -120,28 +109,36 @@
           >
             <select
               id="filter-breed"
-              style="padding: 10px; border-radius: 8px; flex: 1"
+              style="
+                padding: 10px;
+                border-radius: 8px;
+                flex: 1;
+                border: 1px solid #ddd;
+              "
             >
               <option value="">All Breeds</option>
-              <option value="Springer Spaniel">Springer Spaniel</option>
-              <option value="Retriever">Retriever</option>
-              <option value="German Shepherd">German Shepherd</option>
             </select>
 
             <select
               id="filter-distance"
-              style="padding: 10px; border-radius: 8px; flex: 1"
+              style="
+                padding: 10px;
+                border-radius: 8px;
+                flex: 1;
+                border: 1px solid #ddd;
+              "
             >
               <option value="">Any Distance</option>
               <option value="5">Within 5 miles</option>
               <option value="10">Within 10 miles</option>
               <option value="25">Within 25 miles</option>
+              <option value="50">Within 50 miles</option>
             </select>
 
             <input
               type="text"
               id="member-search"
-              placeholder="Search dog name..."
+              placeholder="Search by name..."
               style="
                 padding: 10px;
                 border-radius: 8px;
@@ -159,9 +156,27 @@
             </button>
           </div>
         </div>
-        <h3 style="margin-bottom: 15px">
-          <i class="fa fa-heart" style="color: #ff4d4d"></i> My Pack
-        </h3>
+
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+          "
+        >
+          <h3 style="margin: 0">
+            <i class="fa fa-heart" style="color: #ff4d4d"></i> My Pack
+          </h3>
+          <button
+            id="toggle-pack-btn"
+            class="btn-outline"
+            style="padding: 5px 15px; font-size: 12px"
+          >
+            Hide Pack
+          </button>
+        </div>
+
         <div
           id="following-grid"
           class="friends-grid-container"
@@ -176,13 +191,43 @@
       </div>
 
       <div id="section-forum" class="community-section hidden">
-        <button
-          id="open-post-form"
-          class="follow-btn-small"
-          style="margin-bottom: 20px"
+        <div
+          style="
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 25px;
+          "
         >
-          + New Topic
-        </button>
+          <div
+            class="filter-group"
+            style="display: flex; gap: 10px; align-items: center"
+          >
+            <input
+              type="text"
+              id="forum-search"
+              placeholder="Search topics or content..."
+              style="
+                padding: 10px;
+                border-radius: 8px;
+                flex: 1;
+                border: 1px solid #ddd;
+              "
+            />
+            <button id="forum-search-btn" class="follow-btn-small">
+              Search Forum
+            </button>
+            <button
+              id="open-post-form"
+              class="follow-btn-small"
+              style="background: var(--teal)"
+            >
+              + New Topic
+            </button>
+          </div>
+        </div>
+
         <div
           id="new-post-modal"
           class="hidden"
@@ -242,6 +287,9 @@
 
     <script>
       function showSection(section) {
+        // Persist tab choice in local storage
+        localStorage.setItem("activeCommunityTab", section);
+
         document
           .querySelectorAll(".community-section")
           .forEach((s) => s.classList.add("hidden"));
@@ -256,23 +304,19 @@
           .classList.add("active");
       }
 
-      // New script block for UI handling
       document.addEventListener("DOMContentLoaded", () => {
+        // Load persisted tab
+        const activeTab = localStorage.getItem("activeCommunityTab") || "posts";
+        showSection(activeTab);
+
         const openPostBtn = document.getElementById("open-post-form");
         const postModal = document.getElementById("new-post-modal");
         const cancelPostBtn = document.getElementById("cancel-post");
 
-        if (openPostBtn) {
+        if (openPostBtn)
           openPostBtn.onclick = () => postModal.classList.remove("hidden");
-        }
-        if (cancelPostBtn) {
+        if (cancelPostBtn)
           cancelPostBtn.onclick = () => postModal.classList.add("hidden");
-        }
-
-        // Handle URL hash to open correct tab (e.g., coming back from detail page)
-        if (window.location.hash === "#section-forum") {
-          showSection("forum");
-        }
       });
     </script>
     <script type="module" src="firebase-config.js"></script>
