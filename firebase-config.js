@@ -47,7 +47,7 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
 
-// --- 1. HELPERS ---
+// --- 1. CORE HELPERS ---
 function formatTimestamp(ts) {
   if (!ts) return "Just now";
   try {
@@ -86,7 +86,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
   return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
 }
 
-// --- 2. GLOBAL AUTH OBSERVER ---
+// --- 2. GLOBAL AUTH & INITIALIZATION ---
 onAuthStateChanged(auth, async (user) => {
   const loginLink = document.getElementById("login-link");
   const logoutLink = document.getElementById("logout-link");
@@ -131,12 +131,11 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-// --- 3. PACK FEED (VISUAL INSTAGRAM STYLE) ---
+// --- 3. VISUAL PACK FEED (2-COLUMN + PACK FILTER) ---
 async function loadVisualFeed(myUid) {
   const feedContainer = document.getElementById("pack-feed");
   if (!feedContainer) return;
 
-  // 1. Get following list to filter the private feed
   const followingSnap = await getDocs(
     collection(db, "users", myUid, "following")
   );
@@ -148,7 +147,6 @@ async function loadVisualFeed(myUid) {
     (snapshot) => {
       feedContainer.innerHTML = "";
       let hasPosts = false;
-      // Show global feed if following list is empty (just contains user)
       const showGlobal = followingIds.length <= 1;
 
       snapshot.forEach((d) => {
@@ -156,44 +154,39 @@ async function loadVisualFeed(myUid) {
         if (showGlobal || followingIds.includes(post.authorId)) {
           hasPosts = true;
           feedContainer.innerHTML += `
-          <div class="feed-card" style="background: white; border-radius: 12px; border: 1px solid #ddd; overflow: hidden; margin-bottom: 20px;">
+          <div class="feed-card" style="background: white; border-radius: 12px; border: 1px solid #ddd; overflow: hidden; margin-bottom: 10px;">
             <div style="padding: 10px; display: flex; align-items: center; gap: 8px;">
                 <img src="${
                   post.authorPhoto || "https://via.placeholder.com/40"
-                }" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;">
-                <span style="font-weight: bold; font-size: 13px;">${
+                }" style="width: 25px; height: 25px; border-radius: 50%; object-fit: cover;">
+                <span style="font-weight: bold; font-size: 12px;">${
                   post.authorName
                 }</span>
             </div>
             <img src="${
               post.imageUrl
-            }" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: pointer;" onclick="woofPost('${
-            d.id
-          }')">
-            <div style="padding: 12px;">
-                <div style="margin-bottom: 8px; display: flex; gap: 15px; font-size: 18px;">
+            }" style="width: 100%; aspect-ratio: 1/1; object-fit: cover;">
+            <div style="padding: 10px;">
+                <div style="margin-bottom: 5px; display: flex; gap: 12px; font-size: 16px;">
                     <span onclick="woofPost('${
                       d.id
-                    }')" class="woof-btn" style="cursor:pointer;"><i class="fa fa-paw"></i> <small style="font-size:12px;">${
+                    }')" class="woof-btn"><i class="fa fa-paw"></i> <small>${
             post.woofs || 0
           }</small></span>
                     <span onclick="openComments('${
                       d.id
-                    }')" class="comment-btn" style="cursor:pointer;"><i class="fa-regular fa-comment"></i></span>
+                    }')" class="comment-btn"><i class="fa-regular fa-comment"></i></span>
                 </div>
-                <p style="margin: 0; font-size: 13px; line-height: 1.4;"><strong>${
+                <p style="margin: 0; font-size: 12px; line-height: 1.3;"><strong>${
                   post.authorName
                 }</strong> ${post.caption || ""}</p>
-                <small style="color:#999; font-size:10px;">${formatTimestamp(
-                  post.createdAt
-                )}</small>
             </div>
           </div>`;
         }
       });
       if (!hasPosts)
         feedContainer.innerHTML =
-          "<p style='text-align:center; padding:40px; color:#999;'>Be the first to share a bark! Your pack feed is currently empty.</p>";
+          "<p style='grid-column: span 2; text-align:center; padding:40px; color:#999;'>No pack updates. Follow friends to see their barks!</p>";
     }
   );
 }
@@ -210,15 +203,13 @@ window.openComments = async (postId) => {
   const submitBtn = document.getElementById("submit-comment");
   modal.classList.remove("hidden");
   list.innerHTML = "Loading...";
-
   const postSnap = await getDoc(doc(db, "feedPosts", postId));
   const comments = postSnap.data().comments || [];
   list.innerHTML = comments.length ? "" : "No woof-comments yet.";
   comments.forEach(
     (c) =>
-      (list.innerHTML += `<div style="margin-bottom:8px; font-size:14px; border-bottom:1px solid #eee; padding-bottom:4px;"><strong>${c.user}:</strong> ${c.text}</div>`)
+      (list.innerHTML += `<div style="margin-bottom:8px; font-size:14px;"><strong>${c.user}:</strong> ${c.text}</div>`)
   );
-
   submitBtn.onclick = async () => {
     const text = document.getElementById("new-comment-text").value;
     if (!text) return;
@@ -235,23 +226,20 @@ window.openComments = async (postId) => {
   };
 };
 
-// --- 4. FEED UPLOAD LOGIC ---
+// --- 4. FEED UPLOADS ---
 const feedFileInput = document.getElementById("feed-file-input");
 if (document.getElementById("feed-image-preview")) {
   document.getElementById("feed-image-preview").onclick = () =>
     feedFileInput.click();
   feedFileInput.onchange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        const preview = document.getElementById("img-to-upload");
-        preview.src = ev.target.result;
-        preview.classList.remove("hidden");
-        document.getElementById("preview-text").classList.add("hidden");
-      };
-      reader.readAsDataURL(file);
-    }
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const preview = document.getElementById("img-to-upload");
+      preview.src = ev.target.result;
+      preview.classList.remove("hidden");
+      document.getElementById("preview-text").classList.add("hidden");
+    };
+    reader.readAsDataURL(e.target.files[0]);
   };
 }
 
@@ -261,7 +249,7 @@ if (feedPostForm) {
     e.preventDefault();
     const file = feedFileInput.files[0];
     if (!file) return alert("Select a photo!");
-    showToast("Sharing your bark...");
+    showToast("Posting...");
     const user = auth.currentUser;
     const userDoc = await getDoc(doc(db, "users", user.uid));
     const userData = userDoc.data() || {};
@@ -280,12 +268,10 @@ if (feedPostForm) {
     });
     document.getElementById("feed-post-modal").classList.add("hidden");
     feedPostForm.reset();
-    document.getElementById("img-to-upload").classList.add("hidden");
-    document.getElementById("preview-text").classList.remove("hidden");
   };
 }
 
-// --- 5. PROFILE LOGIC (SNIPPETS & TOGGLES) ---
+// --- 5. PROFILE LOGIC (FIXED TOGGLES & GENDER) ---
 async function setupProfilePage(user) {
   const profileName = document.getElementById("profile-name");
   const avatarImg = document.getElementById("display-avatar");
@@ -299,7 +285,6 @@ async function setupProfilePage(user) {
   document.getElementById("public-city").innerText = data.city || "Not set";
   document.getElementById("public-bio").innerText = data.bio || "No bio yet.";
 
-  // Dog Badge restoration with color logic
   const badge = document.getElementById("public-dog-badge");
   if (badge && (data.dogName || data.dogBreed)) {
     badge.style.display = "inline-flex";
@@ -313,7 +298,6 @@ async function setupProfilePage(user) {
       emoji.style.color = data.dogGender === "Boy" ? "#3498db" : "#e91e63";
   }
 
-  // Pre-fill fields for editing
   const fields = {
     "edit-username": data.displayName || "",
     "edit-city": data.city || "",
@@ -330,7 +314,7 @@ async function setupProfilePage(user) {
       document.getElementById(id).value = fields[id];
   });
 
-  // RE-ATTACHING TOGGLE LISTENERS
+  // RESTORED TOGGLES
   document.getElementById("btn-edit-toggle").onclick = () => {
     document.getElementById("view-public").classList.add("hidden");
     document.getElementById("view-edit").classList.remove("hidden");
@@ -339,7 +323,6 @@ async function setupProfilePage(user) {
       .classList.add("hidden");
     document.getElementById("general-info-section").classList.remove("hidden");
   };
-
   document.getElementById("btn-login-details-toggle").onclick = () => {
     document.getElementById("view-public").classList.add("hidden");
     document.getElementById("view-edit").classList.remove("hidden");
@@ -348,7 +331,6 @@ async function setupProfilePage(user) {
       .classList.remove("hidden");
     document.getElementById("general-info-section").classList.add("hidden");
   };
-
   document.getElementById("btn-cancel-edit").onclick = () => {
     document.getElementById("view-public").classList.remove("hidden");
     document.getElementById("view-edit").classList.add("hidden");
@@ -367,14 +349,14 @@ async function setupProfilePage(user) {
       dogGender: document.getElementById("edit-dog-gender").value,
     };
     await setDoc(doc(db, "users", user.uid), updated, { merge: true });
-    showToast("Profile saved!");
+    showToast("Profile Saved!");
     setTimeout(() => location.reload(), 800);
   };
 
   renderUserPosts(user.uid);
 }
 
-// --- 6. FORUM LOGIC (SNIPPETS RESTORED) ---
+// --- 6. FORUM LOGIC (BARK SNIPPETS) ---
 async function renderUserPosts(uid) {
   const container = document.getElementById("my-posts-list");
   if (!container) return;
@@ -384,36 +366,34 @@ async function renderUserPosts(uid) {
     orderBy("createdAt", "desc")
   );
   const snap = await getDocs(q);
-  container.innerHTML = snap.empty ? "<p>No barks in the forum yet.</p>" : "";
-
+  container.innerHTML = snap.empty ? "<p>No barks yet.</p>" : "";
   snap.forEach((d) => {
     const post = d.data();
     container.innerHTML += `
-      <div class="forum-topic-card" style="border:1px solid #ddd; padding:15px; border-radius:8px; margin-bottom:15px; background:white; position:relative;">
+      <div class="forum-topic-card" style="border:1px solid #ddd; padding:15px; border-radius:8px; margin-bottom:15px; background:white;">
         <h3 style="margin:0; color:#ff6b35;">${post.title}</h3>
         <small style="color:#888;">${formatTimestamp(post.createdAt)}</small>
-        <p style="color:#444; margin: 10px 0;">${
+        <p style="color:#444; margin: 10px 0; font-size:14px;">${
           post.description ? post.description.substring(0, 150) : ""
         }...</p>
         <div style="display:flex; gap:10px;">
             <button onclick="editBark('${d.id}', \`${
       post.description
-    }\`)" class="follow-btn-small" style="padding: 4px 10px; font-size:11px;">Edit Bark</button>
+    }\`)" class="follow-btn-small" style="font-size:11px;">Edit</button>
             <button onclick="deletePost('${
               d.id
-            }')" style="background:none; border:none; color:#ff4d4d; cursor:pointer; font-size:11px;">Delete Bark</button>
+            }')" style="background:none; border:none; color:#ff4d4d; font-size:11px; cursor:pointer;">Delete</button>
         </div>
       </div>`;
   });
 }
 
 window.editBark = (id, oldText) => {
-  const newText = prompt("Update your forum bark:", oldText);
-  if (newText && newText !== oldText) {
-    updateDoc(doc(db, "posts", id), { description: newText }).then(() =>
+  const nt = prompt("Update your forum bark:", oldText);
+  if (nt)
+    updateDoc(doc(db, "posts", id), { description: nt }).then(() =>
       location.reload()
     );
-  }
 };
 
 async function loadForumPosts(searchTerm = "") {
@@ -448,51 +428,15 @@ async function loadForumPosts(searchTerm = "") {
   });
 }
 
-async function loadPostDetails() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const postId = urlParams.get("id");
-  if (!postId) return;
-  const postSnap = await getDoc(doc(db, "posts", postId));
-  if (postSnap.exists()) {
-    const post = postSnap.data();
-    document.getElementById("detail-title").innerText = post.title;
-    document.getElementById("detail-author").innerText = `By ${
-      post.authorName
-    } | ${formatTimestamp(post.createdAt)}`;
-    document.getElementById("detail-description").innerText = post.description;
-
-    if (auth.currentUser && auth.currentUser.uid === post.authorId) {
-      const editBtn = document.createElement("button");
-      editBtn.innerText = "Edit Bark";
-      editBtn.className = "follow-btn-small";
-      editBtn.onclick = () => {
-        const area = document.createElement("textarea");
-        area.value = post.description;
-        area.style.width = "100%";
-        document.getElementById("detail-description").replaceWith(area);
-        editBtn.innerText = "Save";
-        editBtn.onclick = async () => {
-          await updateDoc(doc(db, "posts", postId), {
-            description: area.value,
-          });
-          location.reload();
-        };
-      };
-      document.getElementById("post-detail-container").appendChild(editBtn);
-    }
-  }
-}
-
-// --- 7. COMMUNITY, DIRECTORY & SEARCH ---
+// --- 7. COMMUNITY, DIRECTORY & DISTANCE ---
 function setupCommunityListeners() {
-  const toggleBtn = document.getElementById("toggle-pack-btn");
-  if (toggleBtn) {
-    toggleBtn.onclick = () => {
-      const grid = document.getElementById("following-grid");
-      const isHidden = grid.classList.toggle("hidden");
-      toggleBtn.innerText = isHidden ? "Show Pack" : "Hide Pack";
-    };
-  }
+  document.getElementById("toggle-pack-btn").onclick = () => {
+    const grid = document.getElementById("following-grid");
+    const isHidden = grid.classList.toggle("hidden");
+    document.getElementById("toggle-pack-btn").innerText = isHidden
+      ? "Show Pack"
+      : "Hide Pack";
+  };
   document.getElementById("friends-search-btn").onclick = () => {
     loadMemberDirectory(
       document.getElementById("member-search").value.toLowerCase(),
@@ -568,18 +512,13 @@ function createFriendCard(id, member, isFollowing) {
   const btn = isFollowing
     ? `<button class="follow-btn-small" style="background:#ddd" onclick="unfollowUser('${id}', '${member.displayName}')">Following</button>`
     : `<button class="follow-btn-small" onclick="followUser('${id}', '${member.displayName}')">Follow</button>`;
-  return `
-    <div class="friend-row-card">
-      <img src="${
-        member.photoURL || "https://via.placeholder.com/80"
-      }" class="row-avatar" onclick="openUserModal('${id}')">
-      <div style="flex:1">
-        <div class="row-header"><span class="username" onclick="openUserModal('${id}')">${
+  return `<div class="friend-row-card"><img src="${
+    member.photoURL || "https://via.placeholder.com/80"
+  }" class="row-avatar" onclick="openUserModal('${id}')"><div style="flex:1"><div class="row-header"><span class="username" onclick="openUserModal('${id}')">${
     member.displayName || "Anonymous"
-  }</span>${btn}</div>
-        <div class="breed-tag">${member.dogBreed || "Dog Lover"}</div>
-      </div>
-    </div>`;
+  }</span>${btn}</div><div class="breed-tag">${
+    member.dogBreed || "Dog Lover"
+  }</div></div></div>`;
 }
 
 // --- 8. AUTH HANDLERS & COUNTERS ---
@@ -615,37 +554,6 @@ if (authForm) {
   };
 }
 
-window.followUser = async (uid, name) => {
-  await setDoc(
-    doc(db, "users", auth.currentUser.uid, "following", uid),
-    { displayName: name, followedAt: serverTimestamp() },
-    { merge: true }
-  );
-  await setDoc(
-    doc(db, "users", uid, "followers", auth.currentUser.uid),
-    {
-      displayName: auth.currentUser.displayName,
-      followedAt: serverTimestamp(),
-    },
-    { merge: true }
-  );
-  showToast("Following your new friend!");
-  loadMyPack();
-  loadMemberDirectory();
-  loadVisualFeed(auth.currentUser.uid);
-};
-
-window.unfollowUser = async (uid, name) => {
-  if (confirm(`Unfollow ${name}?`)) {
-    await deleteDoc(doc(db, "users", auth.currentUser.uid, "following", uid));
-    await deleteDoc(doc(db, "users", uid, "followers", auth.currentUser.uid));
-    showToast("Unfollowed.");
-    loadMyPack();
-    loadMemberDirectory();
-    loadVisualFeed(auth.currentUser.uid);
-  }
-};
-
 async function updateCounter(uid) {
   const fCount = document.getElementById("count-following"),
     pCount = document.getElementById("count-pack"),
@@ -666,11 +574,63 @@ async function updateCounter(uid) {
     ).size;
 }
 
+window.followUser = async (uid, name) => {
+  await setDoc(
+    doc(db, "users", auth.currentUser.uid, "following", uid),
+    { displayName: name, followedAt: serverTimestamp() },
+    { merge: true }
+  );
+  await setDoc(
+    doc(db, "users", uid, "followers", auth.currentUser.uid),
+    {
+      displayName: auth.currentUser.displayName,
+      followedAt: serverTimestamp(),
+    },
+    { merge: true }
+  );
+  showToast("Following!");
+  loadMyPack();
+  loadMemberDirectory();
+};
+
+window.unfollowUser = async (uid, name) => {
+  if (confirm(`Unfollow ${name}?`)) {
+    await deleteDoc(doc(db, "users", auth.currentUser.uid, "following", uid));
+    await deleteDoc(doc(db, "users", uid, "followers", auth.currentUser.uid));
+    showToast("Unfollowed");
+    loadMyPack();
+    loadMemberDirectory();
+  }
+};
+
 window.deletePost = async (id) => {
-  if (confirm("Delete bark forever?")) {
+  if (confirm("Delete bark?")) {
     await deleteDoc(doc(db, "posts", id));
     location.reload();
   }
 };
 window.logoutUser = () =>
   signOut(auth).then(() => (location.href = "index.html"));
+
+window.openUserModal = async (uid) => {
+  const data = (await getDoc(doc(db, "users", uid))).data();
+  if (!data) return;
+  document.getElementById("modal-user-avatar").src =
+    data.photoURL || "https://via.placeholder.com/150";
+  document.getElementById("modal-user-name").innerText =
+    data.displayName || "Member";
+  document.getElementById(
+    "modal-user-city"
+  ).innerHTML = `<i class="fa fa-map-marker-alt"></i> ${
+    data.city || "Not set"
+  }`;
+  document.getElementById("modal-user-bio").innerText =
+    data.bio || "No bio yet.";
+  if (data.dogName) {
+    document.getElementById("modal-dog-info").style.display = "flex";
+    document.getElementById(
+      "modal-dog-details"
+    ).innerText = `${data.dogName} (${data.dogBreed}) • ${data.dogAge} yrs`;
+  } else document.getElementById("modal-dog-info").style.display = "none";
+  document.getElementById("user-modal").classList.remove("hidden");
+};
