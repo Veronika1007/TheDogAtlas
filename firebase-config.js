@@ -47,7 +47,7 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
 
-// --- HELPERS ---
+// --- 1. HELPERS ---
 function formatTimestamp(ts) {
   if (!ts) return "Just now";
   try {
@@ -86,7 +86,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
   return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
 }
 
-// --- GLOBAL AUTH OBSERVER ---
+// --- 2. GLOBAL AUTH OBSERVER ---
 onAuthStateChanged(auth, async (user) => {
   const loginLink = document.getElementById("login-link");
   const logoutLink = document.getElementById("logout-link");
@@ -105,6 +105,7 @@ onAuthStateChanged(auth, async (user) => {
       setupCommunityListeners();
     }
 
+    // Core Loaders
     loadForumPosts();
     loadVisualFeed(user.uid);
 
@@ -130,70 +131,72 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-// --- PACK FEED LOGIC (FIXED) ---
+// --- 3. PACK FEED (VISUAL INSTAGRAM STYLE) ---
 async function loadVisualFeed(myUid) {
   const feedContainer = document.getElementById("pack-feed");
   if (!feedContainer) return;
 
-  // 1. Get the list of people I am following
+  // Fetch people you follow to filter feed
   const followingSnap = await getDocs(
     collection(db, "users", myUid, "following")
   );
   const followingIds = followingSnap.docs.map((doc) => doc.id);
   followingIds.push(myUid);
 
-  // 2. Set up real-time listener
-  const q = query(collection(db, "feedPosts"), orderBy("createdAt", "desc"));
-  onSnapshot(q, (snapshot) => {
-    feedContainer.innerHTML = "";
-    let hasPosts = false;
+  onSnapshot(
+    query(collection(db, "feedPosts"), orderBy("createdAt", "desc")),
+    (snapshot) => {
+      feedContainer.innerHTML = "";
+      let hasPosts = false;
+      // If not following anyone, show global; otherwise show pack
+      const showGlobal = followingIds.length <= 1;
 
-    snapshot.forEach((d) => {
-      const post = d.data();
-      // If followingIds only contains ME, show everyone to prevent empty screen
-      // Otherwise, show only the pack
-      const showEveryone = followingIds.length <= 1;
-
-      if (showEveryone || followingIds.includes(post.authorId)) {
-        hasPosts = true;
-        feedContainer.innerHTML += `
+      snapshot.forEach((d) => {
+        const post = d.data();
+        if (showGlobal || followingIds.includes(post.authorId)) {
+          hasPosts = true;
+          feedContainer.innerHTML += `
                     <div class="feed-card" style="background: white; border-radius: 12px; border: 1px solid #ddd; overflow: hidden; margin-bottom: 20px;">
                         <div style="padding: 10px; display: flex; align-items: center; gap: 8px;">
                             <img src="${
                               post.authorPhoto ||
                               "https://via.placeholder.com/40"
-                            }" style="width: 25px; height: 25px; border-radius: 50%; object-fit: cover;">
+                            }" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;">
                             <span style="font-weight: bold; font-size: 13px;">${
                               post.authorName
                             }</span>
                         </div>
                         <img src="${
                           post.imageUrl
-                        }" style="width: 100%; aspect-ratio: 1/1; object-fit: cover;">
+                        }" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: pointer;" onclick="woofPost('${
+            d.id
+          }')">
                         <div style="padding: 12px;">
-                            <div style="margin-bottom: 8px; display: flex; gap: 12px;">
+                            <div style="margin-bottom: 8px; display: flex; gap: 15px; font-size: 18px;">
                                 <span onclick="woofPost('${
                                   d.id
-                                }')" class="woof-btn"><i class="fa fa-paw"></i> <small>${
-          post.woofs || 0
-        }</small></span>
+                                }')" class="woof-btn" style="cursor:pointer;"><i class="fa fa-paw"></i> <small style="font-size:12px;">${
+            post.woofs || 0
+          }</small></span>
                                 <span onclick="openComments('${
                                   d.id
-                                }')" class="comment-btn"><i class="fa-regular fa-comment"></i></span>
+                                }')" class="comment-btn" style="cursor:pointer;"><i class="fa-regular fa-comment"></i></span>
                             </div>
-                            <p style="margin: 0; font-size: 13px;"><strong>${
+                            <p style="margin: 0; font-size: 13px; line-height: 1.4;"><strong>${
                               post.authorName
                             }</strong> ${post.caption || ""}</p>
+                            <small style="color:#999; font-size:10px;">${formatTimestamp(
+                              post.createdAt
+                            )}</small>
                         </div>
                     </div>`;
-      }
-    });
-
-    if (!hasPosts) {
-      feedContainer.innerHTML =
-        "<p style='text-align:center; padding:40px; color:#999;'>Be the first to share a bark! Your feed is currently empty.</p>";
+        }
+      });
+      if (!hasPosts)
+        feedContainer.innerHTML =
+          "<p style='text-align:center; padding:40px; color:#999;'>No barks in your pack yet! Follow friends to see updates.</p>";
     }
-  });
+  );
 }
 
 window.woofPost = async (postId) => {
@@ -214,7 +217,7 @@ window.openComments = async (postId) => {
   list.innerHTML = comments.length ? "" : "No woof-comments yet.";
   comments.forEach(
     (c) =>
-      (list.innerHTML += `<div style="margin-bottom:5px; font-size:14px;"><strong>${c.user}:</strong> ${c.text}</div>`)
+      (list.innerHTML += `<div style="margin-bottom:8px; font-size:14px; border-bottom:1px solid #eee; padding-bottom:4px;"><strong>${c.user}:</strong> ${c.text}</div>`)
   );
 
   submitBtn.onclick = async () => {
@@ -233,7 +236,7 @@ window.openComments = async (postId) => {
   };
 };
 
-// --- FILE UPLOAD LOGIC ---
+// --- 4. FEED UPLOAD LOGIC ---
 const feedFileInput = document.getElementById("feed-file-input");
 if (document.getElementById("feed-image-preview")) {
   document.getElementById("feed-image-preview").onclick = () =>
@@ -243,8 +246,9 @@ if (document.getElementById("feed-image-preview")) {
     if (file) {
       const reader = new FileReader();
       reader.onload = (ev) => {
-        document.getElementById("img-to-upload").src = ev.target.result;
-        document.getElementById("img-to-upload").classList.remove("hidden");
+        const preview = document.getElementById("img-to-upload");
+        preview.src = ev.target.result;
+        preview.classList.remove("hidden");
         document.getElementById("preview-text").classList.add("hidden");
       };
       reader.readAsDataURL(file);
@@ -258,7 +262,7 @@ if (feedPostForm) {
     e.preventDefault();
     const file = feedFileInput.files[0];
     if (!file) return alert("Select a photo!");
-    showToast("Sharing...");
+    showToast("Uploading bark...");
     const user = auth.currentUser;
     const userDoc = await getDoc(doc(db, "users", user.uid));
     const userData = userDoc.data() || {};
@@ -282,7 +286,7 @@ if (feedPostForm) {
   };
 }
 
-// --- PROFILE SETUP & EDIT ---
+// --- 5. PROFILE LOGIC (BARKS, SNIPPETS, GENDER) ---
 async function setupProfilePage(user) {
   const profileName = document.getElementById("profile-name");
   const avatarImg = document.getElementById("display-avatar");
@@ -296,6 +300,21 @@ async function setupProfilePage(user) {
   document.getElementById("public-city").innerText = data.city || "Not set";
   document.getElementById("public-bio").innerText = data.bio || "No bio yet.";
 
+  // Restored: Dog Badge with Gender Coloring
+  const badge = document.getElementById("public-dog-badge");
+  if (badge && (data.dogName || data.dogBreed)) {
+    badge.style.display = "inline-flex";
+    document.getElementById("public-dog-name").innerText = data.dogName || "";
+    document.getElementById("public-dog-breed").innerText = data.dogBreed || "";
+    document.getElementById("public-dog-age").innerText = data.dogAge
+      ? `${data.dogAge} yrs`
+      : "";
+    const emoji = document.getElementById("dog-emoji");
+    if (emoji)
+      emoji.style.color = data.dogGender === "Boy" ? "#3498db" : "#e91e63";
+  }
+
+  // Pre-fill fields
   const fields = {
     "edit-username": data.displayName || "",
     "edit-city": data.city || "",
@@ -304,6 +323,7 @@ async function setupProfilePage(user) {
     "edit-dog-name": data.dogName || "",
     "edit-dog-age": data.dogAge || "",
     "edit-dog-breed": data.dogBreed || "",
+    "edit-dog-gender": data.dogGender || "",
     "edit-email": user.email || "",
   };
   Object.keys(fields).forEach((id) => {
@@ -311,6 +331,7 @@ async function setupProfilePage(user) {
       document.getElementById(id).value = fields[id];
   });
 
+  // RESTORED: Toggle Logic
   document.getElementById("btn-edit-toggle").onclick = () => {
     document.getElementById("view-public").classList.add("hidden");
     document.getElementById("view-edit").classList.remove("hidden");
@@ -319,7 +340,6 @@ async function setupProfilePage(user) {
       .classList.add("hidden");
     document.getElementById("general-info-section").classList.remove("hidden");
   };
-
   document.getElementById("btn-login-details-toggle").onclick = () => {
     document.getElementById("view-public").classList.add("hidden");
     document.getElementById("view-edit").classList.remove("hidden");
@@ -328,7 +348,6 @@ async function setupProfilePage(user) {
       .classList.remove("hidden");
     document.getElementById("general-info-section").classList.add("hidden");
   };
-
   document.getElementById("btn-cancel-edit").onclick = () => {
     document.getElementById("view-public").classList.remove("hidden");
     document.getElementById("view-edit").classList.add("hidden");
@@ -344,13 +363,14 @@ async function setupProfilePage(user) {
       dogName: document.getElementById("edit-dog-name").value,
       dogBreed: document.getElementById("edit-dog-breed").value,
       dogAge: document.getElementById("edit-dog-age").value,
+      dogGender: document.getElementById("edit-dog-gender").value,
     };
     await setDoc(doc(db, "users", user.uid), updated, { merge: true });
-    showToast("Profile Saved!");
+    showToast("Profile Updated!");
     setTimeout(() => location.reload(), 800);
   };
 
-  // --- IMAGE CROPPER ---
+  // Image Cropper Math
   const avatarInput = document.getElementById("avatar-upload");
   const cropModal = document.getElementById("crop-modal");
   const previewImg = document.getElementById("preview-to-crop");
@@ -436,7 +456,49 @@ async function setupProfilePage(user) {
   renderUserPosts(user.uid);
 }
 
-// --- FORUM LOGIC ---
+// --- 6. FORUM LOGIC (BARKS SNIPPETS RESTORED) ---
+async function renderUserPosts(uid) {
+  const container = document.getElementById("my-posts-list");
+  if (!container) return;
+  const snap = await getDocs(
+    query(
+      collection(db, "posts"),
+      where("authorId", "==", uid),
+      orderBy("createdAt", "desc")
+    )
+  );
+  container.innerHTML = snap.empty ? "<p>No barks yet.</p>" : "";
+
+  snap.forEach((d) => {
+    const post = d.data();
+    container.innerHTML += `
+      <div class="forum-topic-card" style="border:1px solid #ddd; padding:15px; border-radius:8px; margin-bottom:15px; background:white;">
+        <h3 style="margin:0; color:#ff6b35;">${post.title}</h3>
+        <small style="color:#888;">${formatTimestamp(post.createdAt)}</small>
+        <p style="color:#444; margin: 10px 0;">${
+          post.description ? post.description.substring(0, 150) : ""
+        }...</p>
+        <div style="display:flex; gap:10px;">
+            <button onclick="editBark('${d.id}', \`${
+      post.description
+    }\`)" class="follow-btn-small" style="padding: 4px 10px; font-size:11px;">Edit</button>
+            <button onclick="deletePost('${
+              d.id
+            }')" style="background:none; border:none; color:#ff4d4d; cursor:pointer; font-size:11px;">Delete Bark</button>
+        </div>
+      </div>`;
+  });
+}
+
+window.editBark = (id, oldText) => {
+  const newText = prompt("Edit your bark:", oldText);
+  if (newText && newText !== oldText) {
+    updateDoc(doc(db, "posts", id), { description: newText }).then(() =>
+      location.reload()
+    );
+  }
+};
+
 async function loadForumPosts(searchTerm = "") {
   const forumContainer = document.getElementById("dynamic-forum-list");
   if (!forumContainer) return;
@@ -504,7 +566,7 @@ async function loadPostDetails() {
   }
 }
 
-// --- DIRECTORY & SEARCH ---
+// --- 7. COMMUNITY, DIRECTORY & SEARCH ---
 function setupCommunityListeners() {
   const toggleBtn = document.getElementById("toggle-pack-btn");
   if (toggleBtn) {
@@ -514,26 +576,16 @@ function setupCommunityListeners() {
       toggleBtn.innerText = isHidden ? "Show Pack" : "Hide Pack";
     };
   }
-
-  const friendsSearchBtn = document.getElementById("friends-search-btn");
-  if (friendsSearchBtn) {
-    friendsSearchBtn.onclick = () => {
-      loadMemberDirectory(
-        document.getElementById("member-search").value.toLowerCase(),
-        document.getElementById("filter-breed").value,
-        document.getElementById("filter-distance")?.value
-      );
-    };
-  }
-
-  const forumSearchBtn = document.getElementById("forum-search-btn");
-  if (forumSearchBtn) {
-    forumSearchBtn.onclick = () => {
-      loadForumPosts(
-        document.getElementById("forum-search").value.toLowerCase()
-      );
-    };
-  }
+  document.getElementById("friends-search-btn").onclick = () => {
+    loadMemberDirectory(
+      document.getElementById("member-search").value.toLowerCase(),
+      document.getElementById("filter-breed").value,
+      document.getElementById("filter-distance")?.value
+    );
+  };
+  document.getElementById("forum-search-btn").onclick = () => {
+    loadForumPosts(document.getElementById("forum-search").value.toLowerCase());
+  };
 }
 
 async function populateBreeds() {
@@ -613,7 +665,7 @@ function createFriendCard(id, member, isFollowing) {
     </div>`;
 }
 
-// --- AUTH & FORUM POSTING ---
+// --- 8. AUTH HANDLERS & COUNTERS ---
 const authForm = document.getElementById("auth-form");
 if (authForm) {
   authForm.onsubmit = async (e) => {
@@ -712,32 +764,6 @@ async function updateCounter(uid) {
         query(collection(db, "posts"), where("authorId", "==", uid))
       )
     ).size;
-}
-
-// RESTORED SNIPPET LOGIC
-async function renderUserPosts(uid) {
-  const container = document.getElementById("my-posts-list");
-  if (!container) return;
-  const snap = await getDocs(
-    query(
-      collection(db, "posts"),
-      where("authorId", "==", uid),
-      orderBy("createdAt", "desc")
-    )
-  );
-  container.innerHTML = snap.empty ? "<p>No barks yet.</p>" : "";
-  snap.forEach((d) => {
-    const post = d.data();
-    container.innerHTML += `<div class="forum-topic-card" style="border:1px solid #ddd; padding:15px; border-radius:8px; margin-bottom:15px; background:white;">
-        <h3 style="margin:0; color:#ff6b35;">${post.title}</h3>
-        <p style="color:#444; margin: 8px 0;">${
-          post.description ? post.description.substring(0, 100) : ""
-        }...</p>
-        <button onclick="deletePost('${
-          d.id
-        }')" style="color:#ff4d4d; background:none; border:none; cursor:pointer;">Delete</button>
-      </div>`;
-  });
 }
 
 window.openUserModal = async (uid) => {

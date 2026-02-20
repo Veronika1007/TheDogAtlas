@@ -216,12 +216,9 @@
               <span id="public-city">Not set</span>
             </p>
             <p id="public-bio">No bio yet.</p>
-            <div id="public-dog-badge" class="dog-badge" style="display: none">
-              <i class="fa fa-dog"></i>
-              <span id="public-dog-name"></span> (<span
-                id="public-dog-breed"
-              ></span
-              >) <span id="public-dog-age"></span>
+            <div id="public-dog-badge" class="badge">
+              <i id="dog-emoji" class="fa fa-dog"></i>
+              <span id="public-dog-name"></span>...
             </div>
           </div>
           <div class="profile-stats">
@@ -294,6 +291,19 @@
                 <div class="form-group">
                   <label>Breed</label><input type="text" id="edit-dog-breed" />
                 </div>
+                <select
+                  id="edit-dog-gender"
+                  style="
+                    padding: 10px;
+                    border-radius: 8px;
+                    margin-bottom: 10px;
+                    width: 100%;
+                  "
+                >
+                  <option value="">Select Gender</option>
+                  <option value="Boy">Boy</option>
+                  <option value="Girl">Girl</option>
+                </select>
               </div>
               <div
                 id="login-credentials-section"
