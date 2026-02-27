@@ -366,6 +366,15 @@ footer {
   display: block;
 }
 
+#pack-feed {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 10px;
+}
+
 .woof-btn,
 .comment-btn {
   cursor: pointer;
@@ -376,18 +385,20 @@ footer {
   gap: 5px;
 }
 
-.woof-btn:active {
-  transform: scale(1.2);
+/* Update the Woof (Like) button to use a paw print icon */
+.woof-btn i::before {
+  content: "\f1b0"; /* FontAwesome Paw Print Unicode */
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
 }
-.woof-btn i {
-  color: #666;
-}
-.woof-btn.active i {
-  color: #ff6b35;
-} /* Color when user woofs */
 
+.woof-btn.active i {
+  color: #ff6b35; /* Your existing primary orange color */
+}
+
+/* Responsive adjustment for mobile (1 post per row) */
 @media (max-width: 600px) {
-  #pack-feed {
+  #instagram-feed {
     grid-template-columns: 1fr;
   }
 }
