@@ -131,7 +131,7 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-// --- 3. VISUAL PACK FEED (2-COLUMN + PACK FILTER) ---
+// --- 3. PACK FEED (VISUAL INSTAGRAM STYLE) ---
 async function loadVisualFeed(myUid) {
   const feedContainer = document.getElementById("pack-feed");
   if (!feedContainer) return;
@@ -154,39 +154,44 @@ async function loadVisualFeed(myUid) {
         if (showGlobal || followingIds.includes(post.authorId)) {
           hasPosts = true;
           feedContainer.innerHTML += `
-          <div class="feed-card" style="background: white; border-radius: 12px; border: 1px solid #ddd; overflow: hidden; margin-bottom: 10px;">
+          <div class="feed-card" style="background: white; border-radius: 12px; border: 1px solid #ddd; overflow: hidden; margin-bottom: 20px;">
             <div style="padding: 10px; display: flex; align-items: center; gap: 8px;">
                 <img src="${
                   post.authorPhoto || "https://via.placeholder.com/40"
-                }" style="width: 25px; height: 25px; border-radius: 50%; object-fit: cover;">
-                <span style="font-weight: bold; font-size: 12px;">${
+                }" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;">
+                <span style="font-weight: bold; font-size: 13px;">${
                   post.authorName
                 }</span>
             </div>
             <img src="${
               post.imageUrl
-            }" style="width: 100%; aspect-ratio: 1/1; object-fit: cover;">
-            <div style="padding: 10px;">
-                <div style="margin-bottom: 5px; display: flex; gap: 12px; font-size: 16px;">
+            }" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: pointer;" onclick="woofPost('${
+            d.id
+          }')">
+            <div style="padding: 12px;">
+                <div style="margin-bottom: 8px; display: flex; gap: 15px; font-size: 18px;">
                     <span onclick="woofPost('${
                       d.id
-                    }')" class="woof-btn"><i class="fa fa-paw"></i> <small>${
+                    }')" class="woof-btn" style="cursor:pointer;"><i class="fa fa-paw"></i> <small style="font-size:12px;">${
             post.woofs || 0
           }</small></span>
                     <span onclick="openComments('${
                       d.id
-                    }')" class="comment-btn"><i class="fa-regular fa-comment"></i></span>
+                    }')" class="comment-btn" style="cursor:pointer;"><i class="fa-regular fa-comment"></i></span>
                 </div>
-                <p style="margin: 0; font-size: 12px; line-height: 1.3;"><strong>${
+                <p style="margin: 0; font-size: 13px; line-height: 1.4;"><strong>${
                   post.authorName
                 }</strong> ${post.caption || ""}</p>
+                <small style="color:#999; font-size:10px;">${formatTimestamp(
+                  post.createdAt
+                )}</small>
             </div>
           </div>`;
         }
       });
       if (!hasPosts)
         feedContainer.innerHTML =
-          "<p style='grid-column: span 2; text-align:center; padding:40px; color:#999;'>No pack updates. Follow friends to see their barks!</p>";
+          "<p style='text-align:center; padding:40px; color:#999;'>Be the first to share a bark! Your pack feed is currently empty.</p>";
     }
   );
 }
@@ -203,13 +208,15 @@ window.openComments = async (postId) => {
   const submitBtn = document.getElementById("submit-comment");
   modal.classList.remove("hidden");
   list.innerHTML = "Loading...";
+
   const postSnap = await getDoc(doc(db, "feedPosts", postId));
   const comments = postSnap.data().comments || [];
   list.innerHTML = comments.length ? "" : "No woof-comments yet.";
   comments.forEach(
     (c) =>
-      (list.innerHTML += `<div style="margin-bottom:8px; font-size:14px;"><strong>${c.user}:</strong> ${c.text}</div>`)
+      (list.innerHTML += `<div style="margin-bottom:8px; font-size:14px; border-bottom:1px solid #eee; padding-bottom:4px;"><strong>${c.user}:</strong> ${c.text}</div>`)
   );
+
   submitBtn.onclick = async () => {
     const text = document.getElementById("new-comment-text").value;
     if (!text) return;
@@ -226,20 +233,23 @@ window.openComments = async (postId) => {
   };
 };
 
-// --- 4. FEED UPLOADS ---
+// --- 4. FEED UPLOAD LOGIC ---
 const feedFileInput = document.getElementById("feed-file-input");
 if (document.getElementById("feed-image-preview")) {
   document.getElementById("feed-image-preview").onclick = () =>
     feedFileInput.click();
   feedFileInput.onchange = (e) => {
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const preview = document.getElementById("img-to-upload");
-      preview.src = ev.target.result;
-      preview.classList.remove("hidden");
-      document.getElementById("preview-text").classList.add("hidden");
-    };
-    reader.readAsDataURL(e.target.files[0]);
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const preview = document.getElementById("img-to-upload");
+        preview.src = ev.target.result;
+        preview.classList.remove("hidden");
+        document.getElementById("preview-text").classList.add("hidden");
+      };
+      reader.readAsDataURL(file);
+    }
   };
 }
 
@@ -249,7 +259,7 @@ if (feedPostForm) {
     e.preventDefault();
     const file = feedFileInput.files[0];
     if (!file) return alert("Select a photo!");
-    showToast("Posting...");
+    showToast("Uploading bark...");
     const user = auth.currentUser;
     const userDoc = await getDoc(doc(db, "users", user.uid));
     const userData = userDoc.data() || {};
@@ -271,7 +281,7 @@ if (feedPostForm) {
   };
 }
 
-// --- 5. PROFILE LOGIC (FIXED TOGGLES & GENDER) ---
+// --- 5. PROFILE LOGIC (BARKS, SNIPPETS, GENDER) ---
 async function setupProfilePage(user) {
   const profileName = document.getElementById("profile-name");
   const avatarImg = document.getElementById("display-avatar");
@@ -314,7 +324,6 @@ async function setupProfilePage(user) {
       document.getElementById(id).value = fields[id];
   });
 
-  // RESTORED TOGGLES
   document.getElementById("btn-edit-toggle").onclick = () => {
     document.getElementById("view-public").classList.add("hidden");
     document.getElementById("view-edit").classList.remove("hidden");
@@ -338,7 +347,7 @@ async function setupProfilePage(user) {
 
   document.getElementById("profile-edit-form").onsubmit = async (e) => {
     e.preventDefault();
-    const updated = {
+    const updatedData = {
       displayName: document.getElementById("edit-username").value,
       city: document.getElementById("edit-city").value,
       postcode: document.getElementById("edit-postcode").value,
@@ -348,59 +357,146 @@ async function setupProfilePage(user) {
       dogAge: document.getElementById("edit-dog-age").value,
       dogGender: document.getElementById("edit-dog-gender").value,
     };
-    await setDoc(doc(db, "users", user.uid), updated, { merge: true });
-    showToast("Profile Saved!");
+    await setDoc(doc(db, "users", user.uid), updatedData, { merge: true });
+    showToast("Profile Updated!");
     setTimeout(() => location.reload(), 800);
   };
 
+  // Image Cropper Logic
+  const avatarInput = document.getElementById("avatar-upload");
+  const cropModal = document.getElementById("crop-modal");
+  const previewImg = document.getElementById("preview-to-crop");
+  const zoomSlider = document.getElementById("zoom-slider");
+  let isDragging = false,
+    startX,
+    startY,
+    currentX = 0,
+    currentY = 0,
+    currentScale = 1;
+
+  if (avatarInput) {
+    avatarInput.onchange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          previewImg.src = ev.target.result;
+          currentX = 0;
+          currentY = 0;
+          currentScale = 1;
+          zoomSlider.value = 1;
+          previewImg.style.transform = `translate(-50%, -50%) scale(1)`;
+          cropModal.classList.remove("hidden");
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+  }
+  zoomSlider.oninput = (e) => {
+    currentScale = e.target.value;
+    previewImg.style.transform = `translate(calc(-50% + ${currentX}px), calc(-50% + ${currentY}px)) scale(${currentScale})`;
+  };
+  previewImg.onmousedown = (e) => {
+    isDragging = true;
+    startX = e.clientX - currentX;
+    startY = e.clientY - currentY;
+  };
+  document.onmousemove = (e) => {
+    if (isDragging) {
+      currentX = e.clientX - startX;
+      currentY = e.clientY - startY;
+      previewImg.style.transform = `translate(calc(-50% + ${currentX}px), calc(-50% + ${currentY}px)) scale(${currentScale})`;
+    }
+  };
+  document.onmouseup = () => (isDragging = false);
+
+  document.getElementById("save-crop").onclick = async () => {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    const size = 300;
+    canvas.width = size;
+    canvas.height = size;
+    const drawWidth = size * currentScale * (previewImg.naturalWidth / 280);
+    const drawHeight =
+      drawWidth / (previewImg.naturalWidth / previewImg.naturalHeight);
+    ctx.beginPath();
+    ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+    ctx.clip();
+    ctx.drawImage(
+      previewImg,
+      size / 2 - drawWidth / 2 + currentX * (size / 280),
+      size / 2 - drawHeight / 2 + currentY * (size / 280),
+      drawWidth,
+      drawHeight
+    );
+    canvas.toBlob(
+      async (blob) => {
+        const storageRef = ref(storage, `profile_pictures/${user.uid}`);
+        await uploadBytes(storageRef, blob);
+        const url = await getDownloadURL(storageRef);
+        await setDoc(
+          doc(db, "users", user.uid),
+          { photoURL: url },
+          { merge: true }
+        );
+        location.reload();
+      },
+      "image/jpeg",
+      0.9
+    );
+  };
   renderUserPosts(user.uid);
 }
 
-// --- 6. FORUM LOGIC (BARK SNIPPETS) ---
+// --- 6. FORUM LOGIC (SNIPPETS & EDITING) ---
 async function renderUserPosts(uid) {
   const container = document.getElementById("my-posts-list");
   if (!container) return;
-  const q = query(
-    collection(db, "posts"),
-    where("authorId", "==", uid),
-    orderBy("createdAt", "desc")
+  const snap = await getDocs(
+    query(
+      collection(db, "posts"),
+      where("authorId", "==", uid),
+      orderBy("createdAt", "desc")
+    )
   );
-  const snap = await getDocs(q);
   container.innerHTML = snap.empty ? "<p>No barks yet.</p>" : "";
+
   snap.forEach((d) => {
     const post = d.data();
     container.innerHTML += `
       <div class="forum-topic-card" style="border:1px solid #ddd; padding:15px; border-radius:8px; margin-bottom:15px; background:white;">
         <h3 style="margin:0; color:#ff6b35;">${post.title}</h3>
         <small style="color:#888;">${formatTimestamp(post.createdAt)}</small>
-        <p style="color:#444; margin: 10px 0; font-size:14px;">${
+        <p style="color:#444; margin: 10px 0;">${
           post.description ? post.description.substring(0, 150) : ""
         }...</p>
         <div style="display:flex; gap:10px;">
             <button onclick="editBark('${d.id}', \`${
       post.description
-    }\`)" class="follow-btn-small" style="font-size:11px;">Edit</button>
+    }\`)" class="follow-btn-small" style="padding: 4px 10px; font-size:11px;">Edit</button>
             <button onclick="deletePost('${
               d.id
-            }')" style="background:none; border:none; color:#ff4d4d; font-size:11px; cursor:pointer;">Delete</button>
+            }')" style="background:none; border:none; color:#ff4d4d; cursor:pointer; font-size:11px;">Delete Bark</button>
         </div>
       </div>`;
   });
 }
 
 window.editBark = (id, oldText) => {
-  const nt = prompt("Update your forum bark:", oldText);
-  if (nt)
-    updateDoc(doc(db, "posts", id), { description: nt }).then(() =>
+  const newText = prompt("Edit your bark:", oldText);
+  if (newText && newText !== oldText) {
+    updateDoc(doc(db, "posts", id), { description: newText }).then(() =>
       location.reload()
     );
+  }
 };
 
 async function loadForumPosts(searchTerm = "") {
   const forumContainer = document.getElementById("dynamic-forum-list");
   if (!forumContainer) return;
-  const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
-  const snap = await getDocs(q);
+  const snap = await getDocs(
+    query(collection(db, "posts"), orderBy("createdAt", "desc"))
+  );
   forumContainer.innerHTML = "";
   snap.forEach((d) => {
     const post = d.data();
@@ -428,15 +524,51 @@ async function loadForumPosts(searchTerm = "") {
   });
 }
 
+async function loadPostDetails() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const postId = urlParams.get("id");
+  if (!postId) return;
+  const postSnap = await getDoc(doc(db, "posts", postId));
+  if (postSnap.exists()) {
+    const post = postSnap.data();
+    document.getElementById("detail-title").innerText = post.title;
+    document.getElementById("detail-author").innerText = `By ${
+      post.authorName
+    } | ${formatTimestamp(post.createdAt)}`;
+    document.getElementById("detail-description").innerText = post.description;
+
+    if (auth.currentUser && auth.currentUser.uid === post.authorId) {
+      const editBtn = document.createElement("button");
+      editBtn.innerText = "Edit Bark";
+      editBtn.className = "follow-btn-small";
+      editBtn.onclick = () => {
+        const area = document.createElement("textarea");
+        area.value = post.description;
+        area.style.width = "100%";
+        document.getElementById("detail-description").replaceWith(area);
+        editBtn.innerText = "Save";
+        editBtn.onclick = async () => {
+          await updateDoc(doc(db, "posts", postId), {
+            description: area.value,
+          });
+          location.reload();
+        };
+      };
+      document.getElementById("post-detail-container").appendChild(editBtn);
+    }
+  }
+}
+
 // --- 7. COMMUNITY, DIRECTORY & DISTANCE ---
 function setupCommunityListeners() {
-  document.getElementById("toggle-pack-btn").onclick = () => {
-    const grid = document.getElementById("following-grid");
-    const isHidden = grid.classList.toggle("hidden");
-    document.getElementById("toggle-pack-btn").innerText = isHidden
-      ? "Show Pack"
-      : "Hide Pack";
-  };
+  const toggleBtn = document.getElementById("toggle-pack-btn");
+  if (toggleBtn) {
+    toggleBtn.onclick = () => {
+      const grid = document.getElementById("following-grid");
+      const isHidden = grid.classList.toggle("hidden");
+      toggleBtn.innerText = isHidden ? "Show Pack" : "Hide Pack";
+    };
+  }
   document.getElementById("friends-search-btn").onclick = () => {
     loadMemberDirectory(
       document.getElementById("member-search").value.toLowerCase(),
@@ -554,24 +686,21 @@ if (authForm) {
   };
 }
 
-async function updateCounter(uid) {
-  const fCount = document.getElementById("count-following"),
-    pCount = document.getElementById("count-pack"),
-    sCount = document.getElementById("count-posts");
-  if (fCount)
-    fCount.innerText = (
-      await getDocs(collection(db, "users", uid, "following"))
-    ).size;
-  if (pCount)
-    pCount.innerText = (
-      await getDocs(collection(db, "users", uid, "followers"))
-    ).size;
-  if (sCount)
-    sCount.innerText = (
-      await getDocs(
-        query(collection(db, "posts"), where("authorId", "==", uid))
-      )
-    ).size;
+const forumPostForm = document.getElementById("create-post-form");
+if (forumPostForm) {
+  forumPostForm.onsubmit = async (e) => {
+    e.preventDefault();
+    const userDoc = await getDoc(doc(db, "users", auth.currentUser.uid));
+    const userData = userDoc.data() || {};
+    const docRef = await addDoc(collection(db, "posts"), {
+      title: document.getElementById("post-title").value,
+      description: document.getElementById("post-description").value,
+      authorId: auth.currentUser.uid,
+      authorName: userData.displayName || "Anonymous",
+      createdAt: serverTimestamp(),
+    });
+    window.location.href = `Forum Post/forum-detail.html?id=${docRef.id}`;
+  };
 }
 
 window.followUser = async (uid, name) => {
@@ -591,6 +720,7 @@ window.followUser = async (uid, name) => {
   showToast("Following!");
   loadMyPack();
   loadMemberDirectory();
+  loadVisualFeed(auth.currentUser.uid);
 };
 
 window.unfollowUser = async (uid, name) => {
@@ -600,17 +730,29 @@ window.unfollowUser = async (uid, name) => {
     showToast("Unfollowed");
     loadMyPack();
     loadMemberDirectory();
+    loadVisualFeed(auth.currentUser.uid);
   }
 };
 
-window.deletePost = async (id) => {
-  if (confirm("Delete bark?")) {
-    await deleteDoc(doc(db, "posts", id));
-    location.reload();
-  }
-};
-window.logoutUser = () =>
-  signOut(auth).then(() => (location.href = "index.html"));
+async function updateCounter(uid) {
+  const fCount = document.getElementById("count-following"),
+    pCount = document.getElementById("count-pack"),
+    sCount = document.getElementById("count-posts");
+  if (fCount)
+    fCount.innerText = (
+      await getDocs(collection(db, "users", uid, "following"))
+    ).size;
+  if (pCount)
+    pCount.innerText = (
+      await getDocs(collection(db, "users", uid, "followers"))
+    ).size;
+  if (sCount)
+    sCount.innerText = (
+      await getDocs(
+        query(collection(db, "posts"), where("authorId", "==", uid))
+      )
+    ).size;
+}
 
 window.openUserModal = async (uid) => {
   const data = (await getDoc(doc(db, "users", uid))).data();
@@ -634,3 +776,12 @@ window.openUserModal = async (uid) => {
   } else document.getElementById("modal-dog-info").style.display = "none";
   document.getElementById("user-modal").classList.remove("hidden");
 };
+
+window.deletePost = async (id) => {
+  if (confirm("Delete bark?")) {
+    await deleteDoc(doc(db, "posts", id));
+    location.reload();
+  }
+};
+window.logoutUser = () =>
+  signOut(auth).then(() => (location.href = "index.html"));
