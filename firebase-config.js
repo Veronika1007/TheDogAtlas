@@ -398,12 +398,13 @@ async function setupProfilePage(user) {
   const userDoc = await getDoc(doc(db, "users", user.uid));
   const data = userDoc.exists() ? userDoc.data() : {};
 
+  // Display Public Data
   profileName.innerText = data.displayName || "Pack Member";
   if (data.photoURL) avatarImg.src = data.photoURL;
   document.getElementById("public-city").innerText = data.city || "Not set";
   document.getElementById("public-bio").innerText = data.bio || "No bio yet.";
 
-  // Populate Edit Fields - FRESH FETCH
+  // Populate Edit Fields
   const fields = {
     "edit-username": data.displayName || "",
     "edit-city": data.city || "",
@@ -420,165 +421,42 @@ async function setupProfilePage(user) {
     if (el) el.value = fields[id];
   });
 
-  const badge = document.getElementById("public-dog-badge");
-  if (badge && (data.dogName || data.dogBreed)) {
-    badge.style.display = "inline-flex";
-    document.getElementById("public-dog-name").innerText = data.dogName || "";
-    document.getElementById("public-dog-breed").innerText = data.dogBreed || "";
-    document.getElementById("public-dog-age").innerText = data.dogAge
-      ? `${data.dogAge} yrs`
-      : "";
-  }
-
-  // Toggle between General Info and Login Credentials in Edit Mode
-  // 1. "Edit Profile" Button Logic
+  // --- BUTTON CLICK HANDLERS ---
   const editBtn = document.getElementById("btn-edit-toggle");
   const loginToggle = document.getElementById("btn-login-details-toggle");
+  const cancelBtn = document.getElementById("btn-cancel-edit");
+  const viewPublic = document.getElementById("view-public");
+  const viewEdit = document.getElementById("view-edit");
+  const loginSection = document.getElementById("login-credentials-section");
 
   if (editBtn) {
     editBtn.onclick = () => {
-      document.getElementById("view-public").classList.add("hidden");
-      document.getElementById("view-edit").classList.remove("hidden");
+      viewPublic.classList.add("hidden");
+      viewEdit.classList.remove("hidden");
     };
   }
 
-  // 2. "Login Details" Button Logic
-  const loginToggle = document.getElementById("btn-login-details-toggle");
   if (loginToggle) {
     loginToggle.onclick = () => {
-      const editView = document.getElementById("view-edit");
-      const loginSection = document.getElementById("login-credentials-section");
-
-      // Switch to edit mode if hidden, then toggle login section
-      if (editView.classList.contains("hidden")) {
-        document.getElementById("view-public").classList.add("hidden");
-        editView.classList.remove("hidden");
+      // Switch to edit mode if currently on public view
+      if (viewEdit.classList.contains("hidden")) {
+        viewPublic.classList.add("hidden");
+        viewEdit.classList.remove("hidden");
       }
+      // Toggle only the login section
       loginSection.classList.toggle("hidden");
     };
   }
 
-  // 3. "Cancel" Button Logic
-  const cancelBtn = document.getElementById("btn-cancel-edit");
   if (cancelBtn) {
     cancelBtn.onclick = () => {
-      document.getElementById("view-public").classList.remove("hidden");
-      document.getElementById("view-edit").classList.add("hidden");
-      document
-        .getElementById("login-credentials-section")
-        .classList.add("hidden");
+      viewPublic.classList.remove("hidden");
+      viewEdit.classList.add("hidden");
+      loginSection.classList.add("hidden");
     };
   }
 
-  document.getElementById("profile-edit-form").onsubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const updatedData = {
-        displayName: document.getElementById("edit-username").value,
-        city: document.getElementById("edit-city").value,
-        postcode: document.getElementById("edit-postcode").value,
-        bio: document.getElementById("edit-bio").value,
-        dogName: document.getElementById("edit-dog-name").value,
-        dogBreed: document.getElementById("edit-dog-breed").value,
-        dogAge: document.getElementById("edit-dog-age").value,
-      };
-      await setDoc(doc(db, "users", user.uid), updatedData, { merge: true });
-      showToast("Profile Updated!");
-      setTimeout(() => location.reload(), 1000);
-    } catch (err) {
-      alert(err.message);
-    }
-  };
-
-  // Canvas Crop Logic
-  const avatarInput = document.getElementById("avatar-upload");
-  const cropModal = document.getElementById("crop-modal");
-  const previewImg = document.getElementById("preview-to-crop");
-  const zoomSlider = document.getElementById("zoom-slider");
-  let isDragging = false,
-    startX,
-    startY,
-    currentX = 0,
-    currentY = 0,
-    currentScale = 1;
-
-  if (avatarInput) {
-    avatarInput.onchange = (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          previewImg.src = event.target.result;
-          previewImg.style.left = "50%";
-          previewImg.style.top = "50%";
-          currentX = 0;
-          currentY = 0;
-          currentScale = 1;
-          zoomSlider.value = 1;
-          previewImg.style.transform = `translate(-50%, -50%) scale(1)`;
-          cropModal.classList.remove("hidden");
-        };
-        reader.readAsDataURL(file);
-      }
-    };
-  }
-
-  zoomSlider.oninput = (e) => {
-    currentScale = e.target.value;
-    previewImg.style.transform = `translate(calc(-50% + ${currentX}px), calc(-50% + ${currentY}px)) scale(${currentScale})`;
-  };
-
-  previewImg.onmousedown = (e) => {
-    isDragging = true;
-    startX = e.clientX - currentX;
-    startY = e.clientY - currentY;
-  };
-  document.onmousemove = (e) => {
-    if (!isDragging) return;
-    currentX = e.clientX - startX;
-    currentY = e.clientY - startY;
-    previewImg.style.transform = `translate(calc(-50% + ${currentX}px), calc(-50% + ${currentY}px)) scale(${currentScale})`;
-  };
-  document.onmouseup = () => {
-    isDragging = false;
-  };
-
-  document.getElementById("save-crop").onclick = async () => {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    const size = 300;
-    canvas.width = size;
-    canvas.height = size;
-    const drawWidth = size * currentScale * (previewImg.naturalWidth / 280);
-    const drawHeight =
-      drawWidth / (previewImg.naturalWidth / previewImg.naturalHeight);
-    ctx.beginPath();
-    ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
-    ctx.clip();
-    ctx.drawImage(
-      previewImg,
-      size / 2 - drawWidth / 2 + currentX * (size / 280),
-      size / 2 - drawHeight / 2 + currentY * (size / 280),
-      drawWidth,
-      drawHeight
-    );
-    canvas.toBlob(
-      async (blob) => {
-        const storageRef = ref(storage, `profile_pictures/${user.uid}`);
-        await uploadBytes(storageRef, blob);
-        const url = await getDownloadURL(storageRef);
-        await setDoc(
-          doc(db, "users", user.uid),
-          { photoURL: url },
-          { merge: true }
-        );
-        location.reload();
-      },
-      "image/jpeg",
-      0.9
-    );
-  };
-
+  // Load the user's posts
   renderUserPosts(user.uid);
 }
 
@@ -753,37 +631,51 @@ async function updateCounter(uid) {
   }
 }
 
-// Forum Posts in My Profile //
+s; // --- UPDATED FORUM BARKS RENDERING ---
 async function renderUserPosts(uid) {
-    const container = document.getElementById("my-posts-list");
-    if (!container) return;
-  
-    const q = query(collection(db, "posts"), where("authorId", "==", uid), orderBy("createdAt", "desc"));
+  const container = document.getElementById("my-posts-list");
+  if (!container) return;
+
+  // Query posts authored by this user
+  const q = query(
+    collection(db, "posts"),
+    where("authorId", "==", uid),
+    orderBy("createdAt", "desc")
+  );
+
+  try {
     const snap = await getDocs(q);
-    
-    container.innerHTML = snap.empty ? "<p>No barks yet.</p>" : "";
-  
+    container.innerHTML = snap.empty
+      ? "<p style='text-align:center;'>No barks yet.</p>"
+      : "";
+
     snap.forEach((d) => {
       const post = d.data();
       container.innerHTML += `
-        <div class="forum-topic-card" style="border:1px solid #ddd; padding:20px; border-radius:12px; margin-bottom:15px; background:white;">
-          <h3 style="margin:0 0 10px 0; color:var(--primary);">${post.title}</h3>
-          <p style="color:#444; font-size:0.95rem; margin-bottom:10px;">${post.description || ""}</p>
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <small style="color:#888;">Posted on: ${formatTimestamp(post.createdAt)}</small>
-            <div style="display:flex; gap:10px;">
-              <button onclick="window.location.href='Forum Post/forum-detail.html?id=${d.id}'" 
-                      class="follow-btn-small" style="background:var(--teal); font-size:12px;">Edit</button>
-              <button onclick="deletePost('${d.id}')" 
-                      style="color:#ff4d4d; background:none; border:1px solid #ff4d4d; border-radius:20px; padding:4px 12px; cursor:pointer; font-size:12px; font-weight:600;">Delete</button>
+          <div class="forum-topic-card" style="border:1px solid #ddd; padding:20px; border-radius:12px; margin-bottom:15px; background:white; text-align:left;">
+            <h3 style="margin:0 0 10px 0; color:var(--primary);">${
+              post.title
+            }</h3>
+            <p style="color:#444; font-size:0.95rem; margin-bottom:10px;">${
+              post.description || ""
+            }</p>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <small style="color:#888;">Posted on: ${formatTimestamp(
+                post.createdAt
+              )}</small>
+              <div style="display:flex; gap:10px;">
+                <button onclick="window.location.href='Forum Post/forum-detail.html?id=${
+                  d.id
+                }'" 
+                        class="follow-btn-small" style="font-size:12px;">Edit</button>
+                <button onclick="deletePost('${d.id}')" 
+                        style="color:#ff4d4d; background:none; border:1px solid #ff4d4d; border-radius:20px; padding:4px 12px; cursor:pointer; font-size:12px; font-weight:600;">Delete</button>
+              </div>
             </div>
-          </div>
-        </div>`;
+          </div>`;
     });
-
   } catch (error) {
-    console.error("Error loading barks:", error);
-    // Note: If you see an error about 'indexes' in the console, click the link Firebase provides to fix it.
+    console.error("Error loading user barks:", error);
   }
 }
 
