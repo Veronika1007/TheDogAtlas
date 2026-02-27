@@ -433,27 +433,33 @@ async function setupProfilePage(user) {
   // Toggle between General Info and Login Credentials in Edit Mode
   // Inside setupProfilePage(user) function...
 
-  // 1. Functional Edit Profile Button
-  document.getElementById("btn-edit-toggle").onclick = () => {
-    document.getElementById("view-public").classList.add("hidden");
-    document.getElementById("view-edit").classList.remove("hidden");
-  };
-
-  // 2. Functional Login Details Button
-  document.getElementById("btn-login-details-toggle").onclick = () => {
-    const editView = document.getElementById("view-edit");
-    const loginSection = document.getElementById("login-credentials-section");
-
-    // If public view is still visible, switch to edit mode first
-    if (editView.classList.contains("hidden")) {
+  // 1. "Edit Profile" Button Logic
+  const editBtn = document.getElementById("btn-edit-toggle");
+  if (editBtn) {
+    editBtn.onclick = () => {
       document.getElementById("view-public").classList.add("hidden");
-      editView.classList.remove("hidden");
-    }
-    // Toggle the login section visibility
-    loginSection.classList.toggle("hidden");
-  };
+      document.getElementById("view-edit").classList.remove("hidden");
+    };
+  }
 
-  // 3. Functional Cancel Button
+  // 2. "Login Details" Button Logic
+  const loginToggle = document.getElementById("btn-login-details-toggle");
+  if (loginToggle) {
+    loginToggle.onclick = () => {
+      const editView = document.getElementById("view-edit");
+      const loginSection = document.getElementById("login-credentials-section");
+
+      // Force switch to edit mode if not already there
+      if (editView.classList.contains("hidden")) {
+        document.getElementById("view-public").classList.add("hidden");
+        editView.classList.remove("hidden");
+      }
+      // Toggle the specific login section
+      loginSection.classList.toggle("hidden");
+    };
+  }
+
+  // 3. "Cancel" Button Logic
   const cancelBtn = document.getElementById("btn-cancel-edit");
   if (cancelBtn) {
     cancelBtn.onclick = () => {
