@@ -162,39 +162,41 @@ async function loadVisualFeed() {
     snapshot.forEach((d) => {
       const post = d.data();
       feedContainer.innerHTML += `
-                <div class="feed-card" style="background: white; border-radius: 15px; border: 1px solid #ddd; margin-bottom: 25px; overflow: hidden; max-width:600px; margin-left:auto; margin-right:auto;">
-                    <div style="padding: 12px; display: flex; align-items: center; gap: 10px;">
-                        <img src="${
-                          post.authorPhoto || "https://via.placeholder.com/40"
-                        }" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
-                        <span style="font-weight: bold;">${
-                          post.authorName
-                        }</span>
-                        <small style="color: #999; margin-left: auto;">${formatTimestamp(
-                          post.createdAt
-                        )}</small>
-                    </div>
-                    <img src="${
-                      post.imageUrl
-                    }" style="width: 100%; display: block; background: #eee;">
-                    <div style="padding: 15px;">
-                        <div style="margin-bottom: 10px; display: flex; gap: 15px; font-size: 20px;">
-                            <i class="fa-regular fa-heart" style="cursor:pointer;" onclick="likeFeedPost('${
-                              d.id
-                            }')"></i>
-                            <i class="fa-regular fa-comment" style="cursor:pointer;"></i>
-                        </div>
-                        <p style="margin: 0; line-height: 1.4;"><strong>${
-                          post.authorName
-                        }</strong> ${post.caption || ""}</p>
-                    </div>
-                </div>`;
+<div class="feed-card">
+    <div style="padding: 12px; display: flex; align-items: center; gap: 10px;">
+        <img src="${
+          post.authorPhoto || "https://via.placeholder.com/40"
+        }" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
+        <span style="font-weight: bold;">${post.authorName}</span>
+        <small style="color: #999; margin-left: auto;">${formatTimestamp(
+          post.createdAt
+        )}</small>
+    </div>
+    <img src="${
+      post.imageUrl
+    }" style="width: 100%; display: block; background: #eee;">
+    <div style="padding: 15px;">
+        <div style="margin-bottom: 10px; display: flex; gap: 15px;">
+            <span class="woof-btn" onclick="likeFeedPost('${d.id}', this)">
+                <i class="fa-solid fa-paw"></i> 
+                <small style="font-size:14px;">${post.likes || 0}</small>
+            </span>
+            <i class="fa-regular fa-comment" style="cursor:pointer; font-size: 20px;"></i>
+        </div>
+        <p style="margin: 0; line-height: 1.4;"><strong>${
+          post.authorName
+        }</strong> ${post.caption || ""}</p>
+    </div>
+</div>`;
     });
   });
 }
 
-window.likeFeedPost = async (postId) => {
+window.likeFeedPost = async (postId, element) => {
   try {
+    // Toggle the active class for immediate feedback
+    element.classList.toggle("active");
+
     await updateDoc(doc(db, "feedPosts", postId), {
       likes: increment(1),
     });

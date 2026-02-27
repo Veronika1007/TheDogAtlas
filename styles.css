@@ -343,11 +343,28 @@ footer {
 /* 2-Column Pack Feed Grid */
 #pack-feed {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr; /* 2 posts per row */
   gap: 15px;
   max-width: 900px;
   margin: 0 auto;
   padding: 10px;
+}
+
+/* Updated Like Button Style */
+.woof-btn i {
+  color: #666;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.woof-btn.active i {
+  color: #ff6b35; /* Orange color when liked */
+}
+
+@media (max-width: 600px) {
+  #pack-feed {
+    grid-template-columns: 1fr; /* 1 post per row on mobile */
+  }
 }
 
 .feed-card {
@@ -385,25 +402,6 @@ footer {
   gap: 5px;
 }
 
-/* Update the Woof (Like) button to use a paw print icon */
-.woof-btn i::before {
-  content: "\f1b0"; /* FontAwesome Paw Print Unicode */
-  font-family: "Font Awesome 6 Free";
-  font-weight: 900;
-}
-
-.woof-btn.active i {
-  color: #ff6b35; /* Your existing primary orange color */
-}
-
-/* Responsive adjustment for mobile (1 post per row) */
-@media (max-width: 600px) {
-  #instagram-feed {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Add to styles.css */
 #general-info-section,
 #login-credentials-section {
   width: 100%;
@@ -415,7 +413,6 @@ footer {
   display: none !important;
 }
 
-/* Add to styles.css */
 .dog-badge {
   display: inline-flex;
   align-items: center;
