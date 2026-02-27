@@ -124,7 +124,7 @@ onAuthStateChanged(auth, async (user) => {
     }
 
     if (document.getElementById("dynamic-forum-list")) loadForumPosts();
-    if (document.getElementById("instagram-feed")) loadVisualFeed();
+    if (document.getElementById("pack-feed")) loadVisualFeed();
     if (document.getElementById("post-detail-container")) loadPostDetails();
 
     const userDoc = await getDoc(doc(db, "users", user.uid));
@@ -147,9 +147,9 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-// --- VISUAL FEED LOGIC (INSTAGRAM STYLE) ---
+// --- VISUAL FEED LOGIC  ---
 async function loadVisualFeed() {
-  const feedContainer = document.getElementById("instagram-feed");
+  const feedContainer = document.getElementById("pack-feed");
   if (!feedContainer) return;
 
   const q = query(collection(db, "feedPosts"), orderBy("createdAt", "desc"));
