@@ -431,11 +431,20 @@ async function setupProfilePage(user) {
   }
 
   // Toggle between General Info and Login Credentials in Edit Mode
+  // Inside setupProfilePage(user) function...
+
+  // 1. Functional Edit Profile Button
+  document.getElementById("btn-edit-toggle").onclick = () => {
+    document.getElementById("view-public").classList.add("hidden");
+    document.getElementById("view-edit").classList.remove("hidden");
+  };
+
+  // 2. Functional Login Details Button
   document.getElementById("btn-login-details-toggle").onclick = () => {
     const editView = document.getElementById("view-edit");
     const loginSection = document.getElementById("login-credentials-section");
 
-    // If we aren't in edit mode yet, turn it on
+    // If public view is still visible, switch to edit mode first
     if (editView.classList.contains("hidden")) {
       document.getElementById("view-public").classList.add("hidden");
       editView.classList.remove("hidden");
@@ -443,6 +452,18 @@ async function setupProfilePage(user) {
     // Toggle the login section visibility
     loginSection.classList.toggle("hidden");
   };
+
+  // 3. Functional Cancel Button
+  const cancelBtn = document.getElementById("btn-cancel-edit");
+  if (cancelBtn) {
+    cancelBtn.onclick = () => {
+      document.getElementById("view-public").classList.remove("hidden");
+      document.getElementById("view-edit").classList.add("hidden");
+      document
+        .getElementById("login-credentials-section")
+        .classList.add("hidden");
+    };
+  }
 
   document.getElementById("profile-edit-form").onsubmit = async (e) => {
     e.preventDefault();
