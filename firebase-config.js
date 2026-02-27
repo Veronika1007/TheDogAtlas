@@ -86,7 +86,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
   return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
 }
 
-// --- 2. GLOBAL AUTH & INITIALIZATION ---
+// --- 2. GLOBAL AUTH OBSERVER ---
 onAuthStateChanged(auth, async (user) => {
   const loginLink = document.getElementById("login-link");
   const logoutLink = document.getElementById("logout-link");
@@ -105,7 +105,6 @@ onAuthStateChanged(auth, async (user) => {
       setupCommunityListeners();
     }
 
-    // Core Loaders
     loadForumPosts();
     loadVisualFeed(user.uid);
 
@@ -281,7 +280,7 @@ if (feedPostForm) {
   };
 }
 
-// --- 5. PROFILE LOGIC (BARKS, SNIPPETS, GENDER) ---
+// --- 5. PROFILE LOGIC (SNIPPETS & TOGGLES) ---
 async function setupProfilePage(user) {
   const profileName = document.getElementById("profile-name");
   const avatarImg = document.getElementById("display-avatar");
@@ -332,6 +331,7 @@ async function setupProfilePage(user) {
       .classList.add("hidden");
     document.getElementById("general-info-section").classList.remove("hidden");
   };
+
   document.getElementById("btn-login-details-toggle").onclick = () => {
     document.getElementById("view-public").classList.add("hidden");
     document.getElementById("view-edit").classList.remove("hidden");
@@ -340,6 +340,7 @@ async function setupProfilePage(user) {
       .classList.remove("hidden");
     document.getElementById("general-info-section").classList.add("hidden");
   };
+
   document.getElementById("btn-cancel-edit").onclick = () => {
     document.getElementById("view-public").classList.remove("hidden");
     document.getElementById("view-edit").classList.add("hidden");
@@ -347,7 +348,7 @@ async function setupProfilePage(user) {
 
   document.getElementById("profile-edit-form").onsubmit = async (e) => {
     e.preventDefault();
-    const updatedData = {
+    const updated = {
       displayName: document.getElementById("edit-username").value,
       city: document.getElementById("edit-city").value,
       postcode: document.getElementById("edit-postcode").value,
@@ -357,12 +358,12 @@ async function setupProfilePage(user) {
       dogAge: document.getElementById("edit-dog-age").value,
       dogGender: document.getElementById("edit-dog-gender").value,
     };
-    await setDoc(doc(db, "users", user.uid), updatedData, { merge: true });
-    showToast("Profile Updated!");
+    await setDoc(doc(db, "users", user.uid), updated, { merge: true });
+    showToast("Profile saved!");
     setTimeout(() => location.reload(), 800);
   };
 
-  // Image Cropper Logic
+  // Image Cropper Math
   const avatarInput = document.getElementById("avatar-upload");
   const cropModal = document.getElementById("crop-modal");
   const previewImg = document.getElementById("preview-to-crop");
@@ -448,23 +449,22 @@ async function setupProfilePage(user) {
   renderUserPosts(user.uid);
 }
 
-// --- 6. FORUM LOGIC (SNIPPETS & EDITING) ---
+// --- 6. FORUM LOGIC (BARKS SNIPPETS RESTORED) ---
 async function renderUserPosts(uid) {
   const container = document.getElementById("my-posts-list");
   if (!container) return;
-  const snap = await getDocs(
-    query(
-      collection(db, "posts"),
-      where("authorId", "==", uid),
-      orderBy("createdAt", "desc")
-    )
+  const q = query(
+    collection(db, "posts"),
+    where("authorId", "==", uid),
+    orderBy("createdAt", "desc")
   );
-  container.innerHTML = snap.empty ? "<p>No barks yet.</p>" : "";
+  const snap = await getDocs(q);
+  container.innerHTML = snap.empty ? "<p>No barks in the forum yet.</p>" : "";
 
   snap.forEach((d) => {
     const post = d.data();
     container.innerHTML += `
-      <div class="forum-topic-card" style="border:1px solid #ddd; padding:15px; border-radius:8px; margin-bottom:15px; background:white;">
+      <div class="forum-topic-card" style="border:1px solid #ddd; padding:15px; border-radius:8px; margin-bottom:15px; background:white; position:relative;">
         <h3 style="margin:0; color:#ff6b35;">${post.title}</h3>
         <small style="color:#888;">${formatTimestamp(post.createdAt)}</small>
         <p style="color:#444; margin: 10px 0;">${
@@ -473,7 +473,7 @@ async function renderUserPosts(uid) {
         <div style="display:flex; gap:10px;">
             <button onclick="editBark('${d.id}', \`${
       post.description
-    }\`)" class="follow-btn-small" style="padding: 4px 10px; font-size:11px;">Edit</button>
+    }\`)" class="follow-btn-small" style="padding: 4px 10px; font-size:11px;">Edit Bark</button>
             <button onclick="deletePost('${
               d.id
             }')" style="background:none; border:none; color:#ff4d4d; cursor:pointer; font-size:11px;">Delete Bark</button>
@@ -483,7 +483,7 @@ async function renderUserPosts(uid) {
 }
 
 window.editBark = (id, oldText) => {
-  const newText = prompt("Edit your bark:", oldText);
+  const newText = prompt("Update your forum bark:", oldText);
   if (newText && newText !== oldText) {
     updateDoc(doc(db, "posts", id), { description: newText }).then(() =>
       location.reload()
@@ -494,9 +494,8 @@ window.editBark = (id, oldText) => {
 async function loadForumPosts(searchTerm = "") {
   const forumContainer = document.getElementById("dynamic-forum-list");
   if (!forumContainer) return;
-  const snap = await getDocs(
-    query(collection(db, "posts"), orderBy("createdAt", "desc"))
-  );
+  const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+  const snap = await getDocs(q);
   forumContainer.innerHTML = "";
   snap.forEach((d) => {
     const post = d.data();
@@ -559,7 +558,7 @@ async function loadPostDetails() {
   }
 }
 
-// --- 7. COMMUNITY, DIRECTORY & DISTANCE ---
+// --- 7. COMMUNITY, DIRECTORY & SEARCH ---
 function setupCommunityListeners() {
   const toggleBtn = document.getElementById("toggle-pack-btn");
   if (toggleBtn) {
@@ -686,23 +685,6 @@ if (authForm) {
   };
 }
 
-const forumPostForm = document.getElementById("create-post-form");
-if (forumPostForm) {
-  forumPostForm.onsubmit = async (e) => {
-    e.preventDefault();
-    const userDoc = await getDoc(doc(db, "users", auth.currentUser.uid));
-    const userData = userDoc.data() || {};
-    const docRef = await addDoc(collection(db, "posts"), {
-      title: document.getElementById("post-title").value,
-      description: document.getElementById("post-description").value,
-      authorId: auth.currentUser.uid,
-      authorName: userData.displayName || "Anonymous",
-      createdAt: serverTimestamp(),
-    });
-    window.location.href = `Forum Post/forum-detail.html?id=${docRef.id}`;
-  };
-}
-
 window.followUser = async (uid, name) => {
   await setDoc(
     doc(db, "users", auth.currentUser.uid, "following", uid),
@@ -778,7 +760,7 @@ window.openUserModal = async (uid) => {
 };
 
 window.deletePost = async (id) => {
-  if (confirm("Delete bark?")) {
+  if (confirm("Delete bark forever?")) {
     await deleteDoc(doc(db, "posts", id));
     location.reload();
   }
