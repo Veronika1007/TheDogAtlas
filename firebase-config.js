@@ -655,7 +655,11 @@ if (authForm) {
     const isLogin =
       document.getElementById("auth-submit").innerText === "Login";
     try {
-      if (!isLogin) {
+      if (isLogin) {
+        // Log in existing user
+        await signInWithEmailAndPassword(auth, email, password);
+      } else {
+        // Register new user
         const userCred = await createUserWithEmailAndPassword(
           auth,
           email,
@@ -663,15 +667,17 @@ if (authForm) {
         );
         const usernameInput = document.getElementById("auth-username").value;
 
-        // Explicitly save the username to Firestore
+        // Save username to Firestore immediately so it's not the email
         await setDoc(doc(db, "users", userCred.user.uid), {
           displayName: usernameInput || "Member",
           email: email,
           createdAt: serverTimestamp(),
         });
       }
+      // Redirect to profile upon success
       window.location.href = "profile.html";
     } catch (error) {
+      console.error("Auth Error:", error);
       alert(error.message);
     }
   };
