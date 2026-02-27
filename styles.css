@@ -195,17 +195,36 @@ nav {
   font-weight: 700;
   cursor: pointer;
 }
-.btn-outline {
+/* --- TEAL OUTLINE BUTTON (Edit Profile) --- */
+.btn-outline-teal {
   background: white;
-  color: var(--primary);
-  border: 2px solid var(--primary);
-  padding: 6px 20px;
+  color: var(--teal);
+  border: 2px solid var(--teal);
+  padding: 8px 20px;
   border-radius: 20px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
 }
-.btn-outline:hover {
+
+.btn-outline-teal:hover {
+  background: var(--teal);
+  color: white;
+}
+
+/* --- ORANGE OUTLINE BUTTON (Login Details) --- */
+.btn-outline-orange {
+  background: white;
+  color: var(--primary); /* Uses your orange variable */
+  border: 2px solid var(--primary);
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-orange:hover {
   background: var(--primary);
   color: white;
 }

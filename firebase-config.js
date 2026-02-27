@@ -431,10 +431,10 @@ async function setupProfilePage(user) {
   }
 
   // Toggle between General Info and Login Credentials in Edit Mode
-  // Inside setupProfilePage(user) function...
-
   // 1. "Edit Profile" Button Logic
   const editBtn = document.getElementById("btn-edit-toggle");
+  const loginToggle = document.getElementById("btn-login-details-toggle");
+
   if (editBtn) {
     editBtn.onclick = () => {
       document.getElementById("view-public").classList.add("hidden");
@@ -449,12 +449,11 @@ async function setupProfilePage(user) {
       const editView = document.getElementById("view-edit");
       const loginSection = document.getElementById("login-credentials-section");
 
-      // Force switch to edit mode if not already there
+      // Switch to edit mode if hidden, then toggle login section
       if (editView.classList.contains("hidden")) {
         document.getElementById("view-public").classList.add("hidden");
         editView.classList.remove("hidden");
       }
-      // Toggle the specific login section
       loginSection.classList.toggle("hidden");
     };
   }
@@ -756,50 +755,35 @@ async function updateCounter(uid) {
 
 // Forum Posts in My Profile //
 async function renderUserPosts(uid) {
-  const container = document.getElementById("my-posts-list");
-  if (!container) return;
-
-  // Query posts specifically authored by the current user
-  const q = query(
-    collection(db, "posts"),
-    where("authorId", "==", uid),
-    orderBy("createdAt", "desc")
-  );
-
-  try {
+    const container = document.getElementById("my-posts-list");
+    if (!container) return;
+  
+    const q = query(collection(db, "posts"), where("authorId", "==", uid), orderBy("createdAt", "desc"));
     const snap = await getDocs(q);
-    container.innerHTML = snap.empty
-      ? "<p style='text-align:center;'>No barks yet.</p>"
-      : "";
-
+    
+    container.innerHTML = snap.empty ? "<p>No barks yet.</p>" : "";
+  
     snap.forEach((d) => {
       const post = d.data();
-      // Inject the HTML with the summary text, timestamp, and action buttons
       container.innerHTML += `
-          <div class="forum-topic-card" style="border:1px solid #ddd; padding:20px; border-radius:12px; margin-bottom:15px; background:white; text-align:left;">
-            <h3 style="margin:0 0 10px 0; color:var(--primary);">${
-              post.title
-            }</h3>
-            <p style="color:#444; font-size:0.95rem; margin-bottom:10px;">${
-              post.description || ""
-            }</p>
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <small style="color:#888;">Posted on: ${formatTimestamp(
-                post.createdAt
-              )}</small>
-              <div style="display:flex; gap:10px;">
-                <button onclick="window.location.href='Forum Post/forum-detail.html?id=${
-                  d.id
-                }'" 
-                        class="follow-btn-small" style="background:var(--teal); font-size:12px;">Edit</button>
-                <button onclick="deletePost('${d.id}')" 
-                        style="color:#ff4d4d; background:none; border:1px solid #ff4d4d; border-radius:20px; padding:4px 12px; cursor:pointer; font-size:12px; font-weight:600;">Delete</button>
-              </div>
+        <div class="forum-topic-card" style="border:1px solid #ddd; padding:20px; border-radius:12px; margin-bottom:15px; background:white;">
+          <h3 style="margin:0 0 10px 0; color:var(--primary);">${post.title}</h3>
+          <p style="color:#444; font-size:0.95rem; margin-bottom:10px;">${post.description || ""}</p>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <small style="color:#888;">Posted on: ${formatTimestamp(post.createdAt)}</small>
+            <div style="display:flex; gap:10px;">
+              <button onclick="window.location.href='Forum Post/forum-detail.html?id=${d.id}'" 
+                      class="follow-btn-small" style="background:var(--teal); font-size:12px;">Edit</button>
+              <button onclick="deletePost('${d.id}')" 
+                      style="color:#ff4d4d; background:none; border:1px solid #ff4d4d; border-radius:20px; padding:4px 12px; cursor:pointer; font-size:12px; font-weight:600;">Delete</button>
             </div>
-          </div>`;
+          </div>
+        </div>`;
     });
-  } catch (err) {
-    console.error("Error fetching user barks:", err);
+
+  } catch (error) {
+    console.error("Error loading barks:", error);
+    // Note: If you see an error about 'indexes' in the console, click the link Firebase provides to fix it.
   }
 }
 
