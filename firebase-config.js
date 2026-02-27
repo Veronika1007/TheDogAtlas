@@ -400,8 +400,8 @@ async function setupProfilePage(user) {
   const data = userDoc.exists() ? userDoc.data() : {};
 
   // Display Public Data
-  document.getElementById("profile-name").innerText =
-    data.displayName || "Pack Member";
+  const displayName = data.displayName || "Pack Member";
+  document.getElementById("profile-name").innerText = displayName;
   document.getElementById("public-city").innerText = data.city || "Not set";
   document.getElementById("public-bio").innerText = data.bio || "No bio yet.";
 
@@ -444,6 +444,12 @@ async function setupProfilePage(user) {
     const el = document.getElementById(id);
     if (el) el.value = fields[id];
   });
+
+  // ADD THIS LINE: Explicitly set the gender dropdown value
+  const genderSelect = document.getElementById("edit-dog-gender");
+  if (genderSelect && data.dogGender) {
+    genderSelect.value = data.dogGender;
+  }
 
   // --- BUTTON CLICK HANDLERS ---
   const editBtn = document.getElementById("btn-edit-toggle");
@@ -646,16 +652,17 @@ if (authForm) {
     const isLogin =
       document.getElementById("auth-submit").innerText === "Login";
     try {
-      if (isLogin) {
-        await signInWithEmailAndPassword(auth, email, password);
-      } else {
+      if (!isLogin) {
         const userCred = await createUserWithEmailAndPassword(
           auth,
           email,
           password
         );
+        const usernameInput = document.getElementById("auth-username").value;
+
+        // Explicitly save the username to Firestore
         await setDoc(doc(db, "users", userCred.user.uid), {
-          displayName: document.getElementById("auth-username").value,
+          displayName: usernameInput || "Member",
           email: email,
           createdAt: serverTimestamp(),
         });
