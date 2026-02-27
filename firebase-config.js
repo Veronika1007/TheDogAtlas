@@ -430,13 +430,18 @@ async function setupProfilePage(user) {
       : "";
   }
 
-  document.getElementById("btn-edit-toggle").onclick = () => {
-    document.getElementById("view-public").classList.add("hidden");
-    document.getElementById("view-edit").classList.remove("hidden");
-  };
-  document.getElementById("btn-cancel-edit").onclick = () => {
-    document.getElementById("view-public").classList.remove("hidden");
-    document.getElementById("view-edit").classList.add("hidden");
+  // Toggle between General Info and Login Credentials in Edit Mode
+  document.getElementById("btn-login-details-toggle").onclick = () => {
+    const editView = document.getElementById("view-edit");
+    const loginSection = document.getElementById("login-credentials-section");
+
+    // If we aren't in edit mode yet, turn it on
+    if (editView.classList.contains("hidden")) {
+      document.getElementById("view-public").classList.add("hidden");
+      editView.classList.remove("hidden");
+    }
+    // Toggle the login section visibility
+    loginSection.classList.toggle("hidden");
   };
 
   document.getElementById("profile-edit-form").onsubmit = async (e) => {
@@ -725,20 +730,38 @@ async function updateCounter(uid) {
 async function renderUserPosts(uid) {
   const container = document.getElementById("my-posts-list");
   if (!container) return;
+
   const q = query(
     collection(db, "posts"),
     where("authorId", "==", uid),
     orderBy("createdAt", "desc")
   );
+
   const snap = await getDocs(q);
   container.innerHTML = snap.empty ? "<p>No barks yet.</p>" : "";
+
   snap.forEach((d) => {
-    container.innerHTML += `<div class="forum-topic-card" style="border:1px solid #ddd; padding:15px; border-radius:8px; margin-bottom:15px; background:white;">
-        <h3 style="margin:0; color:#ff6b35;">${d.data().title}</h3>
-        <button onclick="deletePost('${
-          d.id
-        }')" style="color:#ff4d4d; background:none; border:none; cursor:pointer;">Delete</button>
-      </div>`;
+    const post = d.data();
+    container.innerHTML += `
+        <div class="forum-topic-card" style="border:1px solid #ddd; padding:20px; border-radius:12px; margin-bottom:15px; background:white;">
+          <h3 style="margin:0 0 10px 0; color:#ff6b35;">${post.title}</h3>
+          <p style="color:#444; font-size:0.95rem; margin-bottom:10px;">${
+            post.description || ""
+          }</p>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <small style="color:#888;">Posted on: ${formatTimestamp(
+              post.createdAt
+            )}</small>
+            <div style="display:flex; gap:10px;">
+              <button onclick="window.location.href='Forum Post/forum-detail.html?id=${
+                d.id
+              }'" 
+                      class="follow-btn-small" style="background:var(--teal); font-size:12px;">Edit</button>
+              <button onclick="deletePost('${d.id}')" 
+                      style="color:#ff4d4d; background:none; border:1px solid #ff4d4d; border-radius:20px; padding:4px 12px; cursor:pointer; font-size:12px; font-weight:600;">Delete</button>
+            </div>
+          </div>
+        </div>`;
   });
 }
 

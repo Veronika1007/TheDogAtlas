@@ -203,7 +203,7 @@ nav {
   border-radius: 20px;
   font-weight: 700;
   cursor: pointer;
-  transition: 0.2s;
+  transition: all 0.3s ease;
 }
 .btn-outline:hover {
   background: var(--primary);
