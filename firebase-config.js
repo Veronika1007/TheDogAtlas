@@ -404,7 +404,7 @@ async function setupProfilePage(user) {
   document.getElementById("public-city").innerText = data.city || "Not set";
   document.getElementById("public-bio").innerText = data.bio || "No bio yet.";
 
-  // Populate Edit Fields
+  // Populate Edit Fields with fresh data
   const fields = {
     "edit-username": data.displayName || "",
     "edit-city": data.city || "",
@@ -425,9 +425,10 @@ async function setupProfilePage(user) {
   const editBtn = document.getElementById("btn-edit-toggle");
   const loginToggle = document.getElementById("btn-login-details-toggle");
   const cancelBtn = document.getElementById("btn-cancel-edit");
+  const editView = document.getElementById("view-edit");
   const viewPublic = document.getElementById("view-public");
-  const viewEdit = document.getElementById("view-edit");
   const loginSection = document.getElementById("login-credentials-section");
+  const generalSection = document.getElementById("general-info-section");
 
   if (editBtn) {
     editBtn.onclick = () => {
@@ -456,8 +457,53 @@ async function setupProfilePage(user) {
     };
   }
 
-  // Load the user's posts
-  renderUserPosts(user.uid);
+  // Logic for the Edit Profile button
+  document.getElementById("btn-edit-toggle").onclick = () => {
+    viewPublic.classList.add("hidden");
+    editView.classList.remove("hidden");
+    generalSection.classList.remove("hidden"); // Show profile fields
+    loginSection.classList.add("hidden"); // Hide login fields
+  };
+
+  // Logic for the Login Details button
+  document.getElementById("btn-login-details-toggle").onclick = () => {
+    viewPublic.classList.add("hidden");
+    editView.classList.remove("hidden");
+    loginSection.classList.remove("hidden"); // Show login fields
+    generalSection.classList.add("hidden"); // Hide profile fields
+  };
+
+  // Cancel Button Logic
+  document.getElementById("btn-cancel-edit").onclick = () => {
+    viewPublic.classList.remove("hidden");
+    editView.classList.add("hidden");
+  };
+  // --- FIXED SAVE FORM LOGIC ---
+  document.getElementById("profile-edit-form").onsubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const updatedData = {
+        displayName: document.getElementById("edit-username").value,
+        city: document.getElementById("edit-city").value,
+        postcode: document.getElementById("edit-postcode").value,
+        bio: document.getElementById("edit-bio").value,
+        // These fields ensure your dog bio info updates
+        dogName: document.getElementById("edit-dog-name").value,
+        dogBreed: document.getElementById("edit-dog-breed").value,
+        dogAge: document.getElementById("edit-dog-age").value,
+        dogGender: document.getElementById("edit-dog-gender").value,
+      };
+
+      // Update Firestore
+      await setDoc(doc(db, "users", user.uid), updatedData, { merge: true });
+      showToast("Profile and Dog Info Updated!");
+      setTimeout(() => location.reload(), 1000);
+    } catch (err) {
+      alert("Update Error: " + err.message);
+    }
+  };
+
+  renderUserPosts(user.uid); // Render the "Barks"
 }
 
 // --- FORUM DETAIL + EDIT ---
