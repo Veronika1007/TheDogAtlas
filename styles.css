@@ -403,3 +403,24 @@ footer {
 .hidden {
   display: none !important;
 }
+
+/* Add to styles.css */
+.dog-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  color: var(--text);
+  padding: 8px 16px;
+  border-radius: 20px;
+  margin-top: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+#dog-gender-icon {
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
+}

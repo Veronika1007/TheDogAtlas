@@ -393,16 +393,40 @@ function createFriendCard(id, member, isFollowing) {
 async function setupProfilePage(user) {
   const profileName = document.getElementById("profile-name");
   const avatarImg = document.getElementById("display-avatar");
+
   if (!profileName) return;
 
   const userDoc = await getDoc(doc(db, "users", user.uid));
   const data = userDoc.exists() ? userDoc.data() : {};
 
   // Display Public Data
-  profileName.innerText = data.displayName || "Pack Member";
-  if (data.photoURL) avatarImg.src = data.photoURL;
+  document.getElementById("profile-name").innerText =
+    data.displayName || "Pack Member";
   document.getElementById("public-city").innerText = data.city || "Not set";
   document.getElementById("public-bio").innerText = data.bio || "No bio yet.";
+
+  // --- NEW DOG INFO & GENDER LOGIC ---
+  const dogBadge = document.getElementById("public-dog-badge");
+  const dogInfoText = document.getElementById("public-dog-info");
+  const genderIcon = document.getElementById("dog-gender-icon");
+
+  if (data.dogName || data.dogBreed) {
+    dogBadge.style.display = "inline-flex";
+
+    // Set text: "Name (Breed)"
+    const name = data.dogName || "My Dog";
+    const breed = data.dogBreed ? ` (${data.dogBreed})` : "";
+    dogInfoText.innerText = `${name}${breed}`;
+
+    // Apply Gender Colors
+    if (data.dogGender === "Boy") {
+      genderIcon.style.color = "#3498db"; // Blue
+    } else if (data.dogGender === "Girl") {
+      genderIcon.style.color = "#e91e63"; // Pink
+    } else {
+      genderIcon.style.color = "var(--primary)"; // Default Orange
+    }
+  }
 
   // Populate Edit Fields with fresh data
   const fields = {
