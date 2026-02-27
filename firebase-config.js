@@ -754,42 +754,53 @@ async function updateCounter(uid) {
   }
 }
 
+// Forum Posts in My Profile //
 async function renderUserPosts(uid) {
   const container = document.getElementById("my-posts-list");
   if (!container) return;
 
+  // Query posts specifically authored by the current user
   const q = query(
     collection(db, "posts"),
     where("authorId", "==", uid),
     orderBy("createdAt", "desc")
   );
 
-  const snap = await getDocs(q);
-  container.innerHTML = snap.empty ? "<p>No barks yet.</p>" : "";
+  try {
+    const snap = await getDocs(q);
+    container.innerHTML = snap.empty
+      ? "<p style='text-align:center;'>No barks yet.</p>"
+      : "";
 
-  snap.forEach((d) => {
-    const post = d.data();
-    container.innerHTML += `
-        <div class="forum-topic-card" style="border:1px solid #ddd; padding:20px; border-radius:12px; margin-bottom:15px; background:white;">
-          <h3 style="margin:0 0 10px 0; color:#ff6b35;">${post.title}</h3>
-          <p style="color:#444; font-size:0.95rem; margin-bottom:10px;">${
-            post.description || ""
-          }</p>
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <small style="color:#888;">Posted on: ${formatTimestamp(
-              post.createdAt
-            )}</small>
-            <div style="display:flex; gap:10px;">
-              <button onclick="window.location.href='Forum Post/forum-detail.html?id=${
-                d.id
-              }'" 
-                      class="follow-btn-small" style="background:var(--teal); font-size:12px;">Edit</button>
-              <button onclick="deletePost('${d.id}')" 
-                      style="color:#ff4d4d; background:none; border:1px solid #ff4d4d; border-radius:20px; padding:4px 12px; cursor:pointer; font-size:12px; font-weight:600;">Delete</button>
+    snap.forEach((d) => {
+      const post = d.data();
+      // Inject the HTML with the summary text, timestamp, and action buttons
+      container.innerHTML += `
+          <div class="forum-topic-card" style="border:1px solid #ddd; padding:20px; border-radius:12px; margin-bottom:15px; background:white; text-align:left;">
+            <h3 style="margin:0 0 10px 0; color:var(--primary);">${
+              post.title
+            }</h3>
+            <p style="color:#444; font-size:0.95rem; margin-bottom:10px;">${
+              post.description || ""
+            }</p>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <small style="color:#888;">Posted on: ${formatTimestamp(
+                post.createdAt
+              )}</small>
+              <div style="display:flex; gap:10px;">
+                <button onclick="window.location.href='Forum Post/forum-detail.html?id=${
+                  d.id
+                }'" 
+                        class="follow-btn-small" style="background:var(--teal); font-size:12px;">Edit</button>
+                <button onclick="deletePost('${d.id}')" 
+                        style="color:#ff4d4d; background:none; border:1px solid #ff4d4d; border-radius:20px; padding:4px 12px; cursor:pointer; font-size:12px; font-weight:600;">Delete</button>
+              </div>
             </div>
-          </div>
-        </div>`;
-  });
+          </div>`;
+    });
+  } catch (err) {
+    console.error("Error fetching user barks:", err);
+  }
 }
 
 window.openUserModal = async (uid) => {
