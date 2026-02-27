@@ -481,25 +481,42 @@ async function setupProfilePage(user) {
   // --- FIXED SAVE FORM LOGIC ---
   document.getElementById("profile-edit-form").onsubmit = async (e) => {
     e.preventDefault();
+    const user = auth.currentUser;
+
     try {
+      // 1. Collect all data including the specific Dog Bio fields
       const updatedData = {
         displayName: document.getElementById("edit-username").value,
         city: document.getElementById("edit-city").value,
         postcode: document.getElementById("edit-postcode").value,
         bio: document.getElementById("edit-bio").value,
-        // These fields ensure your dog bio info updates
         dogName: document.getElementById("edit-dog-name").value,
         dogBreed: document.getElementById("edit-dog-breed").value,
         dogAge: document.getElementById("edit-dog-age").value,
         dogGender: document.getElementById("edit-dog-gender").value,
+        updatedAt: serverTimestamp(),
       };
 
-      // Update Firestore
+      // 2. Save to Firestore (using merge:true so we don't overwrite other fields)
       await setDoc(doc(db, "users", user.uid), updatedData, { merge: true });
+
+      // 3. Immediately update the visual Header so the user sees the change
+      document.getElementById("profile-name").innerText =
+        updatedData.displayName || "Pack Member";
+      document.getElementById("public-city").innerText =
+        updatedData.city || "Not set";
+      document.getElementById("public-bio").innerText =
+        updatedData.bio || "No bio yet.";
+
       showToast("Profile and Dog Info Updated!");
-      setTimeout(() => location.reload(), 1000);
+
+      // 4. Return to public view and reload to ensure all data is synced
+      document.getElementById("view-public").classList.remove("hidden");
+      document.getElementById("view-edit").classList.add("hidden");
+      setTimeout(() => location.reload(), 800);
     } catch (err) {
-      alert("Update Error: " + err.message);
+      console.error("Update Error:", err);
+      alert("Error saving: " + err.message);
     }
   };
 
