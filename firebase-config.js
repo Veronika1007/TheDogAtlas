@@ -16,6 +16,8 @@ import {
   updateDoc,
   onSnapshot,
   increment,
+  arrayUnion,
+  arrayRemove,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import {
   getAuth,
@@ -147,7 +149,7 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-// --- VISUAL FEED LOGIC  ---
+// --- VISUAL FEED LOGIC (PACK FEED) ---
 async function loadVisualFeed() {
   const feedContainer = document.getElementById("pack-feed");
   if (!feedContainer) return;
@@ -155,112 +157,144 @@ async function loadVisualFeed() {
   const q = query(collection(db, "feedPosts"), orderBy("createdAt", "desc"));
   onSnapshot(q, (snapshot) => {
     feedContainer.innerHTML = "";
-    if (snapshot.empty)
+    if (snapshot.empty) {
       feedContainer.innerHTML =
         "<p style='text-align:center; padding:20px; color:#666;'>No posts yet. Be the first to share!</p>";
+      return;
+    }
 
     snapshot.forEach((d) => {
       const post = d.data();
+      const user = auth.currentUser;
+      // Check if current user has already liked this post
+      const hasLiked = post.likedBy && user && post.likedBy.includes(user.uid);
+      const likeClass = hasLiked ? "fa-solid fa-paw active" : "fa-solid fa-paw";
+
       feedContainer.innerHTML += `
-<div class="feed-card">
-    <div style="padding: 12px; display: flex; align-items: center; gap: 10px;">
-        <img src="${
-          post.authorPhoto || "https://via.placeholder.com/40"
-        }" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
-        <span style="font-weight: bold;">${post.authorName}</span>
-        <small style="color: #999; margin-left: auto;">${formatTimestamp(
-          post.createdAt
-        )}</small>
-    </div>
-    <img src="${
-      post.imageUrl
-    }" style="width: 100%; display: block; background: #eee;">
-    <div style="padding: 15px;">
-        <div style="margin-bottom: 10px; display: flex; gap: 15px;">
-            <span class="woof-btn" onclick="likeFeedPost('${d.id}', this)">
-                <i class="fa-solid fa-paw"></i> 
-                <small style="font-size:14px;">${post.likes || 0}</small>
-            </span>
-            <i class="fa-regular fa-comment" style="cursor:pointer; font-size: 20px;"></i>
-        </div>
-        <p style="margin: 0; line-height: 1.4;"><strong>${
-          post.authorName
-        }</strong> ${post.caption || ""}</p>
-    </div>
-</div>`;
+          <div class="feed-card">
+              <div style="padding: 12px; display: flex; align-items: center; gap: 10px;">
+                  <img src="${
+                    post.authorPhoto || "https://via.placeholder.com/40"
+                  }" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
+                  <span style="font-weight: bold;">${post.authorName}</span>
+                  <small style="color: #999; margin-left: auto;">${formatTimestamp(
+                    post.createdAt
+                  )}</small>
+              </div>
+              <img src="${
+                post.imageUrl
+              }" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; background: #eee;">
+              <div style="padding: 15px;">
+                  <div style="margin-bottom: 10px; display: flex; gap: 15px;">
+                      <span class="woof-btn ${
+                        hasLiked ? "active" : ""
+                      }" onclick="likeFeedPost('${d.id}', this)">
+                          <i class="${likeClass}"></i> 
+                          <small style="font-size:14px;">${
+                            post.likes || 0
+                          }</small>
+                      </span>
+                      <i class="fa-regular fa-comment" style="cursor:pointer; font-size: 20px;" onclick="openPostDetail('${
+                        d.id
+                      }')"></i>
+                  </div>
+                  <p style="margin: 0; line-height: 1.4;"><strong>${
+                    post.authorName
+                  }</strong> ${post.caption || ""}</p>
+              </div>
+          </div>`;
     });
   });
 }
 
+// Updated Like Logic: Prevents multiple likes using likedBy array
 window.likeFeedPost = async (postId, element) => {
-  try {
-    // Toggle the active class for immediate feedback
-    element.classList.toggle("active");
+  const user = auth.currentUser;
+  if (!user) return alert("Please log in to woof at this post!");
 
-    await updateDoc(doc(db, "feedPosts", postId), {
-      likes: increment(1),
-    });
+  try {
+    const postRef = doc(db, "feedPosts", postId);
+    const postSnap = await getDoc(postRef);
+    if (!postSnap.exists()) return;
+
+    const postData = postSnap.data();
+    const likedBy = postData.likedBy || [];
+
+    if (likedBy.includes(user.uid)) {
+      // User already liked it: Unlike the post
+      await updateDoc(postRef, {
+        likes: increment(-1),
+        likedBy: arrayRemove(user.uid),
+      });
+      element.classList.remove("active");
+    } else {
+      // User hasn't liked it: Like the post
+      await updateDoc(postRef, {
+        likes: increment(1),
+        likedBy: arrayUnion(user.uid),
+      });
+      element.classList.add("active");
+    }
   } catch (e) {
-    console.error("Error liking post:", e);
+    console.error("Error toggling like:", e);
   }
 };
 
-const feedFileInput = document.getElementById("feed-file-input");
-if (document.getElementById("feed-image-preview")) {
-  document.getElementById("feed-image-preview").onclick = () =>
-    feedFileInput.click();
-  feedFileInput.onchange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        document.getElementById("img-to-upload").src = ev.target.result;
-        document.getElementById("img-to-upload").classList.remove("hidden");
-        document.getElementById("preview-text").classList.add("hidden");
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-}
+// Comment Modal Logic: Opens side-by-side image and comments
+window.openPostDetail = async (postId) => {
+  const postSnap = await getDoc(doc(db, "feedPosts", postId));
+  if (!postSnap.exists()) return;
+  const post = postSnap.data();
 
-const feedPostForm = document.getElementById("create-feed-post-form");
-if (feedPostForm) {
-  feedPostForm.onsubmit = async (e) => {
+  // Populate Modal content
+  document.getElementById("modal-post-img").src = post.imageUrl;
+  document.getElementById(
+    "modal-post-header"
+  ).innerText = `Post by ${post.authorName}`;
+  document.getElementById("post-detail-modal").classList.remove("hidden");
+
+  // Live snapshot for comments
+  const commentsContainer = document.getElementById("modal-comments-list");
+  const q = query(
+    collection(db, "feedPosts", postId, "comments"),
+    orderBy("createdAt", "asc")
+  );
+
+  onSnapshot(q, (snap) => {
+    commentsContainer.innerHTML = "";
+    snap.forEach((doc) => {
+      const c = doc.data();
+      commentsContainer.innerHTML += `
+          <div style="margin-bottom:12px; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px;">
+              <strong>${c.authorName}</strong> ${c.text}
+              <div style="font-size:10px; color:#999; margin-top: 4px;">${formatTimestamp(
+                c.createdAt
+              )}</div>
+          </div>`;
+    });
+  });
+
+  // Handle new comment submission
+  const form = document.getElementById("comment-form");
+  form.onsubmit = async (e) => {
     e.preventDefault();
-    const file = feedFileInput.files[0];
-    const caption = document.getElementById("feed-caption").value;
-    if (!file) return alert("Select a photo!");
+    const input = document.getElementById("comment-input");
+    if (!input.value.trim()) return;
 
-    showToast("Uploading to the pack...");
     try {
-      const user = auth.currentUser;
-      const userDoc = await getDoc(doc(db, "users", user.uid));
-      const userData = userDoc.data() || {};
-
-      const imgRef = ref(storage, `feed/${user.uid}_${Date.now()}`);
-      const snapshot = await uploadBytes(imgRef, file);
-      const url = await getDownloadURL(snapshot.ref);
-
-      await addDoc(collection(db, "feedPosts"), {
-        imageUrl: url,
-        caption: caption,
-        authorId: user.uid,
-        authorName: userData.displayName || "Anonymous",
-        authorPhoto: userData.photoURL || "",
+      const userDoc = await getDoc(doc(db, "users", auth.currentUser.uid));
+      await addDoc(collection(db, "feedPosts", postId, "comments"), {
+        text: input.value,
+        authorName: userDoc.data()?.displayName || "Anonymous",
+        authorId: auth.currentUser.uid,
         createdAt: serverTimestamp(),
-        likes: 0,
       });
-
-      document.getElementById("feed-post-modal").classList.add("hidden");
-      feedPostForm.reset();
-      document.getElementById("img-to-upload").classList.add("hidden");
-      document.getElementById("preview-text").classList.remove("hidden");
-      showToast("Shared successfully!");
+      input.value = "";
     } catch (err) {
-      alert("Post error: " + err.message);
+      console.error("Error adding comment:", err);
     }
   };
-}
+};
 
 // --- SEARCH & COMMUNITY LISTENERS ---
 function setupCommunityListeners() {
