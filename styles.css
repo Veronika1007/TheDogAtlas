@@ -349,6 +349,12 @@ footer {
   margin: 0 auto;
   padding: 10px;
 }
+.feed-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* Ensures all images are the same size */
+  object-fit: cover;
+  display: block;
+}
 
 /* Updated Like Button Style */
 .woof-btn i {
@@ -359,6 +365,10 @@ footer {
 
 .woof-btn.active i {
   color: #ff6b35; /* Orange color when liked */
+}
+
+.woof-btn:active {
+  transform: scale(1.2);
 }
 
 @media (max-width: 600px) {
@@ -399,7 +409,7 @@ footer {
   transition: transform 0.1s ease;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
 }
 
 #general-info-section,

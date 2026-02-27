@@ -155,60 +155,58 @@ async function loadVisualFeed() {
   if (!feedContainer) return;
 
   const q = query(collection(db, "feedPosts"), orderBy("createdAt", "desc"));
+
   onSnapshot(q, (snapshot) => {
     feedContainer.innerHTML = "";
-    if (snapshot.empty) {
-      feedContainer.innerHTML =
-        "<p style='text-align:center; padding:20px; color:#666;'>No posts yet. Be the first to share!</p>";
-      return;
-    }
-
     snapshot.forEach((d) => {
       const post = d.data();
       const user = auth.currentUser;
-      // Check if current user has already liked this post
       const hasLiked = post.likedBy && user && post.likedBy.includes(user.uid);
-      const likeClass = hasLiked ? "fa-solid fa-paw active" : "fa-solid fa-paw";
-      const commentCountEl = document.getElementById(`comment-count-${d.id}`);
-      const commentsQuery = collection(db, "feedPosts", d.id, "comments");
 
-      onSnapshot(commentsQuery, (commentSnap) => {
-        if (commentCountEl) {
-          commentCountEl.innerText = commentSnap.size;
-        }
-      });
-      feedContainer.innerHTML += `
+      const postHtml = `
           <div class="feed-card">
               <div style="padding: 12px; display: flex; align-items: center; gap: 10px;">
                   <img src="${
                     post.authorPhoto || "https://via.placeholder.com/40"
-                  }" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
-                  <span style="font-weight: bold;">${post.authorName}</span>
+                  }" style="width: 35px; height: 35px; border-radius: 50%;">
+                  <span style="font-weight: 600;">${post.authorName}</span>
                   <small style="color: #999; margin-left: auto;">${formatTimestamp(
                     post.createdAt
                   )}</small>
               </div>
-              <img src="${
-                post.imageUrl
-              }" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; background: #eee;">
-            <div style="margin-bottom: 10px; display: flex; gap: 15px;">
-            <span class="woof-btn ${
-              hasLiked ? "active" : ""
-            }" onclick="likeFeedPost('${d.id}', this)">
-            <i class="${likeClass}"></i> 
-            <small style="font-size:14px;">${post.likes || 0}</small>
-            </span>
-    
-            <span class="comment-btn" onclick="openPostDetail('${
-              d.id
-            }')" style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
-                <i class="fa-regular fa-comment" style="font-size: 20px;"></i>
-                <small id="comment-count-${
-                  d.id
-                }" style="font-size:14px;">0</small>
-            </span>
-            </div>
-        </div>`;
+              <img src="${post.imageUrl}">
+              <div style="padding: 15px;">
+                  <div style="margin-bottom: 12px; display: flex; gap: 20px;">
+                      <span class="woof-btn ${
+                        hasLiked ? "active" : ""
+                      }" onclick="likeFeedPost('${d.id}', this)">
+                          <i class="fa-solid fa-paw" style="font-size: 20px;"></i> 
+                          <small style="font-weight: 700;">${
+                            post.likes || 0
+                          }</small>
+                      </span>
+                      <span class="comment-btn" onclick="openPostDetail('${
+                        d.id
+                      }')">
+                          <i class="fa-regular fa-comment" style="font-size: 20px;"></i>
+                          <small id="comment-count-${
+                            d.id
+                          }" style="font-weight: 700;">0</small>
+                      </span>
+                  </div>
+                  <p style="margin: 0; font-size: 0.95rem;"><strong>${
+                    post.authorName
+                  }</strong> ${post.caption || ""}</p>
+              </div>
+          </div>`;
+
+      feedContainer.insertAdjacentHTML("beforeend", postHtml);
+
+      // LIVE COMMENT COUNT LISTENER
+      const commentCountEl = document.getElementById(`comment-count-${d.id}`);
+      onSnapshot(collection(db, "feedPosts", d.id, "comments"), (snap) => {
+        if (commentCountEl) commentCountEl.innerText = snap.size;
+      });
     });
   });
 }
