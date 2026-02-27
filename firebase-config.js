@@ -728,7 +728,7 @@ async function updateCounter(uid) {
   }
 }
 
-s; // --- UPDATED FORUM BARKS RENDERING ---
+// --- UPDATED FORUM BARKS RENDERING ---
 async function renderUserPosts(uid) {
   const container = document.getElementById("my-posts-list");
   if (!container) return;
