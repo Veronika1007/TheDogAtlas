@@ -169,7 +169,14 @@ async function loadVisualFeed() {
       // Check if current user has already liked this post
       const hasLiked = post.likedBy && user && post.likedBy.includes(user.uid);
       const likeClass = hasLiked ? "fa-solid fa-paw active" : "fa-solid fa-paw";
+      const commentCountEl = document.getElementById(`comment-count-${d.id}`);
+      const commentsQuery = collection(db, "feedPosts", d.id, "comments");
 
+      onSnapshot(commentsQuery, (commentSnap) => {
+        if (commentCountEl) {
+          commentCountEl.innerText = commentSnap.size;
+        }
+      });
       feedContainer.innerHTML += `
           <div class="feed-card">
               <div style="padding: 12px; display: flex; align-items: center; gap: 10px;">
@@ -184,25 +191,24 @@ async function loadVisualFeed() {
               <img src="${
                 post.imageUrl
               }" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; background: #eee;">
-              <div style="padding: 15px;">
-                  <div style="margin-bottom: 10px; display: flex; gap: 15px;">
-                      <span class="woof-btn ${
-                        hasLiked ? "active" : ""
-                      }" onclick="likeFeedPost('${d.id}', this)">
-                          <i class="${likeClass}"></i> 
-                          <small style="font-size:14px;">${
-                            post.likes || 0
-                          }</small>
-                      </span>
-                      <i class="fa-regular fa-comment" style="cursor:pointer; font-size: 20px;" onclick="openPostDetail('${
-                        d.id
-                      }')"></i>
-                  </div>
-                  <p style="margin: 0; line-height: 1.4;"><strong>${
-                    post.authorName
-                  }</strong> ${post.caption || ""}</p>
-              </div>
-          </div>`;
+            <div style="margin-bottom: 10px; display: flex; gap: 15px;">
+            <span class="woof-btn ${
+              hasLiked ? "active" : ""
+            }" onclick="likeFeedPost('${d.id}', this)">
+            <i class="${likeClass}"></i> 
+            <small style="font-size:14px;">${post.likes || 0}</small>
+            </span>
+    
+            <span class="comment-btn" onclick="openPostDetail('${
+              d.id
+            }')" style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                <i class="fa-regular fa-comment" style="font-size: 20px;"></i>
+                <small id="comment-count-${
+                  d.id
+                }" style="font-size:14px;">0</small>
+            </span>
+            </div>
+        </div>`;
     });
   });
 }
