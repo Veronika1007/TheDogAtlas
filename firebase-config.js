@@ -405,6 +405,9 @@ async function setupProfilePage(user) {
   document.getElementById("public-city").innerText = data.city || "Not set";
   document.getElementById("public-bio").innerText = data.bio || "No bio yet.";
 
+  if (data.photoURL && avatarImg) {
+    avatarImg.src = data.photoURL;
+  }
   // --- NEW DOG INFO & GENDER LOGIC ---
   const dogBadge = document.getElementById("public-dog-badge");
   const dogInfoText = document.getElementById("public-dog-info");
@@ -800,11 +803,13 @@ window.openUserModal = async (uid) => {
   }
 };
 
-window.deletePost = async (id) => {
-  if (confirm("Delete bark?")) {
-    await deleteDoc(doc(db, "posts", id));
-    location.reload();
-  }
+// Ensure logout is globally accessible for the HTML onclick attribute
+window.logoutUser = () => {
+  signOut(auth)
+    .then(() => {
+      window.location.href = "index.html";
+    })
+    .catch((error) => {
+      console.error("Logout Error:", error);
+    });
 };
-window.logoutUser = () =>
-  signOut(auth).then(() => (location.href = "index.html"));
