@@ -32,7 +32,12 @@ import {
   uploadBytes,
   getDownloadURL,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
-
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  serverTimestamp,
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 const firebaseConfig = {
   apiKey: "AIzaSyAUzPfsLsh5bCsso7DMLDlmuyb-PR0JeeY",
   authDomain: "thedogatlas.firebaseapp.com",
@@ -951,3 +956,26 @@ onAuthStateChanged(auth, (user) => {
   // ... your existing code ...
   if (document.getElementById("calendar")) initEventsCalendar();
 });
+// Manual Event Submission
+const manualEventForm = document.getElementById("manual-event-form");
+if (manualEventForm) {
+  manualEventForm.onsubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await addDoc(collection(db, "events"), {
+        title: document.getElementById("ev-title").value,
+        start: document.getElementById("ev-start").value,
+        description: document.getElementById("ev-desc").value,
+        location: document.getElementById("ev-loc").value,
+        price: document.getElementById("ev-price").value,
+        website: document.getElementById("ev-link").value,
+        createdAt: serverTimestamp(),
+      });
+      alert("Event added successfully!");
+      manualEventForm.reset();
+      document.getElementById("admin-event-modal").classList.add("hidden");
+    } catch (err) {
+      alert("Error: " + err.message);
+    }
+  };
+}
