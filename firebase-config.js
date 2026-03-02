@@ -859,3 +859,95 @@ window.logoutUser = () => {
       console.error("Logout Error:", error);
     });
 };
+
+// --- INTERACTIVE EVENTS LOGIC ---
+async function initEventsCalendar() {
+  const calendarEl = document.getElementById("calendar");
+  if (!calendarEl) return;
+
+  const calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: "dayGridMonth",
+    headerToolbar: {
+      left: "prev,next",
+      center: "title",
+      right: "today",
+    },
+    eventColor: "#ff7a4a", // Your orange theme
+    events: async function (info, successCallback, failureCallback) {
+      try {
+        const snap = await getDocs(collection(db, "events"));
+        const events = snap.docs.map((d) => ({
+          id: d.id,
+          title: d.data().title,
+          start: d.data().start, // Format: YYYY-MM-DD
+          extendedProps: d.data(), // Store all extra info (price, link, etc)
+        }));
+        successCallback(events);
+      } catch (e) {
+        console.error(e);
+        failureCallback(e);
+      }
+    },
+
+    // 1. Click Event for "More Info" Modal
+    eventClick: function (info) {
+      const data = info.event.extendedProps;
+      document.getElementById("modal-event-title").innerText = info.event.title;
+      document.getElementById("modal-event-desc").innerText =
+        data.description || "No description provided.";
+      document.getElementById(
+        "modal-event-time"
+      ).innerHTML = `<i class="fa fa-clock"></i> ${data.time || "All Day"}`;
+      document.getElementById(
+        "modal-event-loc"
+      ).innerHTML = `<i class="fa fa-map-marker-alt"></i> ${
+        data.location || "TBA"
+      }`;
+      document.getElementById(
+        "modal-event-price"
+      ).innerHTML = `<i class="fa fa-ticket-alt"></i> ${data.price || "Free"}`;
+      document.getElementById("modal-event-link").href = data.website || "#";
+      document.getElementById("modal-event-booking").href =
+        data.bookingUrl || data.website || "#";
+
+      document.getElementById("event-detail-modal").classList.remove("hidden");
+    },
+
+    // 2. Click Date to see list of events on that day
+    dateClick: function (info) {
+      const listContainer = document.getElementById("dynamic-event-list");
+      const allEvents = calendar.getEvents();
+      const dayEvents = allEvents.filter((e) => e.startStr === info.dateStr);
+
+      if (dayEvents.length === 0) {
+        listContainer.innerHTML = `<p>No events scheduled for ${info.dateStr}.</p>`;
+        return;
+      }
+
+      listContainer.innerHTML = `<h3>Events on ${info.dateStr}</h3>`;
+      dayEvents.forEach((e) => {
+        const d = e.extendedProps;
+        listContainer.innerHTML += `
+            <div class="event-card" onclick="calendar.trigger('eventClick', {event: calendar.getEventById('${
+              e.id
+            }')})" style="cursor:pointer; margin-bottom:10px;">
+              <div class="event-info">
+                <h3 style="color:var(--primary)">${e.title}</h3>
+                <p>${d.description?.substring(0, 60)}...</p>
+                <small><i class="fa fa-map-marker-alt"></i> ${
+                  d.location || "UK"
+                }</small>
+              </div>
+            </div>`;
+      });
+    },
+  });
+
+  calendar.render();
+}
+
+// Ensure this runs when the auth state changes and we are on the events page
+onAuthStateChanged(auth, (user) => {
+  // ... your existing code ...
+  if (document.getElementById("calendar")) initEventsCalendar();
+});
