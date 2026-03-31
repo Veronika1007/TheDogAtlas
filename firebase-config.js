@@ -984,11 +984,11 @@ if (manualEventForm) {
 // EVENTS Page //
 
 // --- FIXED CALENDAR LOGIC ---
-// --- CALENDAR LOGIC WITH LOGIN PROTECTION ---
 async function initEventsCalendar() {
   const calendarEl = document.getElementById("calendar");
 
-  // STOP if the calendar element isn't here (e.g., on the Login page)
+  // SAFETY CHECK: If we are not on the events page, exit immediately.
+  // This prevents the script from crashing on the login page.
   if (!calendarEl) return;
 
   try {
@@ -1010,23 +1010,24 @@ async function initEventsCalendar() {
           }));
           successCallback(events);
         } catch (e) {
-          console.error("Error fetching events:", e);
+          console.error("Firestore events error:", e);
         }
       },
     });
 
     calendar.render();
-    // Force redraw to ensure visibility
-    setTimeout(() => calendar.updateSize(), 400);
+    // Force a size update to handle browser rendering delays
+    setTimeout(() => calendar.updateSize(), 500);
   } catch (err) {
-    console.error("Calendar failed to load:", err);
+    console.error("Calendar initialization failed:", err);
   }
 }
 
-// Global initialization to protect Login functionality
+// Unified Listener: Ensures Login and Calendar don't conflict
 window.addEventListener("load", () => {
-  // Only run if we are on the events page
+  // Only attempt calendar if the div exists
   if (document.getElementById("calendar")) {
     initEventsCalendar();
   }
+  // Your login and authentication listeners will now continue to load safely
 });
