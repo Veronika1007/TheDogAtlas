@@ -449,17 +449,16 @@ footer {
 /* EVENTS Calendar container */
 /* Symmetrical Calendar Widget */
 .calendar-widget {
-  background: #ffffff;
-  border-radius: 15px;
+  flex: 2; /* Makes calendar wider */
+  background: white;
   padding: 25px;
+  border-radius: 15px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-  width: 100%;
-  max-width: 900px; /* Adjust based on your layout */
-  margin: 0 auto;
 }
 
 #calendar {
-  min-height: 600px;
+  min-height: 550px;
+  width: 100%;
 }
 
 /* Symmetrical Grid Fixes */
@@ -498,19 +497,6 @@ footer {
   align-items: flex-start;
 }
 
-.calendar-widget {
-  flex: 2; /* Makes calendar wider */
-  background: white;
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-}
-
 .event-list {
   flex: 1; /* List takes less space */
-}
-
-#calendar {
-  min-height: 550px;
-  width: 100%;
 }
