@@ -1,5 +1,5 @@
 // ==========================================
-// 1. FIREBASE INITIALIZATION & IMPORTS
+// 1. IMPORTS & INITIALIZATION
 // ==========================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import {
@@ -12,21 +12,22 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import {
   getFirestore,
-  doc,
-  setDoc,
-  getDoc,
-  getDocs,
   collection,
+  getDocs,
   addDoc,
+  doc,
+  getDoc,
   query,
   orderBy,
-  onSnapshot,
   serverTimestamp,
-  increment,
+  where,
+  deleteDoc,
+  setDoc,
   updateDoc,
+  onSnapshot,
+  increment,
   arrayUnion,
   arrayRemove,
-  deleteDoc,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import {
   getStorage,
@@ -45,15 +46,13 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const db = getFirestore(app);
+const auth = getAuth(app);
 const storage = getStorage(app);
 
 // ==========================================
-// 2. AUTHENTICATION (RE-ORDERED TO TOP)
+// 2. AUTHENTICATION (MOVED TO TOP)
 // ==========================================
-
-// Login Logic
 const loginForm = document.getElementById("login-form");
 if (loginForm) {
   loginForm.addEventListener("submit", (e) => {
@@ -65,12 +64,11 @@ if (loginForm) {
         window.location.href = "index.html";
       })
       .catch((err) => {
-        alert("Login Error: " + err.message);
+        alert("Login failed: " + err.message);
       });
   });
 }
 
-// Signup Logic
 const signupForm = document.getElementById("signup-form");
 if (signupForm) {
   signupForm.addEventListener("submit", async (e) => {
@@ -79,9 +77,13 @@ if (signupForm) {
     const pass = document.getElementById("signup-password").value;
     const name = document.getElementById("signup-name").value;
     try {
-      const userCred = await createUserWithEmailAndPassword(auth, email, pass);
-      await updateProfile(userCred.user, { displayName: name });
-      await setDoc(doc(db, "users", userCred.user.uid), {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        pass,
+      );
+      await updateProfile(userCredential.user, { displayName: name });
+      await setDoc(doc(db, "users", userCredential.user.uid), {
         displayName: name,
         email: email,
         createdAt: serverTimestamp(),
@@ -90,12 +92,11 @@ if (signupForm) {
       });
       window.location.href = "index.html";
     } catch (err) {
-      alert("Signup Error: " + err.message);
+      alert("Signup error: " + err.message);
     }
   });
 }
 
-// Global Auth State
 onAuthStateChanged(auth, (user) => {
   const authLinks = document.getElementById("auth-links");
   if (user) {
@@ -118,9 +119,8 @@ window.logoutUser = () => {
 };
 
 // ==========================================
-// 3. SOCIAL & COMMUNITY (FEED/FOLLOW)
+// 3. SOCIAL & CORE LOGIC (FEED / TRAILS / PROFILES)
 // ==========================================
-
 async function loadVisualFeed() {
   const feedContainer = document.getElementById("pack-feed");
   if (!feedContainer) return;
@@ -132,54 +132,67 @@ async function loadVisualFeed() {
       const user = auth.currentUser;
       const hasLiked = post.likedBy && user && post.likedBy.includes(user.uid);
       feedContainer.innerHTML += `
-                <div class="feed-card">
-                    <div class="feed-header" style="padding:12px; display:flex; align-items:center; gap:10px;">
-                        <img src="${post.authorPhoto || "Media/Milo.png"}" style="width:35px; height:35px; border-radius:50%;">
-                        <strong>${post.authorName}</strong>
-                    </div>
-                    <img src="${post.imageUrl}" style="width:100%; aspect-ratio:1/1; object-fit:cover;">
-                    <div style="padding:15px;">
-                        <div style="display:flex; gap:15px; margin-bottom:10px;">
-                            <span class="woof-btn ${hasLiked ? "active" : ""}" onclick="likeFeedPost('${d.id}', this)">
-                                <i class="fa-solid fa-paw"></i> <small>${post.likes || 0}</small>
-                            </span>
-                        </div>
-                        <p><strong>${post.authorName}</strong> ${post.caption || ""}</p>
-                    </div>
-                </div>`;
+        <div class="feed-card">
+          <div class="feed-header" style="padding:12px; display:flex; align-items:center; gap:10px;">
+            <img src="${post.authorPhoto || "Media/Milo.png"}" style="width:35px; height:35px; border-radius:50%;">
+            <strong>${post.authorName}</strong>
+          </div>
+          <img src="${post.imageUrl}" style="width:100%; aspect-ratio:1/1; object-fit:cover;">
+          <div style="padding:15px;">
+            <div style="display:flex; gap:15px; margin-bottom:10px;">
+              <span class="woof-btn ${hasLiked ? "active" : ""}" onclick="likeFeedPost('${d.id}', this)">
+                <i class="fa-solid fa-paw"></i> <small>${post.likes || 0}</small>
+              </span>
+            </div>
+            <p><strong>${post.authorName}</strong> ${post.caption || ""}</p>
+          </div>
+        </div>`;
     });
   });
 }
 
 window.likeFeedPost = async (postId, element) => {
   const user = auth.currentUser;
-  if (!user) return;
+  if (!user) return alert("Login to woof!");
   const postRef = doc(db, "feedPosts", postId);
-  element.classList.toggle("active");
-  await updateDoc(postRef, {
-    likes: increment(element.classList.contains("active") ? 1 : -1),
-    likedBy: element.classList.contains("active")
-      ? arrayUnion(user.uid)
-      : arrayRemove(user.uid),
-  });
+  const snap = await getDoc(postRef);
+  const likedBy = snap.data().likedBy || [];
+  if (likedBy.includes(user.uid)) {
+    await updateDoc(postRef, {
+      likes: increment(-1),
+      likedBy: arrayRemove(user.uid),
+    });
+  } else {
+    await updateDoc(postRef, {
+      likes: increment(1),
+      likedBy: arrayUnion(user.uid),
+    });
+  }
 };
 
-// ==========================================
-// 4. CALENDAR & EVENTS (ISOLATED AT BOTTOM)
-// ==========================================
+async function loadUserProfile() {
+  const user = auth.currentUser;
+  const userDoc = await getDoc(doc(db, "users", user.uid));
+  if (userDoc.exists()) {
+    const data = userDoc.data();
+    document.getElementById("profile-name").innerText =
+      data.displayName || "Explorer";
+    if (data.photoURL)
+      document.getElementById("profile-pic").src = data.photoURL;
+  }
+}
 
+// ==========================================
+// 4. CALENDAR & EVENTS (BOTTOM FOR SAFETY)
+// ==========================================
 async function initEventsCalendar() {
   const calendarEl = document.getElementById("calendar");
-  // SAFETY GATE: Stops the script from crashing on Login page
   if (!calendarEl) return;
-
   try {
     const calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: "dayGridMonth",
       height: "auto",
-      aspectRatio: 1.35,
       headerToolbar: { left: "prev,next", center: "title", right: "today" },
-      themeSystem: "standard",
       events: async function (info, successCallback) {
         const snap = await getDocs(collection(db, "events"));
         const events = snap.docs.map((doc) => ({
@@ -192,13 +205,14 @@ async function initEventsCalendar() {
       },
     });
     calendar.render();
-    setTimeout(() => calendar.updateSize(), 500);
-  } catch (e) {
-    console.error("Calendar fail:", e);
+    setTimeout(() => {
+      calendar.updateSize();
+    }, 500);
+  } catch (err) {
+    console.error("Calendar fail:", err);
   }
 }
 
-// Unified Trigger
 window.addEventListener("load", () => {
   if (document.getElementById("calendar")) initEventsCalendar();
 });

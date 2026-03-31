@@ -488,3 +488,29 @@ footer {
   color: #444;
   text-decoration: none !important;
 }
+
+/* Layout Adjustment */
+.events-layout {
+  display: flex;
+  flex-direction: row; /* Side by side */
+  gap: 50px; /* This creates the gap between calendar and list */
+  padding: 30px;
+  align-items: flex-start;
+}
+
+.calendar-widget {
+  flex: 2; /* Makes calendar wider */
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.event-list {
+  flex: 1; /* List takes less space */
+}
+
+#calendar {
+  min-height: 550px;
+  width: 100%;
+}
