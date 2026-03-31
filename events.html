@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,6 +9,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
     <style>
       /* Events Specific Styles */
       .events-hero {
@@ -252,233 +253,42 @@
         </button>
       </form>
 
-      <div style="text-align: right; margin-bottom: 20px">
-        <button
-          onclick="document.getElementById('admin-event-modal').classList.remove('hidden')"
-          class="follow-btn-small"
-        >
-          <i class="fa fa-plus"></i> Add Event
-        </button>
-      </div>
-
-      <div
-        id="admin-event-modal"
-        class="hidden"
-        style="
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: rgba(0, 0, 0, 0.8);
-          z-index: 6000;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        "
-      >
-        <div
-          style="
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 500px;
-          "
-        >
-          <h3>Add New Dog Event</h3>
-          <form id="manual-event-form">
-            <input
-              type="text"
-              id="ev-title"
-              placeholder="Event Name"
-              required
-              style="width: 100%; margin-bottom: 10px; padding: 8px"
-            />
-            <input
-              type="date"
-              id="ev-start"
-              required
-              style="width: 100%; margin-bottom: 10px; padding: 8px"
-            />
-            <textarea
-              id="ev-desc"
-              placeholder="Description"
-              style="width: 100%; margin-bottom: 10px; padding: 8px"
-            ></textarea>
-            <input
-              type="text"
-              id="ev-loc"
-              placeholder="Location"
-              style="width: 100%; margin-bottom: 10px; padding: 8px"
-            />
-            <input
-              type="text"
-              id="ev-price"
-              placeholder="Price (e.g. £10 or Free)"
-              style="width: 100%; margin-bottom: 10px; padding: 8px"
-            />
-            <input
-              type="url"
-              id="ev-link"
-              placeholder="Website URL"
-              style="width: 100%; margin-bottom: 10px; padding: 8px"
-            />
-            <div style="display: flex; gap: 10px; margin-top: 10px">
-              <button type="submit" class="follow-btn-small" style="flex: 1">
-                Save to Calendar
-              </button>
-              <button
-                type="button"
-                onclick="document.getElementById('admin-event-modal').classList.add('hidden')"
-                style="
-                  flex: 1;
-                  background: #ccc;
-                  border: none;
-                  border-radius: 20px;
-                  cursor: pointer;
-                "
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <div class="events-layout">
-        <aside class="calendar-widget">
-          <div id="calendar"></div>
-          <p style="font-size: 0.75rem; color: var(--muted); margin-top: 15px">
-            * Click an event for details or a date to see all events that day.
-          </p>
-        </aside>
-
-        <section id="dynamic-event-list" class="event-list">
-          <p style="text-align: center; color: var(--muted)">
-            Select a date to view events.
-          </p>
-        </section>
-      </div>
-
-      <div
-        id="event-detail-modal"
-        class="hidden"
-        style="
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: rgba(0, 0, 0, 0.8);
-          z-index: 5000;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 20px;
-        "
-      >
-        <div
-          style="
-            background: white;
-            width: 95%;
-            max-width: 600px;
-            border-radius: var(--radius);
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-          "
-        >
-          <button
-            onclick="document.getElementById('event-detail-modal').classList.add('hidden')"
-            style="
-              position: absolute;
-              top: 15px;
-              right: 20px;
-              background: #eee;
-              border: none;
-              border-radius: 50%;
-              width: 30px;
-              height: 30px;
-              cursor: pointer;
-              font-weight: bold;
-            "
-          >
-            &times;
-          </button>
-
-          <div
-            id="modal-event-banner"
-            style="
-              height: 200px;
-              background: var(--primary);
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              color: white;
-              text-align: center;
-              padding: 20px;
-            "
-          >
-            <h2 id="modal-event-title" style="margin: 0"></h2>
-          </div>
-
-          <div style="padding: 30px">
-            <p
-              id="modal-event-desc"
-              style="line-height: 1.6; color: var(--text); margin-bottom: 20px"
-            ></p>
-
+      <main>
+        <div class="events-layout">
+          <aside class="calendar-widget">
             <div
-              class="event-meta"
+              id="calendar-card"
               style="
-                border-top: 1px solid var(--border);
-                padding-top: 20px;
-                gap: 10px;
+                background: white;
+                padding: 20px;
+                border-radius: 15px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
               "
             >
-              <span id="modal-event-time"><i class="fa fa-clock"></i> </span>
-              <span id="modal-event-loc"
-                ><i class="fa fa-map-marker-alt"></i>
-              </span>
-              <span
-                id="modal-event-price"
-                style="color: var(--teal); font-weight: bold"
-                ><i class="fa fa-ticket-alt"></i>
-              </span>
+              <div id="calendar"></div>
             </div>
+            <button
+              onclick="
+                document
+                  .getElementById('admin-event-modal')
+                  .classList.remove('hidden')
+              "
+              class="follow-btn-small"
+              style="margin-top: 20px; width: 100%"
+            >
+              <i class="fa fa-plus"></i> Add New Event
+            </button>
+          </aside>
 
-            <div style="margin-top: 30px; display: flex; gap: 10px">
-              <a
-                id="modal-event-link"
-                href="#"
-                target="_blank"
-                class="follow-btn-small"
-                style="
-                  text-decoration: none;
-                  flex: 1;
-                  text-align: center;
-                  padding: 12px;
-                "
-                >Official Website</a
-              >
-              <a
-                id="modal-event-booking"
-                href="#"
-                target="_blank"
-                class="btn-outline-teal"
-                style="
-                  text-decoration: none;
-                  flex: 1;
-                  text-align: center;
-                  padding: 10px;
-                "
-                >Book Tickets</a
-              >
+          <section class="event-list">
+            <div class="section-header">
+              <h2>Upcoming Events</h2>
+              <p>Click a date on the calendar to filter</p>
             </div>
-          </div>
+            <div id="dynamic-event-list"></div>
+          </section>
         </div>
-      </div>
+      </main>
 
       <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
     </main>

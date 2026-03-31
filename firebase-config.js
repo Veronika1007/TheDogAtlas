@@ -110,7 +110,7 @@ function setupTabPersistence() {
     tab.addEventListener("click", () => {
       localStorage.setItem(
         "activeCommunityTab",
-        tab.id.replace("tab-", "").replace("-btn", "")
+        tab.id.replace("tab-", "").replace("-btn", ""),
       );
     });
   });
@@ -187,7 +187,7 @@ async function loadVisualFeed() {
                   }" style="width: 35px; height: 35px; border-radius: 50%;">
                   <span style="font-weight: 600;">${post.authorName}</span>
                   <small style="color: #999; margin-left: auto;">${formatTimestamp(
-                    post.createdAt
+                    post.createdAt,
                   )}</small>
               </div>
               <img src="${post.imageUrl}">
@@ -268,16 +268,15 @@ window.openPostDetail = async (postId) => {
 
   // Populate Modal content
   document.getElementById("modal-post-img").src = post.imageUrl;
-  document.getElementById(
-    "modal-post-header"
-  ).innerText = `Post by ${post.authorName}`;
+  document.getElementById("modal-post-header").innerText =
+    `Post by ${post.authorName}`;
   document.getElementById("post-detail-modal").classList.remove("hidden");
 
   // Live snapshot for comments
   const commentsContainer = document.getElementById("modal-comments-list");
   const q = query(
     collection(db, "feedPosts", postId, "comments"),
-    orderBy("createdAt", "asc")
+    orderBy("createdAt", "asc"),
   );
 
   onSnapshot(q, (snap) => {
@@ -288,7 +287,7 @@ window.openPostDetail = async (postId) => {
           <div style="margin-bottom:12px; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px;">
               <strong>${c.authorName}</strong> ${c.text}
               <div style="font-size:10px; color:#999; margin-top: 4px;">${formatTimestamp(
-                c.createdAt
+                c.createdAt,
               )}</div>
           </div>`;
     });
@@ -392,7 +391,7 @@ async function loadMemberDirectory(term = "", breed = "", maxDist = "") {
           myData.lat,
           myData.lng,
           member.lat,
-          member.lng
+          member.lng,
         );
         if (distance > parseFloat(maxDist)) distMatch = false;
       } else {
@@ -436,8 +435,8 @@ function createFriendCard(id, member, isFollowing) {
       <div style="flex:1">
         <div class="row-header">
           <span class="username" onclick="openUserModal('${id}')" style="cursor:pointer;">${
-    member.displayName || "Anonymous"
-  }</span>
+            member.displayName || "Anonymous"
+          }</span>
           ${btn}
         </div>
         <div class="breed-tag">${member.dogBreed || "Dog Lover"}</div>
@@ -669,7 +668,7 @@ async function loadForumPosts(searchTerm = "") {
               <h3 style="margin:0; color:#ff6b35;">${post.title}</h3>
               <p style="color:#444; margin: 8px 0;">${post.description.substring(
                 0,
-                100
+                100,
               )}...</p>
               <small style="color:#888;">By ${
                 post.authorName
@@ -719,7 +718,7 @@ if (authForm) {
         const userCred = await createUserWithEmailAndPassword(
           auth,
           email,
-          password
+          password,
         );
         const usernameInput = document.getElementById("auth-username").value;
 
@@ -745,7 +744,7 @@ window.followUser = async (uid, name) => {
   await setDoc(
     doc(db, "users", myUid, "following", uid),
     { displayName: name, followedAt: serverTimestamp() },
-    { merge: true }
+    { merge: true },
   );
   await setDoc(
     doc(db, "users", uid, "followers", myUid),
@@ -753,7 +752,7 @@ window.followUser = async (uid, name) => {
       displayName: auth.currentUser.displayName || "Member",
       followedAt: serverTimestamp(),
     },
-    { merge: true }
+    { merge: true },
   );
   showToast(`Following ${name}`);
   loadMyPack();
@@ -799,7 +798,7 @@ async function renderUserPosts(uid) {
   const q = query(
     collection(db, "posts"),
     where("authorId", "==", uid),
-    orderBy("createdAt", "desc")
+    orderBy("createdAt", "desc"),
   );
 
   try {
@@ -820,7 +819,7 @@ async function renderUserPosts(uid) {
             }</p>
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <small style="color:#888;">Posted on: ${formatTimestamp(
-                post.createdAt
+                post.createdAt,
               )}</small>
               <div style="display:flex; gap:10px;">
                 <button onclick="window.location.href='Forum Post/forum-detail.html?id=${
@@ -846,18 +845,14 @@ window.openUserModal = async (uid) => {
       data.photoURL || "https://via.placeholder.com/150";
     document.getElementById("modal-user-name").innerText =
       data.displayName || "Member";
-    document.getElementById(
-      "modal-user-city"
-    ).innerHTML = `<i class="fa fa-map-marker-alt"></i> ${
-      data.city || "Not set"
-    }`;
+    document.getElementById("modal-user-city").innerHTML =
+      `<i class="fa fa-map-marker-alt"></i> ${data.city || "Not set"}`;
     document.getElementById("modal-user-bio").innerText =
       data.bio || "No bio yet.";
     if (data.dogName) {
       document.getElementById("modal-dog-info").style.display = "flex";
-      document.getElementById(
-        "modal-dog-details"
-      ).innerText = `${data.dogName} (${data.dogBreed}) • ${data.dogAge} yrs`;
+      document.getElementById("modal-dog-details").innerText =
+        `${data.dogName} (${data.dogBreed}) • ${data.dogAge} yrs`;
     } else {
       document.getElementById("modal-dog-info").style.display = "none";
     }
@@ -911,17 +906,12 @@ async function initEventsCalendar() {
       document.getElementById("modal-event-title").innerText = info.event.title;
       document.getElementById("modal-event-desc").innerText =
         data.description || "No description provided.";
-      document.getElementById(
-        "modal-event-time"
-      ).innerHTML = `<i class="fa fa-clock"></i> ${data.time || "All Day"}`;
-      document.getElementById(
-        "modal-event-loc"
-      ).innerHTML = `<i class="fa fa-map-marker-alt"></i> ${
-        data.location || "TBA"
-      }`;
-      document.getElementById(
-        "modal-event-price"
-      ).innerHTML = `<i class="fa fa-ticket-alt"></i> ${data.price || "Free"}`;
+      document.getElementById("modal-event-time").innerHTML =
+        `<i class="fa fa-clock"></i> ${data.time || "All Day"}`;
+      document.getElementById("modal-event-loc").innerHTML =
+        `<i class="fa fa-map-marker-alt"></i> ${data.location || "TBA"}`;
+      document.getElementById("modal-event-price").innerHTML =
+        `<i class="fa fa-ticket-alt"></i> ${data.price || "Free"}`;
       document.getElementById("modal-event-link").href = data.website || "#";
       document.getElementById("modal-event-booking").href =
         data.bookingUrl || data.website || "#";
@@ -990,3 +980,53 @@ if (manualEventForm) {
     }
   };
 }
+
+// EVENTS Page //
+
+// --- FIXED CALENDAR LOGIC ---
+// --- CALENDAR LOGIC WITH LOGIN PROTECTION ---
+async function initEventsCalendar() {
+  const calendarEl = document.getElementById("calendar");
+
+  // STOP if the calendar element isn't here (e.g., on the Login page)
+  if (!calendarEl) return;
+
+  try {
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: "dayGridMonth",
+      headerToolbar: {
+        left: "prev,next",
+        center: "title",
+        right: "today",
+      },
+      events: async function (info, successCallback) {
+        try {
+          const snap = await getDocs(collection(db, "events"));
+          const events = snap.docs.map((doc) => ({
+            id: doc.id,
+            title: doc.data().title,
+            start: doc.data().start,
+            color: "#ff6b35",
+          }));
+          successCallback(events);
+        } catch (e) {
+          console.error("Error fetching events:", e);
+        }
+      },
+    });
+
+    calendar.render();
+    // Force redraw to ensure visibility
+    setTimeout(() => calendar.updateSize(), 400);
+  } catch (err) {
+    console.error("Calendar failed to load:", err);
+  }
+}
+
+// Global initialization to protect Login functionality
+window.addEventListener("load", () => {
+  // Only run if we are on the events page
+  if (document.getElementById("calendar")) {
+    initEventsCalendar();
+  }
+});
