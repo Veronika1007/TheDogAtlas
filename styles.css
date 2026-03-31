@@ -447,45 +447,44 @@ footer {
 }
 
 /* EVENTS Calendar container */
-#calendar {
-  min-height: 550px !important;
-  background: white;
-  padding: 10px;
-  border-radius: 12px;
-}
-
-/* Ensure the widget container isn't squashing it */
+/* Symmetrical Calendar Widget */
 .calendar-widget {
-  min-width: 300px;
-  display: block !important;
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  width: 100%;
+  max-width: 900px; /* Adjust based on your layout */
+  margin: 0 auto;
 }
 
-/* Match the screenshot colors */
-.fc-theme-standard .fc-scrollgrid {
-  border-radius: 10px;
-  overflow: hidden;
+#calendar {
+  min-height: 600px;
 }
+
+/* Symmetrical Grid Fixes */
+.fc-theme-standard td,
+.fc-theme-standard th {
+  border: 1px solid #f0f0f0 !important;
+}
+
+.fc .fc-toolbar-title {
+  font-size: 1.4rem !important;
+  color: var(--primary);
+  font-weight: 700;
+}
+
 .fc .fc-button-primary {
   background-color: #ff6b35 !important;
   border: none !important;
-}
-.fc .fc-toolbar-title {
-  font-size: 1.2rem !important;
-  font-weight: bold;
-}
-.fc-daygrid-day-number {
-  color: #333;
-  text-decoration: none;
-  padding: 8px !important;
+  border-radius: 20px !important;
+  padding: 8px 15px !important;
+  text-transform: capitalize;
 }
 
-/* Modal Styling */
-.hidden {
-  display: none !important;
-}
-.events-layout {
-  display: flex;
-  gap: 30px;
-  padding: 20px;
-  align-items: flex-start;
+.fc-daygrid-day-number {
+  padding: 10px !important;
+  font-weight: 600;
+  color: #444;
+  text-decoration: none !important;
 }
