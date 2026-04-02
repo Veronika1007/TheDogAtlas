@@ -349,28 +349,32 @@ nav {
    8. EVENTS & CALENDAR LAYOUT
    ========================================== */
 .events-layout {
-  display: flex;
-  flex-direction: row;
-  gap: 50px;
-  padding: 30px;
+  display: grid;
+  grid-template-columns: 2.5fr 1fr;
+  gap: 70px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 20px;
   align-items: flex-start;
 }
 
 .calendar-widget {
-  flex: 2;
   background: white;
-  padding: 25px;
+  padding: 30px;
   border-radius: 15px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 #calendar {
-  min-height: 550px;
+  min-height: 650px;
   width: 100%;
 }
 
 .event-list {
-  flex: 1;
+  background: #fdfdfd;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
 }
 
 /* FullCalendar Specific Overrides */
@@ -380,17 +384,16 @@ nav {
 }
 
 .fc .fc-toolbar-title {
-  font-size: 1.4rem !important;
+  font-size: 1.5rem !important;
   color: var(--primary);
   font-weight: 700;
 }
 
 .fc .fc-button-primary {
-  background-color: #ff6b35 !important;
+  background-color: var(--primary) !important;
   border: none !important;
   border-radius: 20px !important;
-  padding: 8px 15px !important;
-  text-transform: capitalize;
+  padding: 8px 16px !important;
 }
 
 .fc-daygrid-day-number {
@@ -398,6 +401,13 @@ nav {
   font-weight: 600;
   color: #444;
   text-decoration: none !important;
+}
+
+@media (max-width: 1024px) {
+  .events-layout {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
 }
 
 /* ==========================================
