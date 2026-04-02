@@ -37,7 +37,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC8lxmPLmhYTMdmFwm21oJQcS9JXjn2ePQ",
+  apiKey: "AIzaSyDEctacZYlmdnQt2ZITO9bsH54tkxvTXE4",
   authDomain: "thedogatlas.firebaseapp.com",
   projectId: "thedogatlas",
   storageBucket: "thedogatlas.appspot.com",
