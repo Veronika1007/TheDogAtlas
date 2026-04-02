@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -91,7 +91,11 @@
       <div id="section-posts" class="community-section">
         <div
           class="create-post-trigger"
-          onclick="document.getElementById('feed-post-modal').classList.remove('hidden')"
+          onclick="
+            document
+              .getElementById('feed-post-modal')
+              .classList.remove('hidden')
+          "
           style="
             background: white;
             padding: 15px;
@@ -165,7 +169,11 @@
           >
             <h3 style="margin: 0">New Post</h3>
             <button
-              onclick="document.getElementById('feed-post-modal').classList.add('hidden')"
+              onclick="
+                document
+                  .getElementById('feed-post-modal')
+                  .classList.add('hidden')
+              "
               style="background: none; border: none; font-size: 20px"
             >
               &times;
@@ -499,7 +507,9 @@
         "
       >
         <button
-          onclick="document.getElementById('post-detail-modal').classList.add('hidden')"
+          onclick="
+            document.getElementById('post-detail-modal').classList.add('hidden')
+          "
           style="
             position: absolute;
             top: 10px;

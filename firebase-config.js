@@ -47,6 +47,13 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+console.log("Firebase App Initialized:", app.name);
+auth.onAuthStateChanged((user) => {
+  console.log(
+    "Auth Connection Status: ACTIVE. User:",
+    user ? user.email : "Logged Out",
+  );
+});
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
