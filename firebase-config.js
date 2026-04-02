@@ -1,5 +1,5 @@
 // ==========================================
-// 1. FIREBASE INITIALIZATION & IMPORTS
+// 1. FIREBASE IMPORTS
 // ==========================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import {
@@ -35,6 +35,9 @@ import {
   getDownloadURL,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
+// ==========================================
+// 2. CONFIGURATION & INITIALIZATION
+// ==========================================
 const firebaseConfig = {
   apiKey: "AIzaSyAUzPfsLsh5bCsso7DMLDlmuyb-PR0JeeY",
   authDomain: "thedogatlas.firebaseapp.com",
@@ -45,23 +48,20 @@ const firebaseConfig = {
   measurementId: "G-RFSFBEKSS9",
 };
 
-// Initialize Firebase first so 'auth' is available for the rest of the script
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
 // ==========================================
-// 2. AUTHENTICATION (LOGIN & SIGNUP)
+// 3. AUTHENTICATION (LOGIN & SIGNUP)
 // ==========================================
-
 const loginForm = document.getElementById("login-form");
 if (loginForm) {
   loginForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const email = document.getElementById("login-email").value;
     const pass = document.getElementById("login-password").value;
-
     signInWithEmailAndPassword(auth, email, pass)
       .then(() => {
         window.location.href = "index.html";
@@ -86,6 +86,8 @@ if (signupForm) {
         displayName: name,
         email: email,
         createdAt: serverTimestamp(),
+        following: [],
+        followers: [],
       });
       window.location.href = "index.html";
     } catch (err) {
@@ -101,6 +103,8 @@ onAuthStateChanged(auth, (user) => {
       authLinks.innerHTML = `<li><a href="profile.html">Profile</a></li><li><a href="#" onclick="logoutUser()">Logout</a></li>`;
     }
     if (document.getElementById("pack-feed")) loadVisualFeed();
+    if (document.getElementById("user-profile-data")) loadUserProfile();
+    if (document.getElementById("trails-container")) loadTrails();
   } else {
     if (authLinks) {
       authLinks.innerHTML = `<li><a href="login.html" class="login-btn">Login</a></li>`;
@@ -115,7 +119,7 @@ window.logoutUser = () => {
 };
 
 // ==========================================
-// 3. PACK FEED & SOCIAL
+// 4. COMMUNITY & SOCIAL (FEED, LIKES, FOLLOWS)
 // ==========================================
 async function loadVisualFeed() {
   const feedContainer = document.getElementById("pack-feed");
@@ -125,10 +129,19 @@ async function loadVisualFeed() {
     feedContainer.innerHTML = "";
     snapshot.forEach((d) => {
       const post = d.data();
+      const user = auth.currentUser;
+      const hasLiked = post.likedBy && user && post.likedBy.includes(user.uid);
       feedContainer.innerHTML += `
                 <div class="feed-card">
+                    <div class="feed-header" style="padding:12px; display:flex; align-items:center; gap:10px;">
+                        <img src="${post.authorPhoto || "Media/Milo.png"}" style="width:35px; height:35px; border-radius:50%;">
+                        <strong>${post.authorName}</strong>
+                    </div>
                     <img src="${post.imageUrl}" style="width:100%; aspect-ratio:1/1; object-fit:cover;">
                     <div style="padding:15px;">
+                        <span class="woof-btn ${hasLiked ? "active" : ""}" onclick="likeFeedPost('${d.id}', this)">
+                            <i class="fa-solid fa-paw"></i> <small>${post.likes || 0}</small>
+                        </span>
                         <p><strong>${post.authorName}</strong> ${post.caption || ""}</p>
                     </div>
                 </div>`;
@@ -136,13 +149,42 @@ async function loadVisualFeed() {
   });
 }
 
+window.likeFeedPost = async (postId, element) => {
+  const user = auth.currentUser;
+  if (!user) return alert("Login to woof!");
+  const postRef = doc(db, "feedPosts", postId);
+  element.classList.toggle("active");
+  const isLiked = element.classList.contains("active");
+  await updateDoc(postRef, {
+    likes: increment(isLiked ? 1 : -1),
+    likedBy: isLiked ? arrayUnion(user.uid) : arrayRemove(user.uid),
+  });
+};
+
+window.toggleFollow = async (targetUid, buttonElement) => {
+  const currentUser = auth.currentUser;
+  if (!currentUser) return;
+  const currentUserRef = doc(db, "users", currentUser.uid);
+  const targetUserRef = doc(db, "users", targetUid);
+  const userDoc = await getDoc(currentUserRef);
+  const following = userDoc.data().following || [];
+  if (following.includes(targetUid)) {
+    await updateDoc(currentUserRef, { following: arrayRemove(targetUid) });
+    await updateDoc(targetUserRef, { followers: arrayRemove(currentUser.uid) });
+    buttonElement.innerText = "Follow";
+  } else {
+    await updateDoc(currentUserRef, { following: arrayUnion(targetUid) });
+    await updateDoc(targetUserRef, { followers: arrayUnion(currentUser.uid) });
+    buttonElement.innerText = "Unfollow";
+  }
+};
+
 // ==========================================
-// 4. CALENDAR & EVENTS
+// 5. CALENDAR & EVENTS (SYMMETRICAL GRID)
 // ==========================================
 async function initEventsCalendar() {
   const calendarEl = document.getElementById("calendar");
   if (!calendarEl) return;
-
   try {
     const calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: "dayGridMonth",
