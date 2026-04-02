@@ -1,5 +1,5 @@
 // ==========================================
-// 1. FIREBASE INITIALIZATION & IMPORTS (CDN)
+// 1. FIREBASE INITIALIZATION & IMPORTS
 // ==========================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import {
@@ -35,7 +35,7 @@ import {
   getDownloadURL,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
-// Your verified configuration from the latest snippet
+// Your verified configuration from the latest screenshot
 const firebaseConfig = {
   apiKey: "AIzaSyAUzPfsLsh5bCsso7DMLDlmuyb-PR0JeeY",
   authDomain: "thedogatlas.firebaseapp.com",
@@ -55,7 +55,7 @@ const storage = getStorage(app);
 // 2. AUTHENTICATION (LOGIN & SIGNUP)
 // ==========================================
 
-// Login Logic - Placed at the top for responsiveness
+// Login Logic
 const loginForm = document.getElementById("login-form");
 if (loginForm) {
   loginForm.addEventListener("submit", (e) => {
@@ -70,6 +70,31 @@ if (loginForm) {
       .catch((err) => {
         alert("Login Error: " + err.message);
       });
+  });
+}
+
+// Signup Logic
+const signupForm = document.getElementById("signup-form");
+if (signupForm) {
+  signupForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("signup-email").value;
+    const pass = document.getElementById("signup-password").value;
+    const name = document.getElementById("signup-name").value;
+    try {
+      const userCred = await createUserWithEmailAndPassword(auth, email, pass);
+      await updateProfile(userCred.user, { displayName: name });
+      await setDoc(doc(db, "users", userCred.user.uid), {
+        displayName: name,
+        email: email,
+        createdAt: serverTimestamp(),
+        following: [],
+        followers: [],
+      });
+      window.location.href = "index.html";
+    } catch (err) {
+      alert("Signup Error: " + err.message);
+    }
   });
 }
 
@@ -121,7 +146,7 @@ async function loadVisualFeed() {
 // ==========================================
 async function initEventsCalendar() {
   const calendarEl = document.getElementById("calendar");
-  // Safety check: Exit if not on the events page
+  // Safety check: Exit if not on the events page to prevent breaking login
   if (!calendarEl) return;
 
   try {
@@ -147,7 +172,6 @@ async function initEventsCalendar() {
   }
 }
 
-// Trigger calendar only if the div is present
 window.addEventListener("load", () => {
   if (document.getElementById("calendar")) initEventsCalendar();
 });
