@@ -377,12 +377,7 @@ nav {
   border: 1px solid var(--border);
 }
 
-/* FullCalendar Specific Overrides */
-.fc-theme-standard td,
-.fc-theme-standard th {
-  border: 1px solid #f0f0f0 !important;
-}
-
+/* FullCalendar Styling */
 .fc .fc-toolbar-title {
   font-size: 1.5rem !important;
   color: var(--primary);
@@ -393,14 +388,6 @@ nav {
   background-color: var(--primary) !important;
   border: none !important;
   border-radius: 20px !important;
-  padding: 8px 16px !important;
-}
-
-.fc-daygrid-day-number {
-  padding: 10px !important;
-  font-weight: 600;
-  color: #444;
-  text-decoration: none !important;
 }
 
 @media (max-width: 1024px) {
