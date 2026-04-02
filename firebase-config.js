@@ -37,7 +37,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAsd9ZeAjF-Byk27mwC85_pE6ci1euKEXk",
+  apiKey: "AIzaSyC8lxmPLmhYTMdmFwm21oJQcS9JXjn2ePQ",
   authDomain: "thedogatlas.firebaseapp.com",
   projectId: "thedogatlas",
   storageBucket: "thedogatlas.appspot.com",
@@ -53,18 +53,27 @@ const storage = getStorage(app);
 // ==========================================
 // 2. AUTHENTICATION (MOVED TO TOP)
 // ==========================================
+// 1. Core Auth Logic
 const loginForm = document.getElementById("login-form");
+
 if (loginForm) {
+  console.log("Login form detected and active."); // This helps us verify in console
   loginForm.addEventListener("submit", (e) => {
     e.preventDefault();
+
     const email = document.getElementById("login-email").value;
     const pass = document.getElementById("login-password").value;
+
+    console.log("Attempting login for:", email);
+
     signInWithEmailAndPassword(auth, email, pass)
-      .then(() => {
+      .then((userCredential) => {
+        console.log("Login success!");
         window.location.href = "index.html";
       })
       .catch((err) => {
-        alert("Login failed: " + err.message);
+        console.error("Login failed:", err.code);
+        alert("Login Error: " + err.message);
       });
   });
 }
