@@ -37,12 +37,13 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDEctacZYlmdnQt2ZITO9bsH54tkxvTXE4",
+  apiKey: "AIzaSyAUzPfsLsh5bCsso7DMLDlmuyb-PR0JeeY",
   authDomain: "thedogatlas.firebaseapp.com",
   projectId: "thedogatlas",
-  storageBucket: "thedogatlas.appspot.com",
-  messagingSenderId: "367375171167",
-  appId: "1:367375171167:web:6e326e64d73347f9f79e8a",
+  storageBucket: "thedogatlas.firebasestorage.app",
+  messagingSenderId: "313338994397",
+  appId: "1:313338994397:web:cc18283775082fa0194534",
+  measurementId: "G-RFSFBEKSS9",
 };
 
 const app = initializeApp(firebaseConfig);
