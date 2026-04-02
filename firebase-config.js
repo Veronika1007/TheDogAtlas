@@ -35,7 +35,6 @@ import {
   getDownloadURL,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
-// Your verified configuration from the latest screenshot
 const firebaseConfig = {
   apiKey: "AIzaSyAUzPfsLsh5bCsso7DMLDlmuyb-PR0JeeY",
   authDomain: "thedogatlas.firebaseapp.com",
@@ -46,14 +45,8 @@ const firebaseConfig = {
   measurementId: "G-RFSFBEKSS9",
 };
 
+// Initialize Firebase first so 'auth' is available for the rest of the script
 const app = initializeApp(firebaseConfig);
-console.log("Firebase App Initialized:", app.name);
-auth.onAuthStateChanged((user) => {
-  console.log(
-    "Auth Connection Status: ACTIVE. User:",
-    user ? user.email : "Logged Out",
-  );
-});
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
@@ -62,7 +55,6 @@ const storage = getStorage(app);
 // 2. AUTHENTICATION (LOGIN & SIGNUP)
 // ==========================================
 
-// Login Logic
 const loginForm = document.getElementById("login-form");
 if (loginForm) {
   loginForm.addEventListener("submit", (e) => {
@@ -80,7 +72,6 @@ if (loginForm) {
   });
 }
 
-// Signup Logic
 const signupForm = document.getElementById("signup-form");
 if (signupForm) {
   signupForm.addEventListener("submit", async (e) => {
@@ -95,8 +86,6 @@ if (signupForm) {
         displayName: name,
         email: email,
         createdAt: serverTimestamp(),
-        following: [],
-        followers: [],
       });
       window.location.href = "index.html";
     } catch (err) {
@@ -105,7 +94,6 @@ if (signupForm) {
   });
 }
 
-// Global Auth State Observer
 onAuthStateChanged(auth, (user) => {
   const authLinks = document.getElementById("auth-links");
   if (user) {
@@ -127,7 +115,7 @@ window.logoutUser = () => {
 };
 
 // ==========================================
-// 3. PACK FEED & SOCIAL LOGIC
+// 3. PACK FEED & SOCIAL
 // ==========================================
 async function loadVisualFeed() {
   const feedContainer = document.getElementById("pack-feed");
@@ -149,11 +137,10 @@ async function loadVisualFeed() {
 }
 
 // ==========================================
-// 4. CALENDAR & EVENTS (ISOLATED AT BOTTOM)
+// 4. CALENDAR & EVENTS
 // ==========================================
 async function initEventsCalendar() {
   const calendarEl = document.getElementById("calendar");
-  // Safety check: Exit if not on the events page to prevent breaking login
   if (!calendarEl) return;
 
   try {
