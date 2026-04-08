@@ -1,5 +1,5 @@
 // ==========================================
-// 1. FIREBASE IMPORTS
+// 1. INITIALIZATION & CONFIG
 // ==========================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import {
@@ -19,9 +19,6 @@ import {
   onSnapshot,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// ==========================================
-// 2. PROJECT CONFIGURATION
-// ==========================================
 const firebaseConfig = {
   apiKey: "AIzaSyAUzPfsLsh5bCsso7DMLDlmuyb-PR0JeeY",
   authDomain: "thedogatlas.firebaseapp.com",
@@ -36,29 +33,28 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-console.log("The Dog Atlas: Firebase logic active.");
-
 // ==========================================
-// 3. LOGIN LOGIC
+// 2. LOGIN LOGIC (PRIORITY)
 // ==========================================
 const loginForm = document.getElementById("login-form");
 if (loginForm) {
-  loginForm.onsubmit = async (e) => {
+  loginForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const email = document.getElementById("login-email").value;
     const pass = document.getElementById("login-password").value;
 
-    try {
-      await signInWithEmailAndPassword(auth, email, pass);
-      window.location.href = "index.html";
-    } catch (error) {
-      alert("Login Failed: " + error.message);
-    }
-  };
+    signInWithEmailAndPassword(auth, email, pass)
+      .then(() => {
+        window.location.href = "index.html";
+      })
+      .catch((err) => {
+        alert("Login Error: " + err.message);
+      });
+  });
 }
 
 // ==========================================
-// 4. AUTH STATE & COMMUNITY DATA RECALL
+// 3. AUTH STATE & GLOBAL HELPERS
 // ==========================================
 onAuthStateChanged(auth, (user) => {
   const authLinks = document.getElementById("auth-links");
@@ -68,7 +64,7 @@ onAuthStateChanged(auth, (user) => {
       document.getElementById("logout-btn").onclick = () =>
         signOut(auth).then(() => (location.href = "login.html"));
     }
-    // This triggers the data recall for the community feed
+    // Only load feed if container exists
     if (document.getElementById("pack-feed")) loadFeed();
   } else {
     if (authLinks)
@@ -76,6 +72,9 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
+// ==========================================
+// 4. COMMUNITY & CALENDAR (SAFE LOADERS)
+// ==========================================
 async function loadFeed() {
   const container = document.getElementById("pack-feed");
   if (!container) return;
@@ -84,18 +83,11 @@ async function loadFeed() {
     container.innerHTML = "";
     snap.forEach((d) => {
       const p = d.data();
-      container.innerHTML += `
-                <div class="feed-card">
-                    <img src="${p.imageUrl || "Media/Milo.png"}">
-                    <p><strong>${p.authorName || "Explorer"}</strong>: ${p.caption || ""}</p>
-                </div>`;
+      container.innerHTML += `<div class="feed-card"><img src="${p.imageUrl || "Media/Milo.png"}"><p>${p.caption || ""}</p></div>`;
     });
   });
 }
 
-// ==========================================
-// 5. CALENDAR (WIDER LAYOUT FIX)
-// ==========================================
 async function initCalendar() {
   const el = document.getElementById("calendar");
   if (!el) return;
