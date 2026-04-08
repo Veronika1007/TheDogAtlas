@@ -1,5 +1,5 @@
 // ==========================================
-// 1. FIREBASE IMPORTS
+// 1. FIREBASE IMPORTS & INITIALIZATION
 // ==========================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import {
@@ -35,9 +35,6 @@ import {
   getDownloadURL,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
-// ==========================================
-// 2. CONFIGURATION & INITIALIZATION
-// ==========================================
 const firebaseConfig = {
   apiKey: "AIzaSyAUzPfsLsh5bCsso7DMLDlmuyb-PR0JeeY",
   authDomain: "thedogatlas.firebaseapp.com",
@@ -54,7 +51,7 @@ const db = getFirestore(app);
 const storage = getStorage(app);
 
 // ==========================================
-// 3. AUTHENTICATION (LOGIN & SIGNUP)
+// 2. AUTHENTICATION (LOGIN & SIGNUP)
 // ==========================================
 const loginForm = document.getElementById("login-form");
 if (loginForm) {
@@ -104,7 +101,6 @@ onAuthStateChanged(auth, (user) => {
     }
     if (document.getElementById("pack-feed")) loadVisualFeed();
     if (document.getElementById("user-profile-data")) loadUserProfile();
-    if (document.getElementById("trails-container")) loadTrails();
   } else {
     if (authLinks) {
       authLinks.innerHTML = `<li><a href="login.html" class="login-btn">Login</a></li>`;
@@ -119,7 +115,7 @@ window.logoutUser = () => {
 };
 
 // ==========================================
-// 4. COMMUNITY & SOCIAL (FEED, LIKES, FOLLOWS)
+// 3. COMMUNITY & SOCIAL LOGIC
 // ==========================================
 async function loadVisualFeed() {
   const feedContainer = document.getElementById("pack-feed");
@@ -161,30 +157,13 @@ window.likeFeedPost = async (postId, element) => {
   });
 };
 
-window.toggleFollow = async (targetUid, buttonElement) => {
-  const currentUser = auth.currentUser;
-  if (!currentUser) return;
-  const currentUserRef = doc(db, "users", currentUser.uid);
-  const targetUserRef = doc(db, "users", targetUid);
-  const userDoc = await getDoc(currentUserRef);
-  const following = userDoc.data().following || [];
-  if (following.includes(targetUid)) {
-    await updateDoc(currentUserRef, { following: arrayRemove(targetUid) });
-    await updateDoc(targetUserRef, { followers: arrayRemove(currentUser.uid) });
-    buttonElement.innerText = "Follow";
-  } else {
-    await updateDoc(currentUserRef, { following: arrayUnion(targetUid) });
-    await updateDoc(targetUserRef, { followers: arrayUnion(currentUser.uid) });
-    buttonElement.innerText = "Unfollow";
-  }
-};
-
 // ==========================================
-// 5. CALENDAR & EVENTS (SYMMETRICAL GRID)
+// 4. CALENDAR & EVENTS
 // ==========================================
 async function initEventsCalendar() {
   const calendarEl = document.getElementById("calendar");
   if (!calendarEl) return;
+
   try {
     const calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: "dayGridMonth",
