@@ -1,5 +1,5 @@
 // ==========================================
-// 1. INITIALIZATION & CONFIG
+// 1. IMPORTS & CONFIG
 // ==========================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import {
@@ -12,8 +12,6 @@ import {
   getFirestore,
   collection,
   getDocs,
-  doc,
-  getDoc,
   query,
   orderBy,
   onSnapshot,
@@ -33,61 +31,34 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// HEARTBEAT: If you see this, the script is working!
+console.log("SUCCESS: firebase-config.js has loaded.");
+
 // ==========================================
-// 2. LOGIN LOGIC (PRIORITY)
+// 2. LOGIN LOGIC
 // ==========================================
 const loginForm = document.getElementById("login-form");
 if (loginForm) {
-  loginForm.addEventListener("submit", (e) => {
+  console.log("Login form detected.");
+  loginForm.onsubmit = async (e) => {
     e.preventDefault();
     const email = document.getElementById("login-email").value;
     const pass = document.getElementById("login-password").value;
 
-    signInWithEmailAndPassword(auth, email, pass)
-      .then(() => {
-        window.location.href = "index.html";
-      })
-      .catch((err) => {
-        alert("Login Error: " + err.message);
-      });
-  });
-}
-
-// ==========================================
-// 3. AUTH STATE & GLOBAL HELPERS
-// ==========================================
-onAuthStateChanged(auth, (user) => {
-  const authLinks = document.getElementById("auth-links");
-  if (user) {
-    if (authLinks) {
-      authLinks.innerHTML = `<li><a href="profile.html">Profile</a></li><li><a href="#" id="logout-btn">Logout</a></li>`;
-      document.getElementById("logout-btn").onclick = () =>
-        signOut(auth).then(() => (location.href = "login.html"));
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+      console.log("Login successful.");
+      window.location.href = "index.html";
+    } catch (error) {
+      console.error("Login Error:", error.code);
+      alert("Login Failed: " + error.message);
     }
-    // Only load feed if container exists
-    if (document.getElementById("pack-feed")) loadFeed();
-  } else {
-    if (authLinks)
-      authLinks.innerHTML = `<li><a href="login.html" class="login-btn">Login</a></li>`;
-  }
-});
-
-// ==========================================
-// 4. COMMUNITY & CALENDAR (SAFE LOADERS)
-// ==========================================
-async function loadFeed() {
-  const container = document.getElementById("pack-feed");
-  if (!container) return;
-  const q = query(collection(db, "feedPosts"), orderBy("createdAt", "desc"));
-  onSnapshot(q, (snap) => {
-    container.innerHTML = "";
-    snap.forEach((d) => {
-      const p = d.data();
-      container.innerHTML += `<div class="feed-card"><img src="${p.imageUrl || "Media/Milo.png"}"><p>${p.caption || ""}</p></div>`;
-    });
-  });
+  };
 }
 
+// ==========================================
+// 3. CALENDAR LOGIC (WIDE LAYOUT)
+// ==========================================
 async function initCalendar() {
   const el = document.getElementById("calendar");
   if (!el) return;
@@ -108,6 +79,6 @@ async function initCalendar() {
   calendar.render();
 }
 
-window.addEventListener("load", () => {
-  if (document.getElementById("calendar")) initCalendar();
+onAuthStateChanged(auth, (user) => {
+  if (user && document.getElementById("calendar")) initCalendar();
 });
