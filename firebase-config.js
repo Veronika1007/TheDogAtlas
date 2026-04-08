@@ -38,7 +38,7 @@ if (loginForm) {
     try {
       await signInWithEmailAndPassword(auth, email, pass);
       // FIXED: Removed the 's' from windows
-      window.location.href = "index.html";
+      window.location.href = "profile.html";
     } catch (error) {
       alert("Login Failed: " + error.message);
     }
