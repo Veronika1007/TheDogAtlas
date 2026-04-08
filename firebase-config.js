@@ -1,3 +1,6 @@
+// ==========================================
+// 1. FIREBASE IMPORTS
+// ==========================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import {
   getAuth,
@@ -9,11 +12,16 @@ import {
   getFirestore,
   collection,
   getDocs,
+  doc,
+  getDoc,
   query,
   orderBy,
   onSnapshot,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+// ==========================================
+// 2. PROJECT CONFIGURATION
+// ==========================================
 const firebaseConfig = {
   apiKey: "AIzaSyAUzPfsLsh5bCsso7DMLDlmuyb-PR0JeeY",
   authDomain: "thedogatlas.firebaseapp.com",
@@ -28,10 +36,11 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Heartbeat to confirm script is active
 console.log("The Dog Atlas: Firebase logic active.");
 
-// --- LOGIN LOGIC ---
+// ==========================================
+// 3. LOGIN LOGIC
+// ==========================================
 const loginForm = document.getElementById("login-form");
 if (loginForm) {
   loginForm.onsubmit = async (e) => {
@@ -48,7 +57,9 @@ if (loginForm) {
   };
 }
 
-// --- AUTH STATE ---
+// ==========================================
+// 4. AUTH STATE & COMMUNITY DATA RECALL
+// ==========================================
 onAuthStateChanged(auth, (user) => {
   const authLinks = document.getElementById("auth-links");
   if (user) {
@@ -57,6 +68,7 @@ onAuthStateChanged(auth, (user) => {
       document.getElementById("logout-btn").onclick = () =>
         signOut(auth).then(() => (location.href = "login.html"));
     }
+    // This triggers the data recall for the community feed
     if (document.getElementById("pack-feed")) loadFeed();
   } else {
     if (authLinks)
@@ -64,7 +76,6 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// --- FEED RECALL ---
 async function loadFeed() {
   const container = document.getElementById("pack-feed");
   if (!container) return;
@@ -73,12 +84,18 @@ async function loadFeed() {
     container.innerHTML = "";
     snap.forEach((d) => {
       const p = d.data();
-      container.innerHTML += `<div class="feed-card"><img src="${p.imageUrl || "Media/Milo.png"}"><p>${p.caption || ""}</p></div>`;
+      container.innerHTML += `
+                <div class="feed-card">
+                    <img src="${p.imageUrl || "Media/Milo.png"}">
+                    <p><strong>${p.authorName || "Explorer"}</strong>: ${p.caption || ""}</p>
+                </div>`;
     });
   });
 }
 
-// --- CALENDAR LOGIC ---
+// ==========================================
+// 5. CALENDAR (WIDER LAYOUT FIX)
+// ==========================================
 async function initCalendar() {
   const el = document.getElementById("calendar");
   if (!el) return;
