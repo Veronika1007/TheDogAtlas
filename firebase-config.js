@@ -9,8 +9,6 @@ import {
   getFirestore,
   collection,
   getDocs,
-  doc,
-  getDoc,
   query,
   orderBy,
   onSnapshot,
@@ -30,26 +28,27 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-console.log("Firebase connection established.");
+// Heartbeat to confirm script is active
+console.log("The Dog Atlas: Firebase logic active.");
 
 // --- LOGIN LOGIC ---
 const loginForm = document.getElementById("login-form");
 if (loginForm) {
-  loginForm.addEventListener("submit", (e) => {
+  loginForm.onsubmit = async (e) => {
     e.preventDefault();
     const email = document.getElementById("login-email").value;
     const pass = document.getElementById("login-password").value;
-    signInWithEmailAndPassword(auth, email, pass)
-      .then(() => {
-        window.location.href = "index.html";
-      })
-      .catch((err) => {
-        alert("Login Error: " + err.message);
-      });
-  });
+
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+      window.location.href = "index.html";
+    } catch (error) {
+      alert("Login Failed: " + error.message);
+    }
+  };
 }
 
-// --- AUTH STATE & FEED RECALL ---
+// --- AUTH STATE ---
 onAuthStateChanged(auth, (user) => {
   const authLinks = document.getElementById("auth-links");
   if (user) {
@@ -65,6 +64,7 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
+// --- FEED RECALL ---
 async function loadFeed() {
   const container = document.getElementById("pack-feed");
   if (!container) return;
