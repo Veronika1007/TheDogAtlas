@@ -9,10 +9,15 @@ import {
   getFirestore,
   doc,
   getDoc,
+  getDocs,
   collection,
   query,
   orderBy,
   onSnapshot,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+  increment,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -32,39 +37,23 @@ const db = getFirestore(app);
 onAuthStateChanged(auth, (user) => {
   const authLinks = document.getElementById("auth-links");
   if (user) {
-    console.log("Session Active:", user.email);
     if (authLinks) {
-      authLinks.innerHTML = `<li><a href="profile.html">Profile</a></li><li><a href="#" id="logout-link">Logout</a></li>`;
-      document.getElementById("logout-link").onclick = () =>
+      authLinks.innerHTML = `<li><a href="profile.html">Profile</a></li><li><a href="#" id="logout-btn">Logout</a></li>`;
+      document.getElementById("logout-btn").onclick = () =>
         signOut(auth).then(() => (window.location.href = "login.html"));
     }
 
     // Page loaders
     if (document.getElementById("pack-feed")) loadVisualFeed();
-    if (document.getElementById("user-profile-data")) loadProfileData(user.uid);
+    if (document.getElementById("friends-list")) loadFriends(user.uid);
+    if (document.getElementById("forum-topics")) loadForum();
   } else {
     if (authLinks)
       authLinks.innerHTML = `<li><a href="login.html" class="login-btn">Login</a></li>`;
   }
 });
 
-// --- LOGIN HANDLER ---
-const loginForm = document.getElementById("login-form");
-if (loginForm) {
-  loginForm.onsubmit = async (e) => {
-    e.preventDefault();
-    const email = document.getElementById("login-email").value;
-    const pass = document.getElementById("login-password").value;
-    try {
-      await signInWithEmailAndPassword(auth, email, pass);
-      window.location.href = "profile.html";
-    } catch (err) {
-      alert("Login failed. Check your credentials.");
-    }
-  };
-}
-
-// --- VISUAL FEED LOADER (Matches "Before" Screenshot) ---
+// --- VISUAL FEED WITH WOOFS & COMMENTS ---
 async function loadVisualFeed() {
   const container = document.getElementById("pack-feed");
   if (!container) return;
@@ -74,6 +63,10 @@ async function loadVisualFeed() {
     container.innerHTML = "";
     snap.forEach((d) => {
       const p = d.data();
+      const postId = d.id;
+      const user = auth.currentUser;
+      const hasWoofed = p.likedBy && user && p.likedBy.includes(user.uid);
+
       container.innerHTML += `
                 <div class="post-item">
                     <div class="post-meta">
@@ -82,9 +75,52 @@ async function loadVisualFeed() {
                     </div>
                     <img src="${p.imageUrl}" class="post-image">
                     <div class="post-footer">
+                        <div class="post-actions">
+                            <span class="woof-btn ${hasWoofed ? "active" : ""}" onclick="handleWoof('${postId}', this)">
+                                <i class="fa-solid fa-paw"></i> <small>${p.likes || 0}</small>
+                            </span>
+                        </div>
                         <p><strong>${p.authorName}</strong> ${p.caption}</p>
                     </div>
                 </div>`;
     });
+  });
+}
+
+// --- SOCIAL LOGIC (WOOFS) ---
+window.handleWoof = async (postId, btn) => {
+  const user = auth.currentUser;
+  if (!user) return alert("Login to woof!");
+  const postRef = doc(db, "feedPosts", postId);
+  const isActive = btn.classList.contains("active");
+
+  await updateDoc(postRef, {
+    likes: increment(isActive ? -1 : 1),
+    likedBy: isActive ? arrayRemove(user.uid) : arrayUnion(user.uid),
+  });
+};
+
+// --- FRIENDS & FORUM ---
+async function loadFriends(uid) {
+  const container = document.getElementById("friends-list");
+  if (!container) return;
+  const userSnap = await getDoc(doc(db, "users", uid));
+  const following = userSnap.data()?.following || [];
+  container.innerHTML = "";
+  following.forEach(async (fId) => {
+    const fSnap = await getDoc(doc(db, "users", fId));
+    if (fSnap.exists()) {
+      container.innerHTML += `<div class="friend-row"><strong>${fSnap.data().displayName}</strong></div>`;
+    }
+  });
+}
+
+async function loadForum() {
+  const container = document.getElementById("forum-topics");
+  if (!container) return;
+  const snap = await getDocs(collection(db, "forum"));
+  container.innerHTML = "";
+  snap.forEach((d) => {
+    container.innerHTML += `<div class="forum-item"><h4>${d.data().title}</h4></div>`;
   });
 }
