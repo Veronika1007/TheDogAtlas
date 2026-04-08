@@ -1,6 +1,3 @@
-// ==========================================
-// 1. IMPORTS & CONFIG
-// ==========================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import {
   getAuth,
@@ -12,9 +9,6 @@ import {
   getFirestore,
   collection,
   getDocs,
-  query,
-  orderBy,
-  onSnapshot,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -31,34 +25,39 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// HEARTBEAT: If you see this, the script is working!
 console.log("SUCCESS: firebase-config.js has loaded.");
 
-// ==========================================
-// 2. LOGIN LOGIC
-// ==========================================
 const loginForm = document.getElementById("login-form");
+
 if (loginForm) {
-  console.log("Login form detected.");
+  console.log("Login form found in HTML.");
   loginForm.onsubmit = async (e) => {
     e.preventDefault();
+    console.log("Login button actually clicked.");
+
     const email = document.getElementById("login-email").value;
     const pass = document.getElementById("login-password").value;
 
     try {
-      await signInWithEmailAndPassword(auth, email, pass);
-      console.log("Login successful.");
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        pass,
+      );
+      console.log("Firebase Login Success:", userCredential.user.email);
       window.location.href = "index.html";
     } catch (error) {
-      console.error("Login Error:", error.code);
+      console.error("Firebase Login Error:", error.code);
       alert("Login Failed: " + error.message);
     }
   };
+} else {
+  console.log(
+    "Login form NOT found. (This is normal if you aren't on the login page)",
+  );
 }
 
-// ==========================================
-// 3. CALENDAR LOGIC (WIDE LAYOUT)
-// ==========================================
+// --- CALENDAR LAYOUT FIX ---
 async function initCalendar() {
   const el = document.getElementById("calendar");
   if (!el) return;

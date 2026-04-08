@@ -54,66 +54,20 @@
           Welcome Back
         </h2>
 
-        <form
-          id="auth-form"
-          style="
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-          "
-        >
-          <input
-            type="email"
-            id="auth-email"
-            placeholder="Email"
-            required
-            style="
-              width: 100%;
-              padding: 12px;
-              margin-bottom: 15px;
-              border-radius: 8px;
-              border: 1px solid #ccc;
-            "
-          />
-
-          <input
-            type="text"
-            id="auth-username"
-            placeholder="Display Name / Username"
-            style="
-              display: none;
-              width: 100%;
-              padding: 12px;
-              margin-bottom: 15px;
-              border-radius: 8px;
-              border: 1px solid #ccc;
-            "
-          />
+        <form id="login-form">
+          <input type="email" id="login-email" placeholder="Email" required />
 
           <input
             type="password"
-            id="auth-password"
+            id="login-password"
             placeholder="Password"
             required
-            style="
-              width: 100%;
-              padding: 12px;
-              margin-bottom: 25px;
-              border-radius: 8px;
-              border: 1px solid #ccc;
-            "
           />
 
-          <button
-            type="submit"
-            id="login-form"
-            class="search-submit-inline"
-            style="width: 200px; padding: 12px; font-weight: bold"
-          >
-            Login
-          </button>
+          <button type="submit">Login</button>
         </form>
+
+        <script type="module" src="firebase-config.js"></script>
 
         <p style="margin-top: 25px; text-align: center; font-size: 0.95rem">
           <span id="auth-toggle-text" style="color: #666"
