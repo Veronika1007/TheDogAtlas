@@ -162,13 +162,13 @@ nav {
 /* ==========================================
    4. PACK FEED (GRID & CARDS)
    ========================================== */
+
+/* Community Feed Grid */
 #pack-feed {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 30px;
+  padding: 20px 0;
 }
 
 .feed-card {
@@ -188,6 +188,40 @@ nav {
   max-height: 500px;
 }
 
+/* Individual Post Card */
+.post-item {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.post-meta {
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.meta-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.post-image {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+}
+
+.post-footer {
+  padding: 15px;
+}
+
+/*Woof Comments*/
 .woof-btn,
 .comment-btn {
   cursor: pointer;
@@ -350,19 +384,17 @@ nav {
    ========================================== */
 .events-layout {
   display: grid;
-  grid-template-columns: 2.5fr 1fr;
+  grid-template-columns: 2.8fr 1fr;
   gap: 70px;
   max-width: 1400px;
   margin: 0 auto;
   padding: 40px 20px;
-  align-items: flex-start;
 }
 
 .calendar-widget {
   background: white;
   padding: 30px;
   border-radius: 15px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 #calendar {
