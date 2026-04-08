@@ -33,7 +33,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// --- PERSISTENT AUTH OBSERVER ---
+// GLOBAL AUTH OBSERVER
 onAuthStateChanged(auth, (user) => {
   const authLinks = document.getElementById("auth-links");
   if (user) {
@@ -42,8 +42,6 @@ onAuthStateChanged(auth, (user) => {
       document.getElementById("logout-btn").onclick = () =>
         signOut(auth).then(() => (window.location.href = "login.html"));
     }
-
-    // Page loaders
     if (document.getElementById("pack-feed")) loadVisualFeed();
     if (document.getElementById("friends-list")) loadFriends(user.uid);
     if (document.getElementById("forum-topics")) loadForum();
@@ -53,7 +51,23 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// --- VISUAL FEED WITH WOOFS & COMMENTS ---
+// LOGIN LOGIC
+const loginForm = document.getElementById("login-form");
+if (loginForm) {
+  loginForm.onsubmit = async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("login-email").value;
+    const pass = document.getElementById("login-password").value;
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+      window.location.href = "profile.html";
+    } catch (err) {
+      alert("Login failed. Check your credentials.");
+    }
+  };
+}
+
+// FEED WITH WOOFS & COMMENTS
 async function loadVisualFeed() {
   const container = document.getElementById("pack-feed");
   if (!container) return;
@@ -61,11 +75,20 @@ async function loadVisualFeed() {
 
   onSnapshot(q, (snap) => {
     container.innerHTML = "";
-    snap.forEach((d) => {
+    snap.forEach(async (d) => {
       const p = d.data();
       const postId = d.id;
       const user = auth.currentUser;
       const hasWoofed = p.likedBy && user && p.likedBy.includes(user.uid);
+
+      // Fetch comments for this specific post
+      const commSnap = await getDocs(
+        collection(db, "feedPosts", postId, "comments"),
+      );
+      let commentsHtml = "";
+      commSnap.forEach((c) => {
+        commentsHtml += `<p class="comment-text"><strong>${c.data().authorName}:</strong> ${c.data().text}</p>`;
+      });
 
       container.innerHTML += `
                 <div class="post-item">
@@ -80,47 +103,22 @@ async function loadVisualFeed() {
                                 <i class="fa-solid fa-paw"></i> <small>${p.likes || 0}</small>
                             </span>
                         </div>
-                        <p><strong>${p.authorName}</strong> ${p.caption}</p>
+                        <p class="caption"><strong>${p.authorName}</strong> ${p.caption}</p>
+                        <div class="comments-section">${commentsHtml}</div>
                     </div>
                 </div>`;
     });
   });
 }
 
-// --- SOCIAL LOGIC (WOOFS) ---
+// ATTACH FUNCTIONS TO WINDOW FOR HTML ACCESS
 window.handleWoof = async (postId, btn) => {
   const user = auth.currentUser;
   if (!user) return alert("Login to woof!");
   const postRef = doc(db, "feedPosts", postId);
   const isActive = btn.classList.contains("active");
-
   await updateDoc(postRef, {
     likes: increment(isActive ? -1 : 1),
     likedBy: isActive ? arrayRemove(user.uid) : arrayUnion(user.uid),
   });
 };
-
-// --- FRIENDS & FORUM ---
-async function loadFriends(uid) {
-  const container = document.getElementById("friends-list");
-  if (!container) return;
-  const userSnap = await getDoc(doc(db, "users", uid));
-  const following = userSnap.data()?.following || [];
-  container.innerHTML = "";
-  following.forEach(async (fId) => {
-    const fSnap = await getDoc(doc(db, "users", fId));
-    if (fSnap.exists()) {
-      container.innerHTML += `<div class="friend-row"><strong>${fSnap.data().displayName}</strong></div>`;
-    }
-  });
-}
-
-async function loadForum() {
-  const container = document.getElementById("forum-topics");
-  if (!container) return;
-  const snap = await getDocs(collection(db, "forum"));
-  container.innerHTML = "";
-  snap.forEach((d) => {
-    container.innerHTML += `<div class="forum-item"><h4>${d.data().title}</h4></div>`;
-  });
-}
