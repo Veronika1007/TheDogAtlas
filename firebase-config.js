@@ -1,5 +1,5 @@
 // ==========================================
-// 1. STABLE IMPORTS & INITIALIZATION
+// 1. ABSOLUTE IMPORTS
 // ==========================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import {
@@ -13,12 +13,14 @@ import {
   collection,
   getDocs,
   doc,
-  getDoc,
   query,
   orderBy,
   onSnapshot,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+// ==========================================
+// 2. PROJECT INITIALIZATION
+// ==========================================
 const firebaseConfig = {
   apiKey: "AIzaSyAUzPfsLsh5bCsso7DMLDlmuyb-PR0JeeY",
   authDomain: "thedogatlas.firebaseapp.com",
@@ -33,94 +35,86 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// HEARTBEAT LOG: If you see this in console, the script is working
+console.log("Firebase connection established.");
+
 // ==========================================
-// 2. CORE LOGIN LOGIC (PRIORITY)
+// 3. LOGIN LISTENER (STRICT VERSION)
 // ==========================================
 const loginForm = document.getElementById("login-form");
 if (loginForm) {
-  loginForm.addEventListener("submit", (e) => {
+  loginForm.onsubmit = async (e) => {
     e.preventDefault();
     const email = document.getElementById("login-email").value;
     const pass = document.getElementById("login-password").value;
 
-    signInWithEmailAndPassword(auth, email, pass)
-      .then(() => {
-        window.location.href = "index.html";
-      })
-      .catch((err) => {
-        alert("Login Error: " + err.message);
-      });
-  });
+    console.log("Attempting login for:", email);
+
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+      window.location.href = "index.html";
+    } catch (error) {
+      console.error("Login Error:", error.code);
+      alert("Login Failed: " + error.message);
+    }
+  };
 }
 
-// Global Auth State
+// ==========================================
+// 4. GLOBAL AUTH OBSERVER
+// ==========================================
 onAuthStateChanged(auth, (user) => {
   const authLinks = document.getElementById("auth-links");
   if (user) {
     if (authLinks)
-      authLinks.innerHTML = `<li><a href="profile.html">Profile</a></li><li><a href="#" onclick="logoutUser()">Logout</a></li>`;
-    if (document.getElementById("pack-feed")) loadVisualFeed();
+      authLinks.innerHTML = `<li><a href="profile.html">Profile</a></li><li><a href="#" id="logout-trigger">Logout</a></li>`;
+    const logoutBtn = document.getElementById("logout-trigger");
+    if (logoutBtn)
+      logoutBtn.onclick = () =>
+        signOut(auth).then(() => (window.location.href = "login.html"));
+
+    if (document.getElementById("pack-feed")) loadFeed();
   } else {
     if (authLinks)
       authLinks.innerHTML = `<li><a href="login.html" class="login-btn">Login</a></li>`;
   }
 });
 
-window.logoutUser = () => {
-  signOut(auth).then(() => {
-    window.location.href = "login.html";
-  });
-};
-
 // ==========================================
-// 3. COMMUNITY FEED RECALL
+// 5. CALENDAR & FEED (ISOLATED)
 // ==========================================
-async function loadVisualFeed() {
-  const feedContainer = document.getElementById("pack-feed");
-  if (!feedContainer) return;
-
+async function loadFeed() {
+  const container = document.getElementById("pack-feed");
+  if (!container) return;
   const q = query(collection(db, "feedPosts"), orderBy("createdAt", "desc"));
-  onSnapshot(q, (snapshot) => {
-    feedContainer.innerHTML = "";
-    snapshot.forEach((d) => {
-      const post = d.data();
-      feedContainer.innerHTML += `
-                <div class="feed-card">
-                    <img src="${post.imageUrl}" style="width:100%; aspect-ratio:1/1; object-fit:cover;">
-                    <div style="padding:15px;">
-                        <p><strong>${post.authorName}</strong> ${post.caption || ""}</p>
-                    </div>
-                </div>`;
+  onSnapshot(q, (snap) => {
+    container.innerHTML = "";
+    snap.forEach((d) => {
+      const p = d.data();
+      container.innerHTML += `<div class="feed-card"><img src="${p.imageUrl}"><p>${p.caption || ""}</p></div>`;
     });
   });
 }
 
-// ==========================================
-// 4. CALENDAR PROTECTION
-// ==========================================
-async function initEventsCalendar() {
-  const calendarEl = document.getElementById("calendar");
-  if (!calendarEl) return;
-
-  try {
-    const calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: "dayGridMonth",
-      events: async function (info, successCallback) {
-        const snap = await getDocs(collection(db, "events"));
-        const events = snap.docs.map((doc) => ({
+async function initCalendar() {
+  const el = document.getElementById("calendar");
+  if (!el) return;
+  const calendar = new FullCalendar.Calendar(el, {
+    initialView: "dayGridMonth",
+    events: async (info, success) => {
+      const snap = await getDocs(collection(db, "events"));
+      success(
+        snap.docs.map((doc) => ({
           title: doc.data().title,
           start: doc.data().start,
           color: "#ff6b35",
-        }));
-        successCallback(events);
-      },
-    });
-    calendar.render();
-  } catch (e) {
-    console.error("Calendar fail:", e);
-  }
+        })),
+      );
+    },
+  });
+  calendar.render();
 }
 
 window.addEventListener("load", () => {
-  if (document.getElementById("calendar")) initEventsCalendar();
+  if (document.getElementById("calendar")) initCalendar();
 });
