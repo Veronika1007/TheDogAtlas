@@ -33,7 +33,9 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// --- 1. THE PERSISTENCE ENGINE ---
+// ==========================================
+// 1. GLOBAL AUTH & REDIRECTS
+// ==========================================
 onAuthStateChanged(auth, (user) => {
   const authLinks = document.getElementById("auth-links");
   if (user) {
@@ -44,7 +46,7 @@ onAuthStateChanged(auth, (user) => {
         signOut(auth).then(() => (window.location.href = "login.html"));
     }
 
-    // Run loaders based on which page we are on
+    // Load data for the current page
     if (document.getElementById("pack-feed")) loadVisualFeed();
     if (document.getElementById("friends-list")) loadFriends(user.uid);
     if (document.getElementById("forum-topics")) loadForum();
@@ -55,12 +57,32 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// --- 2. THE VISUAL FEED (WITH COMMENTS & WOOFS) ---
+// ==========================================
+// 2. LOGIN LOGIC
+// ==========================================
+const loginForm = document.getElementById("login-form");
+if (loginForm) {
+  loginForm.onsubmit = async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("login-email").value;
+    const pass = document.getElementById("login-password").value;
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+      window.location.href = "profile.html";
+    } catch (err) {
+      alert("Login failed. Check your credentials.");
+    }
+  };
+}
+
+// ==========================================
+// 3. COMMUNITY FEED (CLEAN GRID)
+// ==========================================
 async function loadVisualFeed() {
   const container = document.getElementById("pack-feed");
   if (!container) return;
-
   const q = query(collection(db, "feedPosts"), orderBy("createdAt", "desc"));
+
   onSnapshot(q, async (snap) => {
     container.innerHTML = "";
     for (const d of snap.docs) {
@@ -69,25 +91,25 @@ async function loadVisualFeed() {
       const user = auth.currentUser;
       const hasWoofed = p.likedBy && user && p.likedBy.includes(user.uid);
 
-      // Fetch Comments from sub-collection
+      // Fetch Comments
       const commSnap = await getDocs(
         collection(db, "feedPosts", postId, "comments"),
       );
       let commentsHtml = "";
       commSnap.forEach((c) => {
-        commentsHtml += `<div class="comment-item"><strong>${c.data().authorName}:</strong> ${c.data().text}</div>`;
+        commentsHtml += `<p class="comment-item"><strong>${c.data().authorName}:</strong> ${c.data().text}</p>`;
       });
 
       container.innerHTML += `
                 <div class="post-card">
                     <div class="post-header">
-                        <img src="${p.authorPhoto || "Media/Milo.png"}" class="avatar-mini">
+                        <img src="${p.authorPhoto || "Media/Milo.png"}" class="avatar-small">
                         <strong>${p.authorName}</strong>
                     </div>
-                    <img src="${p.imageUrl}" class="post-img-main">
-                    <div class="post-details">
-                        <div class="action-bar">
-                            <span class="woof-trigger ${hasWoofed ? "active" : ""}" onclick="handleWoof('${postId}', this)">
+                    <img src="${p.imageUrl}" class="post-main-img">
+                    <div class="post-body">
+                        <div class="post-actions">
+                            <span class="woof-icon ${hasWoofed ? "active" : ""}" onclick="handleWoof('${postId}', this)">
                                 <i class="fa-solid fa-paw"></i> <small>${p.likes || 0}</small>
                             </span>
                         </div>
@@ -99,13 +121,26 @@ async function loadVisualFeed() {
   });
 }
 
-// --- 3. FRIENDS & FORUM RECALL ---
+window.handleWoof = async (postId, btn) => {
+  const user = auth.currentUser;
+  if (!user) return alert("Login to woof!");
+  const postRef = doc(db, "feedPosts", postId);
+  const isActive = btn.classList.contains("active");
+  await updateDoc(postRef, {
+    likes: increment(isActive ? -1 : 1),
+    likedBy: isActive ? arrayRemove(user.uid) : arrayUnion(user.uid),
+  });
+};
+
+// ==========================================
+// 4. FRIENDS & FORUM
+// ==========================================
 async function loadFriends(uid) {
   const container = document.getElementById("friends-list");
   if (!container) return;
-  const userSnap = await getDoc(doc(db, "users", uid));
-  const following = userSnap.data()?.following || [];
-  container.innerHTML = following.length ? "" : "<p>No pack members yet.</p>";
+  const snap = await getDoc(doc(db, "users", uid));
+  const following = snap.data()?.following || [];
+  container.innerHTML = "";
   for (const fId of following) {
     const fSnap = await getDoc(doc(db, "users", fId));
     if (fSnap.exists()) {
@@ -123,15 +158,3 @@ async function loadForum() {
     container.innerHTML += `<div class="forum-entry"><h4>${d.data().title}</h4></div>`;
   });
 }
-
-// --- 4. UTILITIES ---
-window.handleWoof = async (postId, btn) => {
-  const user = auth.currentUser;
-  if (!user) return;
-  const postRef = doc(db, "feedPosts", postId);
-  const isActive = btn.classList.contains("active");
-  await updateDoc(postRef, {
-    likes: increment(isActive ? -1 : 1),
-    likedBy: isActive ? arrayRemove(user.uid) : arrayUnion(user.uid),
-  });
-};
