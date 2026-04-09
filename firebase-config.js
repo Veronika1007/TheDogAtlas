@@ -33,25 +33,29 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// GLOBAL AUTH OBSERVER
+// --- PERSISTENT LOGIN & UI SYNC ---
 onAuthStateChanged(auth, (user) => {
   const authLinks = document.getElementById("auth-links");
   if (user) {
+    console.log("Logged in:", user.email);
     if (authLinks) {
       authLinks.innerHTML = `<li><a href="profile.html">Profile</a></li><li><a href="#" id="logout-btn">Logout</a></li>`;
       document.getElementById("logout-btn").onclick = () =>
         signOut(auth).then(() => (window.location.href = "login.html"));
     }
+
+    // Trigger data loaders
     if (document.getElementById("pack-feed")) loadVisualFeed();
     if (document.getElementById("friends-list")) loadFriends(user.uid);
     if (document.getElementById("forum-topics")) loadForum();
+    if (document.getElementById("user-profile-data")) loadProfile(user.uid);
   } else {
     if (authLinks)
       authLinks.innerHTML = `<li><a href="login.html" class="login-btn">Login</a></li>`;
   }
 });
 
-// LOGIN LOGIC
+// --- LOGIN HANDLER ---
 const loginForm = document.getElementById("login-form");
 if (loginForm) {
   loginForm.onsubmit = async (e) => {
@@ -62,59 +66,58 @@ if (loginForm) {
       await signInWithEmailAndPassword(auth, email, pass);
       window.location.href = "profile.html";
     } catch (err) {
-      alert("Login failed. Check your credentials.");
+      alert("Invalid login details.");
     }
   };
 }
 
-// FEED WITH WOOFS & COMMENTS
+// --- FEED WITH WOOFS & COMMENTS ---
 async function loadVisualFeed() {
   const container = document.getElementById("pack-feed");
   if (!container) return;
   const q = query(collection(db, "feedPosts"), orderBy("createdAt", "desc"));
 
-  onSnapshot(q, (snap) => {
+  onSnapshot(q, async (snap) => {
     container.innerHTML = "";
-    snap.forEach(async (d) => {
+    for (const d of snap.docs) {
       const p = d.data();
       const postId = d.id;
       const user = auth.currentUser;
       const hasWoofed = p.likedBy && user && p.likedBy.includes(user.uid);
 
-      // Fetch comments for this specific post
+      // Fetch Comments sub-collection
       const commSnap = await getDocs(
         collection(db, "feedPosts", postId, "comments"),
       );
       let commentsHtml = "";
       commSnap.forEach((c) => {
-        commentsHtml += `<p class="comment-text"><strong>${c.data().authorName}:</strong> ${c.data().text}</p>`;
+        commentsHtml += `<p class="comment-item"><strong>${c.data().authorName}:</strong> ${c.data().text}</p>`;
       });
 
       container.innerHTML += `
-                <div class="post-item">
-                    <div class="post-meta">
-                        <img src="${p.authorPhoto || "Media/Milo.png"}" class="meta-avatar">
+                <div class="post-card">
+                    <div class="post-header">
+                        <img src="${p.authorPhoto || "Media/Milo.png"}" class="avatar">
                         <strong>${p.authorName}</strong>
                     </div>
-                    <img src="${p.imageUrl}" class="post-image">
-                    <div class="post-footer">
-                        <div class="post-actions">
-                            <span class="woof-btn ${hasWoofed ? "active" : ""}" onclick="handleWoof('${postId}', this)">
+                    <img src="${p.imageUrl}" class="main-img">
+                    <div class="post-info">
+                        <div class="actions">
+                            <span class="woof-icon ${hasWoofed ? "active" : ""}" onclick="handleWoof('${postId}', this)">
                                 <i class="fa-solid fa-paw"></i> <small>${p.likes || 0}</small>
                             </span>
                         </div>
-                        <p class="caption"><strong>${p.authorName}</strong> ${p.caption}</p>
-                        <div class="comments-section">${commentsHtml}</div>
+                        <p class="cap"><strong>${p.authorName}</strong> ${p.caption}</p>
+                        <div class="comments-wrap">${commentsHtml}</div>
                     </div>
                 </div>`;
-    });
+    }
   });
 }
 
-// ATTACH FUNCTIONS TO WINDOW FOR HTML ACCESS
 window.handleWoof = async (postId, btn) => {
   const user = auth.currentUser;
-  if (!user) return alert("Login to woof!");
+  if (!user) return;
   const postRef = doc(db, "feedPosts", postId);
   const isActive = btn.classList.contains("active");
   await updateDoc(postRef, {
@@ -122,3 +125,17 @@ window.handleWoof = async (postId, btn) => {
     likedBy: isActive ? arrayRemove(user.uid) : arrayUnion(user.uid),
   });
 };
+
+async function loadFriends(uid) {
+  const container = document.getElementById("friends-list");
+  if (!container) return;
+  const userSnap = await getDoc(doc(db, "users", uid));
+  const following = userSnap.data()?.following || [];
+  container.innerHTML = "";
+  for (const fId of following) {
+    const fSnap = await getDoc(doc(db, "users", fId));
+    if (fSnap.exists()) {
+      container.innerHTML += `<div class="friend-pill">${fSnap.data().displayName}</div>`;
+    }
+  }
+}
