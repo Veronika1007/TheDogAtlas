@@ -489,3 +489,50 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+
+/* Feed Visuals */
+.post-card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}
+.main-img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+}
+.post-info {
+  padding: 15px;
+}
+
+.comments-wrap {
+  margin-top: 10px;
+  border-top: 1px solid #eee;
+  padding-top: 8px;
+}
+
+.comment-item {
+  font-size: 0.85rem;
+  margin: 3px 0;
+  color: #555;
+}
+.woof-icon.active i {
+  color: #ff7a4a;
+}
+
+/* Symmetry & Gap for Events */
+.events-layout {
+  display: grid;
+  grid-template-columns: 2.8fr 1fr;
+  gap: 70px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
