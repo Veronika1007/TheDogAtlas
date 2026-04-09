@@ -57,7 +57,7 @@ nav ul {
   margin: 0 auto;
 }
 
-.post-card {
+.feed-item {
   background: var(--white);
   border-radius: 12px;
   border: 1px solid var(--border);
@@ -65,26 +65,26 @@ nav ul {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
-.post-header {
+.feed-header {
   padding: 12px 15px;
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.avatar-small {
+.meta-avatar {
   width: 35px;
   height: 35px;
   border-radius: 50%;
 }
 
-.post-main-img {
+.main-img {
   width: 100%;
   aspect-ratio: 1/1;
   object-fit: cover;
 }
 
-.post-body {
+.feed-footer {
   padding: 15px;
 }
 
@@ -92,13 +92,13 @@ nav ul {
   color: var(--primary);
 }
 
-.post-comments {
+.comments-wrap {
   margin-top: 12px;
   border-top: 1px solid #f0f0f0;
   padding-top: 10px;
 }
 
-.comment-item {
+.comment-row {
   font-size: 0.9rem;
   margin: 4px 0;
   color: #555;
@@ -110,7 +110,7 @@ nav ul {
 .events-layout {
   display: grid;
   grid-template-columns: 2.8fr 1fr;
-  gap: 70px; /* Exact 70px gap */
+  gap: 70px; /* Specific 70px Gap */
   max-width: 1400px;
   margin: 0 auto;
   padding: 40px 20px;
@@ -126,16 +126,4 @@ nav ul {
 #calendar {
   min-height: 650px;
   width: 100%;
-}
-
-/* ==========================================
-   5. PROFILE & FRIENDS
-   ========================================== */
-.friend-pill {
-  background: #eee;
-  padding: 10px 15px;
-  border-radius: 20px;
-  margin-bottom: 10px;
-  display: inline-block;
-  margin-right: 10px;
 }

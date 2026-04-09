@@ -39,17 +39,15 @@ const db = getFirestore(app);
 onAuthStateChanged(auth, (user) => {
   const authLinks = document.getElementById("auth-links");
   if (user) {
-    console.log("Session Active:", user.email);
+    console.log("Logged In:", user.email);
     if (authLinks) {
       authLinks.innerHTML = `<li><a href="profile.html">Profile</a></li><li><a href="#" id="logout-btn">Logout</a></li>`;
       document.getElementById("logout-btn").onclick = () =>
         signOut(auth).then(() => (window.location.href = "login.html"));
     }
 
-    // Load data for the current page
+    // Page Data Loaders
     if (document.getElementById("pack-feed")) loadVisualFeed();
-    if (document.getElementById("friends-list")) loadFriends(user.uid);
-    if (document.getElementById("forum-topics")) loadForum();
     if (document.getElementById("user-profile-data")) loadProfile(user.uid);
   } else {
     if (authLinks)
@@ -58,7 +56,7 @@ onAuthStateChanged(auth, (user) => {
 });
 
 // ==========================================
-// 2. LOGIN LOGIC
+// 2. LOGIN LOGIC (Fixed Redirect)
 // ==========================================
 const loginForm = document.getElementById("login-form");
 if (loginForm) {
@@ -68,6 +66,7 @@ if (loginForm) {
     const pass = document.getElementById("login-password").value;
     try {
       await signInWithEmailAndPassword(auth, email, pass);
+      // This forces the redirect to the profile page
       window.location.href = "profile.html";
     } catch (err) {
       alert("Login failed. Check your credentials.");
@@ -76,7 +75,7 @@ if (loginForm) {
 }
 
 // ==========================================
-// 3. COMMUNITY FEED (CLEAN GRID)
+// 3. COMMUNITY FEED (MATCHES "BEFORE" STYLE)
 // ==========================================
 async function loadVisualFeed() {
   const container = document.getElementById("pack-feed");
@@ -97,24 +96,24 @@ async function loadVisualFeed() {
       );
       let commentsHtml = "";
       commSnap.forEach((c) => {
-        commentsHtml += `<p class="comment-item"><strong>${c.data().authorName}:</strong> ${c.data().text}</p>`;
+        commentsHtml += `<p class="comment-row"><strong>${c.data().authorName}:</strong> ${c.data().text}</p>`;
       });
 
       container.innerHTML += `
-                <div class="post-card">
-                    <div class="post-header">
-                        <img src="${p.authorPhoto || "Media/Milo.png"}" class="avatar-small">
+                <div class="feed-item">
+                    <div class="feed-header">
+                        <img src="${p.authorPhoto || "Media/Milo.png"}" class="meta-avatar">
                         <strong>${p.authorName}</strong>
                     </div>
-                    <img src="${p.imageUrl}" class="post-main-img">
-                    <div class="post-body">
-                        <div class="post-actions">
+                    <img src="${p.imageUrl}" class="main-img">
+                    <div class="feed-footer">
+                        <div class="actions">
                             <span class="woof-icon ${hasWoofed ? "active" : ""}" onclick="handleWoof('${postId}', this)">
                                 <i class="fa-solid fa-paw"></i> <small>${p.likes || 0}</small>
                             </span>
                         </div>
-                        <p class="post-caption"><strong>${p.authorName}</strong> ${p.caption}</p>
-                        <div class="post-comments">${commentsHtml}</div>
+                        <p class="feed-cap"><strong>${p.authorName}</strong> ${p.caption}</p>
+                        <div class="comments-wrap">${commentsHtml}</div>
                     </div>
                 </div>`;
     }
@@ -131,30 +130,3 @@ window.handleWoof = async (postId, btn) => {
     likedBy: isActive ? arrayRemove(user.uid) : arrayUnion(user.uid),
   });
 };
-
-// ==========================================
-// 4. FRIENDS & FORUM
-// ==========================================
-async function loadFriends(uid) {
-  const container = document.getElementById("friends-list");
-  if (!container) return;
-  const snap = await getDoc(doc(db, "users", uid));
-  const following = snap.data()?.following || [];
-  container.innerHTML = "";
-  for (const fId of following) {
-    const fSnap = await getDoc(doc(db, "users", fId));
-    if (fSnap.exists()) {
-      container.innerHTML += `<div class="friend-pill">${fSnap.data().displayName}</div>`;
-    }
-  }
-}
-
-async function loadForum() {
-  const container = document.getElementById("forum-topics");
-  if (!container) return;
-  const snap = await getDocs(collection(db, "forum"));
-  container.innerHTML = "";
-  snap.forEach((d) => {
-    container.innerHTML += `<div class="forum-entry"><h4>${d.data().title}</h4></div>`;
-  });
-}
